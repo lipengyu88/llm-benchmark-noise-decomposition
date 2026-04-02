@@ -5,35 +5,14 @@ Evaluates 4 models on original + 3 paraphrased versions of 150 questions
 per benchmark, using the base prompt template (v00) to isolate test-set
 variation from prompt variation.
 
-Design decisions:
-  - Base prompt only (v00): By fixing the prompt to the base variant
-    (instruction="Choose the correct answer", format=letter_only, options=dot,
-    framing=none), we isolate the effect of *test-set variation* from
-    *prompt variation*.  Exp I already measures prompt sensitivity; Exp II
-    targets a different noise source.  The cross-experiment three-way
-    variance decomposition (prompt × sampling × test-set) in Exp III then
-    combines both.
-  - 150 questions (vs. 300 in Exp I): Paraphrasing via LLM API is costly
-    (150 Q × 3 paraphrases × 4 models × 2 datasets = 3,600 API calls for
-    generation alone, plus 4,800 evaluation calls).  With 150 items and
-    4 versions, we have 600 observations per model×dataset, which provides
-    adequate statistical power for detecting moderate effect sizes in the
-    variance decomposition (power > 0.80 at α = 0.05 for Cohen's f ≥ 0.15).
-    This limitation is acknowledged in the report.
-  - Paraphrase generation: see generate_paraphrases.py for the generation
-    script, model, prompt, and reproducibility details.
+Supports multiple paraphrase sources (GPT-4o and Qwen2.5-72B) for
+cross-source comparison.
 
 Usage:
-    python run_experiment2_async.py                     # run all
-    python run_experiment2_async.py --model qwen2.5-7b  # one model
-    python run_experiment2_async.py --dataset arc        # one dataset
-
-Inputs:
-    arc_challenge_paraphrased.json   (150 questions, each with 3 paraphrases)
-    mmlu_pro_paraphrased.json
-
-Outputs:
-    exp2_{dataset}_{model}.json      (600 records: 150 Q x 4 versions)
+    python run_experiment2_async.py                          # GPT-4o source, all
+    python run_experiment2_async.py --source qwen            # Qwen source
+    python run_experiment2_async.py --source both            # both sources
+    python run_experiment2_async.py --model llama --dataset arc
 """
 from __future__ import annotations
 import asyncio
@@ -72,11 +51,23 @@ MODELS = {
 }
 
 DATASETS = {
-    "arc":  ("arc_challenge_paraphrased.json",  "arc_challenge"),
-    "mmlu": ("mmlu_pro_paraphrased.json",       "mmlu_pro"),
+    "arc":  "arc_challenge",
+    "mmlu": "mmlu_pro",
 }
 
-# Qwen3 thinking mode — append /no_think
+# Paraphrase source -> file name pattern
+PARAPHRASE_FILES = {
+    "gpt4o": {
+        "arc":  "arc_challenge_paraphrased_gpt4o.json",
+        "mmlu": "mmlu_pro_paraphrased_gpt4o.json",
+    },
+    "qwen": {
+        "arc":  "arc_challenge_paraphrased_qwen.json",
+        "mmlu": "mmlu_pro_paraphrased_qwen.json",
+    },
+}
+
+# Qwen3 thinking mode
 THINKING_MODELS = {"qwen/qwen3-32b"}
 
 TEMPERATURE = 0.0
@@ -94,7 +85,7 @@ log = logging.getLogger(__name__)
 
 
 # ============================================================
-# Prompt rendering (v00_base: letter_only, dot format, no framing)
+# Prompt rendering (v00_base)
 # ============================================================
 
 def render_prompt(question: str, choices: list, labels: list) -> str:
@@ -108,7 +99,7 @@ def render_prompt(question: str, choices: list, labels: list) -> str:
 
 
 # ============================================================
-# Answer extraction (robust, fixed version)
+# Answer extraction
 # ============================================================
 
 def extract_answer(response: str, valid_labels: list) -> str | None:
@@ -116,10 +107,12 @@ def extract_answer(response: str, valid_labels: list) -> str | None:
         return None
     text = response.strip()
     valid = set(lb.upper() for lb in valid_labels)
+    vr = "".join(sorted(valid))  # e.g. "ABCDEFGHIJ"
 
-    # Pattern 1: explicit "Answer: X"
+    # Pattern 1: explicit "Answer: X" or "Answer is X"
     for pat in [r"[Aa]nswer\s*:\s*\(?([A-Za-z])\)?",
                 r"[Aa]nswer\s+is\s+\(?([A-Za-z])\)?",
+                r"[Ff]inal\s+[Aa]nswer\s*[:\s]\s*\(?([A-Za-z])\)?",
                 r"\*\*([A-Za-z])\*\*"]:
         m = re.search(pat, text)
         if m and m.group(1).upper() in valid:
@@ -130,13 +123,34 @@ def extract_answer(response: str, valid_labels: list) -> str | None:
     if m and m.group(1).upper() in valid:
         return m.group(1).upper()
 
-    # Pattern 3: standalone letter on a line
+    # Pattern 3: "X is the correct answer" or "X is correct"
+    m = re.search(rf'\b([{vr}])\s+is\s+(?:the\s+)?correct', text, re.IGNORECASE)
+    if m and m.group(1).upper() in valid:
+        return m.group(1).upper()
+
+    # Pattern 4: "the correct answer is X" or "the correct option is X"
+    m = re.search(rf'correct\s+(?:answer|option)\s+is\s+\(?([{vr}a-{vr[-1].lower()}])\)?',
+                  text, re.IGNORECASE)
+    if m and m.group(1).upper() in valid:
+        return m.group(1).upper()
+
+    # Pattern 5: "option X" or "choice X"
+    m = re.search(rf'(?:option|choice)\s+\(?([{vr}])\)?', text, re.IGNORECASE)
+    if m and m.group(1).upper() in valid:
+        return m.group(1).upper()
+
+    # Pattern 6: standalone letter on a line (scan from bottom)
     for line in reversed(text.split("\n")):
         line = line.strip().rstrip(".)")
         if len(line) == 1 and line.upper() in valid:
             return line.upper()
 
-    # Pattern 4: first letter in very short response only
+    # Pattern 7: last bold/parenthesized letter
+    m = re.search(rf'\*\*\(?([{vr}])\)?\*\*', text)
+    if m:
+        return m.group(1).upper()
+
+    # Pattern 8: first letter in very short response
     if len(text) <= 5:
         for ch in text:
             if ch.upper() in valid:
@@ -155,7 +169,7 @@ async def call_api(client, sem, model_id, prompt):
             try:
                 content = prompt
                 if model_id in THINKING_MODELS:
-                    content = prompt + "\n/no_think"
+                    content = prompt + "\n/nothink"
 
                 resp = await client.post(
                     API_URL,
@@ -169,6 +183,11 @@ async def call_api(client, sem, model_id, prompt):
                     },
                     timeout=60.0,
                 )
+                if resp.status_code == 429:
+                    wait = min(2 ** (attempt + 1), 30)
+                    log.warning(f"Rate limited, waiting {wait}s...")
+                    await asyncio.sleep(wait)
+                    continue
                 resp.raise_for_status()
                 data = resp.json()
                 if "error" in data:
@@ -188,17 +207,25 @@ async def call_api(client, sem, model_id, prompt):
 # Main evaluation
 # ============================================================
 
-async def evaluate(model_key, dataset_key):
+async def evaluate(model_key, dataset_key, source):
     model_id, model_short = MODELS[model_key]
-    data_file, bench_name = DATASETS[dataset_key]
+    bench = DATASETS[dataset_key]
 
-    outpath = Path(f"exp2_{bench_name}_{model_short}.json")
+    # Output file includes source tag
+    outpath = Path(__file__).parent / f"exp2_{bench}_{model_short}_{source}.json"
     if outpath.exists():
         log.info(f"Already exists: {outpath}, skipping.")
         return
 
-    questions = json.loads(Path(data_file).read_text())
-    log.info(f"Loaded {len(questions)} questions from {data_file}")
+    # Load paraphrased data
+    para_file = Path(__file__).parent / PARAPHRASE_FILES[source][dataset_key]
+    if not para_file.exists():
+        log.error(f"Paraphrase file not found: {para_file}")
+        log.error(f"Run generate_paraphrases_gpt4o.py --model {source} first.")
+        return
+
+    questions = json.loads(para_file.read_text())
+    log.info(f"Loaded {len(questions)} questions from {para_file}")
 
     # Build tasks: original (v0) + 3 paraphrases (v1-v3) per question
     tasks = []
@@ -214,7 +241,7 @@ async def evaluate(model_key, dataset_key):
                 "labels": q["labels"],
             })
 
-    log.info(f"{model_short} x {bench_name}: {len(tasks)} tasks")
+    log.info(f"{model_short} x {bench} x {source}: {len(tasks)} tasks")
 
     sem = asyncio.Semaphore(CONCURRENCY)
     done = 0
@@ -230,8 +257,9 @@ async def evaluate(model_key, dataset_key):
             if done % 100 == 0:
                 log.info(f"  Progress: {done}/{len(tasks)}")
             return {
-                "benchmark": bench_name,
+                "benchmark": bench,
                 "model_short": model_short,
+                "paraphrase_source": source,
                 "version": task["version"],
                 "question_id": task["question_id"],
                 "correct_answer": task["correct_answer"],
@@ -256,14 +284,18 @@ async def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", choices=list(MODELS.keys()), default=None)
     parser.add_argument("--dataset", choices=list(DATASETS.keys()), default=None)
+    parser.add_argument("--source", choices=["gpt4o", "qwen", "both"], default="gpt4o",
+                        help="Paraphrase source (default: gpt4o)")
     args = parser.parse_args()
 
     models = [args.model] if args.model else list(MODELS.keys())
     datasets = [args.dataset] if args.dataset else list(DATASETS.keys())
+    sources = ["gpt4o", "qwen"] if args.source == "both" else [args.source]
 
-    for ds in datasets:
-        for md in models:
-            await evaluate(md, ds)
+    for source in sources:
+        for ds in datasets:
+            for md in models:
+                await evaluate(md, ds, source)
 
     log.info("Done!")
 
