@@ -1,0 +1,17 @@
+# API keys — never commit
+api.txt
+**/api.txt
+
+# Claude Code local config
+.claude/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
