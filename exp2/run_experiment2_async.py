@@ -71,7 +71,8 @@ PARAPHRASE_FILES = {
 THINKING_MODELS = {"qwen/qwen3-32b"}
 
 TEMPERATURE = 0.0
-MAX_TOKENS = 128
+MAX_TOKENS_PHASE1 = 200
+MAX_TOKENS_PHASE2 = 1024
 CONCURRENCY = 10
 MAX_RETRIES = 5
 
@@ -163,13 +164,15 @@ def extract_answer(response: str, valid_labels: list) -> str | None:
 # API client
 # ============================================================
 
-async def call_api(client, sem, model_id, prompt):
+async def call_api(client, sem, model_id, prompt, max_tokens=None):
+    if max_tokens is None:
+        max_tokens = MAX_TOKENS_PHASE1
     async with sem:
         for attempt in range(MAX_RETRIES):
             try:
                 content = prompt
                 if model_id in THINKING_MODELS:
-                    content = prompt + "\n/nothink"
+                    content = prompt + "\n/no_think"
 
                 resp = await client.post(
                     API_URL,
@@ -178,10 +181,10 @@ async def call_api(client, sem, model_id, prompt):
                         "model": model_id,
                         "messages": [{"role": "user", "content": content}],
                         "temperature": TEMPERATURE,
-                        "max_tokens": MAX_TOKENS,
+                        "max_tokens": max_tokens,
                         "top_p": 1.0,
                     },
-                    timeout=60.0,
+                    timeout=90.0,
                 )
                 if resp.status_code == 429:
                     wait = min(2 ** (attempt + 1), 30)
@@ -273,11 +276,39 @@ async def evaluate(model_key, dataset_key, source):
 
         results = list(await asyncio.gather(*[process(t) for t in tasks]))
 
+    # Phase 2: Retry parse failures with larger max_tokens
+    pf_indices = [i for i, r in enumerate(results) if r["parse_failure"]]
+    if pf_indices:
+        log.info(f"  Phase 2: retrying {len(pf_indices)} parse failures with max_tokens={MAX_TOKENS_PHASE2}")
+        fixed = 0
+
+        async with httpx.AsyncClient() as client2:
+            async def retry(idx):
+                r = results[idx]
+                response = await call_api(client2, sem, model_id, tasks[idx]["prompt"],
+                                          max_tokens=MAX_TOKENS_PHASE2)
+                ext = extract_answer(response or "", r["labels"])
+                return idx, response, ext
+
+            retry_results = await asyncio.gather(*[retry(i) for i in pf_indices])
+
+        for idx, response, ext in retry_results:
+            if ext is not None:
+                results[idx]["response"] = response
+                results[idx]["extracted_answer"] = ext
+                results[idx]["is_correct"] = (ext == results[idx]["correct_answer"])
+                results[idx]["parse_failure"] = False
+                results[idx]["error"] = None
+                fixed += 1
+
+        log.info(f"  Phase 2: fixed {fixed}/{len(pf_indices)} parse failures")
+
     outpath.write_text(json.dumps(results, indent=2, ensure_ascii=False))
     n_ok = sum(1 for r in results if r["is_correct"] is True)
     n_pf = sum(1 for r in results if r["parse_failure"])
     n_valid = sum(1 for r in results if r["is_correct"] is not None)
-    log.info(f"  Saved {outpath}: acc={n_ok}/{n_valid} ({100*n_ok/n_valid:.1f}%), PF={n_pf}")
+    acc_str = f"{100*n_ok/n_valid:.1f}%" if n_valid else "N/A"
+    log.info(f"  Saved {outpath}: acc={n_ok}/{n_valid} ({acc_str}), PF={n_pf}")
 
 
 async def main():

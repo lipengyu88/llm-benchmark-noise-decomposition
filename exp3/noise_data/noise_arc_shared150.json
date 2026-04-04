@@ -1,0 +1,6309 @@
+{
+  "dataset": "arc_challenge",
+  "n_questions": 150,
+  "sources": {
+    "exp1": true,
+    "exp2": true
+  },
+  "source_stats": {
+    "combined": {
+      "n": 150,
+      "mean": 0.235,
+      "std": 0.295,
+      "median": 0.0769,
+      "pct_above_0.5": 22.0
+    },
+    "exp1_only": {
+      "n": 150,
+      "mean": 0.236,
+      "std": 0.2879,
+      "median": 0.1111,
+      "pct_above_0.5": 22.0
+    },
+    "exp2_only": {
+      "n": 150,
+      "mean": 0.2238,
+      "std": 0.3158,
+      "median": 0.0312,
+      "pct_above_0.5": 17.33
+    }
+  },
+  "noise_scores": {
+    "ACTAAP_2007_7_3": {
+      "noise_score": 0.057692,
+      "correct": 101,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 69,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "AIMS_2009_8_14": {
+      "noise_score": 0.692308,
+      "correct": 68,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen3-32b": {
+          "correct": 20,
+          "total": 26,
+          "noise": 0.461538
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 44,
+      "exp1_total": 72,
+      "exp2_correct": 24,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "AKDE&ED_2008_4_35": {
+      "noise_score": 0.538462,
+      "correct": 76,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        }
+      },
+      "exp1_correct": 52,
+      "exp1_total": 72,
+      "exp2_correct": 24,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "AKDE&ED_2012_8_6": {
+      "noise_score": 0.576923,
+      "correct": 74,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 1,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 49,
+      "exp1_total": 72,
+      "exp2_correct": 25,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "CSZ20754": {
+      "noise_score": 0.903846,
+      "correct": 47,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 2,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-7b": {
+          "correct": 2,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen3-32b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-72b": {
+          "correct": 20,
+          "total": 26,
+          "noise": 0.461538
+        }
+      },
+      "exp1_correct": 31,
+      "exp1_total": 72,
+      "exp2_correct": 16,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "CSZ_2005_5_CSZ10021": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "LEAP_2000_8_4": {
+      "noise_score": 0.134615,
+      "correct": 97,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 65,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "LEAP_2001_8_10379": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "LEAP_2002_4_10247": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "LEAP__4_10225": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "LEAP__7_10351": {
+      "noise_score": 0.423077,
+      "correct": 82,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 4,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 56,
+      "exp1_total": 72,
+      "exp2_correct": 26,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2000_8_22": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2002_8_11": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2003_5_33": {
+      "noise_score": 0.153846,
+      "correct": 96,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 64,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2003_8_29": {
+      "noise_score": 0.211538,
+      "correct": 93,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 62,
+      "exp1_total": 72,
+      "exp2_correct": 31,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2004_9_2": {
+      "noise_score": 0.230769,
+      "correct": 92,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 14,
+          "total": 26,
+          "noise": 0.923077
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 63,
+      "exp1_total": 72,
+      "exp2_correct": 29,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2004_9_5": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2005_8_12": {
+      "noise_score": 0.134615,
+      "correct": 97,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 65,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2005_9_17": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2005_9_21": {
+      "noise_score": 0.730769,
+      "correct": 66,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 9,
+          "total": 26,
+          "noise": 0.692308
+        },
+        "qwen2.5-7b": {
+          "correct": 5,
+          "total": 26,
+          "noise": 0.384615
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 50,
+      "exp1_total": 72,
+      "exp2_correct": 16,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2006_8_24": {
+      "noise_score": 0.173077,
+      "correct": 95,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-72b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        }
+      },
+      "exp1_correct": 67,
+      "exp1_total": 72,
+      "exp2_correct": 28,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2006_9_44": {
+      "noise_score": 0.737864,
+      "correct": 38,
+      "total": 103,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 14,
+          "total": 26,
+          "noise": 0.923077
+        },
+        "qwen2.5-7b": {
+          "correct": 0,
+          "total": 25,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen2.5-72b": {
+          "correct": 2,
+          "total": 26,
+          "noise": 0.153846
+        }
+      },
+      "exp1_correct": 26,
+      "exp1_total": 71,
+      "exp2_correct": 12,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2009_8_12": {
+      "noise_score": 0.769231,
+      "correct": 64,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 20,
+          "total": 26,
+          "noise": 0.461538
+        },
+        "qwen3-32b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 42,
+      "exp1_total": 72,
+      "exp2_correct": 22,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2012_5_23614": {
+      "noise_score": 0.230769,
+      "correct": 92,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 14,
+          "total": 26,
+          "noise": 0.923077
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 63,
+      "exp1_total": 72,
+      "exp2_correct": 29,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MCAS_2014_5_15": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MDSA_2007_8_30": {
+      "noise_score": 0.076923,
+      "correct": 100,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 68,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MDSA_2008_8_3": {
+      "noise_score": 0.038462,
+      "correct": 102,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        }
+      },
+      "exp1_correct": 70,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MDSA_2011_5_3": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MDSA_2013_8_32": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MEA_2010_8_15": {
+      "noise_score": 0.173077,
+      "correct": 95,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 20,
+          "total": 26,
+          "noise": 0.461538
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        }
+      },
+      "exp1_correct": 69,
+      "exp1_total": 72,
+      "exp2_correct": 26,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "MSA_2012_5_2": {
+      "noise_score": 0.923077,
+      "correct": 56,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 4,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen2.5-7b": {
+          "correct": 5,
+          "total": 26,
+          "noise": 0.384615
+        },
+        "qwen3-32b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-72b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        }
+      },
+      "exp1_correct": 34,
+      "exp1_total": 72,
+      "exp2_correct": 22,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_177748": {
+      "noise_score": 0.019231,
+      "correct": 1,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 1,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 1,
+      "exp1_total": 72,
+      "exp2_correct": 0,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_183033": {
+      "noise_score": 0.519231,
+      "correct": 77,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 3,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 53,
+      "exp1_total": 72,
+      "exp2_correct": 24,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_184730": {
+      "noise_score": 0.884615,
+      "correct": 46,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 2,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-7b": {
+          "correct": 2,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen3-32b": {
+          "correct": 20,
+          "total": 26,
+          "noise": 0.461538
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 32,
+      "exp1_total": 72,
+      "exp2_correct": 14,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_400084": {
+      "noise_score": 0.884615,
+      "correct": 46,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 5,
+          "total": 26,
+          "noise": 0.384615
+        },
+        "qwen2.5-7b": {
+          "correct": 6,
+          "total": 26,
+          "noise": 0.461538
+        },
+        "qwen3-32b": {
+          "correct": 17,
+          "total": 26,
+          "noise": 0.692308
+        },
+        "qwen2.5-72b": {
+          "correct": 18,
+          "total": 26,
+          "noise": 0.615385
+        }
+      },
+      "exp1_correct": 29,
+      "exp1_total": 72,
+      "exp2_correct": 17,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_400500": {
+      "noise_score": 0.057692,
+      "correct": 101,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 69,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_401195": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_401428": {
+      "noise_score": 0.596154,
+      "correct": 73,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 2,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 49,
+      "exp1_total": 72,
+      "exp2_correct": 24,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_401684": {
+      "noise_score": 0.076923,
+      "correct": 100,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 68,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_401699": {
+      "noise_score": 0.442308,
+      "correct": 81,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 4,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 58,
+      "exp1_total": 72,
+      "exp2_correct": 23,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_401912": {
+      "noise_score": 0.865385,
+      "correct": 59,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 12,
+          "total": 26,
+          "noise": 0.923077
+        },
+        "qwen3-32b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 37,
+      "exp1_total": 72,
+      "exp2_correct": 22,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_402132": {
+      "noise_score": 0.365385,
+      "correct": 85,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 20,
+          "total": 26,
+          "noise": 0.461538
+        },
+        "qwen2.5-7b": {
+          "correct": 20,
+          "total": 26,
+          "noise": 0.461538
+        },
+        "qwen3-32b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 55,
+      "exp1_total": 72,
+      "exp2_correct": 30,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_402341": {
+      "noise_score": 0.134615,
+      "correct": 7,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 7,
+          "total": 26,
+          "noise": 0.538462
+        },
+        "qwen2.5-72b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 5,
+      "exp1_total": 72,
+      "exp2_correct": 2,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_402502": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_402539": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_403907": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_404820": {
+      "noise_score": 0.903846,
+      "correct": 47,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 6,
+          "total": 26,
+          "noise": 0.461538
+        },
+        "qwen2.5-7b": {
+          "correct": 8,
+          "total": 26,
+          "noise": 0.615385
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 7,
+          "total": 26,
+          "noise": 0.538462
+        }
+      },
+      "exp1_correct": 29,
+      "exp1_total": 72,
+      "exp2_correct": 18,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_405136": {
+      "noise_score": 0.076923,
+      "correct": 100,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 68,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_405143": {
+      "noise_score": 0.423077,
+      "correct": 82,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 9,
+          "total": 26,
+          "noise": 0.692308
+        },
+        "qwen2.5-7b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 52,
+      "exp1_total": 72,
+      "exp2_correct": 30,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_405685": {
+      "noise_score": 0.346154,
+      "correct": 86,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 9,
+          "total": 26,
+          "noise": 0.692308
+        }
+      },
+      "exp1_correct": 59,
+      "exp1_total": 72,
+      "exp2_correct": 27,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_406639": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_406777": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_407517": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_411224": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 31,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_412463": {
+      "noise_score": 0.557692,
+      "correct": 75,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 51,
+      "exp1_total": 72,
+      "exp2_correct": 24,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_415086": {
+      "noise_score": 0.730769,
+      "correct": 66,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 9,
+          "total": 26,
+          "noise": 0.692308
+        },
+        "qwen2.5-7b": {
+          "correct": 5,
+          "total": 26,
+          "noise": 0.384615
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 50,
+      "exp1_total": 72,
+      "exp2_correct": 16,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_416646": {
+      "noise_score": 0.538462,
+      "correct": 76,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 12,
+          "total": 26,
+          "noise": 0.923077
+        },
+        "qwen2.5-7b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen3-32b": {
+          "correct": 19,
+          "total": 26,
+          "noise": 0.538462
+        },
+        "qwen2.5-72b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        }
+      },
+      "exp1_correct": 50,
+      "exp1_total": 72,
+      "exp2_correct": 26,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_417117": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_417118": {
+      "noise_score": 0.057692,
+      "correct": 101,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 30,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_417137": {
+      "noise_score": 0.75,
+      "correct": 39,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 13,
+          "total": 26,
+          "noise": 1.0
+        },
+        "qwen2.5-7b": {
+          "correct": 17,
+          "total": 26,
+          "noise": 0.692308
+        },
+        "qwen3-32b": {
+          "correct": 7,
+          "total": 26,
+          "noise": 0.538462
+        },
+        "qwen2.5-72b": {
+          "correct": 2,
+          "total": 26,
+          "noise": 0.153846
+        }
+      },
+      "exp1_correct": 27,
+      "exp1_total": 72,
+      "exp2_correct": 12,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_417465": {
+      "noise_score": 0.057692,
+      "correct": 101,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 30,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7012880": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7016538": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7016800": {
+      "noise_score": 0.75,
+      "correct": 65,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 1,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-7b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen3-32b": {
+          "correct": 18,
+          "total": 26,
+          "noise": 0.615385
+        },
+        "qwen2.5-72b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        }
+      },
+      "exp1_correct": 48,
+      "exp1_total": 72,
+      "exp2_correct": 17,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7017938": {
+      "noise_score": 0.057692,
+      "correct": 101,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 30,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7024273": {
+      "noise_score": 0.557692,
+      "correct": 29,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 3,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 19,
+      "exp1_total": 72,
+      "exp2_correct": 10,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7027248": {
+      "noise_score": 0.096154,
+      "correct": 99,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        }
+      },
+      "exp1_correct": 68,
+      "exp1_total": 72,
+      "exp2_correct": 31,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7043820": {
+      "noise_score": 0.153846,
+      "correct": 96,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 18,
+          "total": 26,
+          "noise": 0.615385
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 68,
+      "exp1_total": 72,
+      "exp2_correct": 28,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7058135": {
+      "noise_score": 0.134615,
+      "correct": 97,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-7b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen3-32b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 67,
+      "exp1_total": 72,
+      "exp2_correct": 30,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7068583": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7068635": {
+      "noise_score": 0.538462,
+      "correct": 76,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 54,
+      "exp1_total": 72,
+      "exp2_correct": 22,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7071523": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7082443": {
+      "noise_score": 0.288462,
+      "correct": 89,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 15,
+          "total": 26,
+          "noise": 0.846154
+        },
+        "qwen2.5-7b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 61,
+      "exp1_total": 72,
+      "exp2_correct": 28,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7082758": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7090790": {
+      "noise_score": 0.076923,
+      "correct": 100,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 68,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7094290": {
+      "noise_score": 0.769231,
+      "correct": 64,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 14,
+          "total": 26,
+          "noise": 0.923077
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        }
+      },
+      "exp1_correct": 46,
+      "exp1_total": 72,
+      "exp2_correct": 18,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7099190": {
+      "noise_score": 0.076923,
+      "correct": 100,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        }
+      },
+      "exp1_correct": 68,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7102323": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7111178": {
+      "noise_score": 0.076923,
+      "correct": 100,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        }
+      },
+      "exp1_correct": 68,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7126263": {
+      "noise_score": 0.038462,
+      "correct": 102,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 70,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7129640": {
+      "noise_score": 0.403846,
+      "correct": 83,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 13,
+          "total": 26,
+          "noise": 1.0
+        },
+        "qwen2.5-7b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen3-32b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 54,
+      "exp1_total": 72,
+      "exp2_correct": 29,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7130655": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7132405": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7133945": {
+      "noise_score": 0.038462,
+      "correct": 102,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 70,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7142520": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7158935": {
+      "noise_score": 0.211538,
+      "correct": 93,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 19,
+          "total": 26,
+          "noise": 0.538462
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        }
+      },
+      "exp1_correct": 63,
+      "exp1_total": 72,
+      "exp2_correct": 30,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7159023": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7159303": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7164623": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7172708": {
+      "noise_score": 0.730769,
+      "correct": 38,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-7b": {
+          "correct": 7,
+          "total": 26,
+          "noise": 0.538462
+        },
+        "qwen3-32b": {
+          "correct": 4,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen2.5-72b": {
+          "correct": 4,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 20,
+      "exp1_total": 72,
+      "exp2_correct": 18,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7174213": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7186358": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7187373": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7201740": {
+      "noise_score": 0.115385,
+      "correct": 98,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-72b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        }
+      },
+      "exp1_correct": 66,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7206378": {
+      "noise_score": 0.096154,
+      "correct": 99,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        }
+      },
+      "exp1_correct": 68,
+      "exp1_total": 72,
+      "exp2_correct": 31,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7210210": {
+      "noise_score": 0.461538,
+      "correct": 80,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 3,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 56,
+      "exp1_total": 72,
+      "exp2_correct": 24,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7210455": {
+      "noise_score": 0.038462,
+      "correct": 102,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 70,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7210473": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7212818": {
+      "noise_score": 0.384615,
+      "correct": 84,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 7,
+          "total": 26,
+          "noise": 0.538462
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 59,
+      "exp1_total": 72,
+      "exp2_correct": 25,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7212888": {
+      "noise_score": 0.942308,
+      "correct": 55,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 18,
+          "total": 26,
+          "noise": 0.615385
+        },
+        "qwen2.5-7b": {
+          "correct": 1,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 11,
+          "total": 26,
+          "noise": 0.846154
+        }
+      },
+      "exp1_correct": 39,
+      "exp1_total": 72,
+      "exp2_correct": 16,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7212993": {
+      "noise_score": 0.057692,
+      "correct": 101,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        }
+      },
+      "exp1_correct": 70,
+      "exp1_total": 72,
+      "exp2_correct": 31,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7213413": {
+      "noise_score": 0.096154,
+      "correct": 99,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 28,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7214498": {
+      "noise_score": 0.807692,
+      "correct": 62,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 4,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen2.5-7b": {
+          "correct": 8,
+          "total": 26,
+          "noise": 0.615385
+        },
+        "qwen3-32b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 46,
+      "exp1_total": 72,
+      "exp2_correct": 16,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7218015": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7221988": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7222460": {
+      "noise_score": 0.076923,
+      "correct": 100,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 29,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7223493": {
+      "noise_score": 0.519231,
+      "correct": 77,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 5,
+          "total": 26,
+          "noise": 0.384615
+        },
+        "qwen2.5-7b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 51,
+      "exp1_total": 72,
+      "exp2_correct": 26,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7236740": {
+      "noise_score": 0.865385,
+      "correct": 59,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 7,
+          "total": 26,
+          "noise": 0.538462
+        },
+        "qwen2.5-7b": {
+          "correct": 4,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen3-32b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 47,
+      "exp1_total": 72,
+      "exp2_correct": 12,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7263183": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_7271758": {
+      "noise_score": 0.25,
+      "correct": 91,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 14,
+          "total": 26,
+          "noise": 0.923077
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 67,
+      "exp1_total": 72,
+      "exp2_correct": 24,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_LBS10302": {
+      "noise_score": 0.076923,
+      "correct": 100,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 28,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_400059": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_400134": {
+      "noise_score": 0.692308,
+      "correct": 36,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 12,
+          "total": 26,
+          "noise": 0.923077
+        },
+        "qwen2.5-72b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        }
+      },
+      "exp1_correct": 26,
+      "exp1_total": 72,
+      "exp2_correct": 10,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_400661": {
+      "noise_score": 0.038462,
+      "correct": 102,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 70,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_400697": {
+      "noise_score": 0.192308,
+      "correct": 94,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen3-32b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 62,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_400985": {
+      "noise_score": 0.096154,
+      "correct": 99,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 67,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_401265": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_401277": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 31,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_401360": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_401373": {
+      "noise_score": 0.096154,
+      "correct": 99,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 67,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_401656": {
+      "noise_score": 0.384615,
+      "correct": 84,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 15,
+          "total": 26,
+          "noise": 0.846154
+        },
+        "qwen2.5-7b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen3-32b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 55,
+      "exp1_total": 72,
+      "exp2_correct": 29,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_402103": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_402164": {
+      "noise_score": 0.673077,
+      "correct": 69,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen2.5-7b": {
+          "correct": 1,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 20,
+          "total": 26,
+          "noise": 0.461538
+        }
+      },
+      "exp1_correct": 48,
+      "exp1_total": 72,
+      "exp2_correct": 21,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_402257": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 31,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_402276": {
+      "noise_score": 0.961538,
+      "correct": 50,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 3,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen3-32b": {
+          "correct": 21,
+          "total": 26,
+          "noise": 0.384615
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 34,
+      "exp1_total": 72,
+      "exp2_correct": 16,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_402981": {
+      "noise_score": 0.711538,
+      "correct": 67,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-7b": {
+          "correct": 18,
+          "total": 26,
+          "noise": 0.615385
+        },
+        "qwen3-32b": {
+          "correct": 0,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 51,
+      "exp1_total": 72,
+      "exp2_correct": 16,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_402985": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_406089": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_406836": {
+      "noise_score": 0.076923,
+      "correct": 100,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        }
+      },
+      "exp1_correct": 68,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_407572": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_408663": {
+      "noise_score": 0.115385,
+      "correct": 98,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-72b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        }
+      },
+      "exp1_correct": 66,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_409171": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_412374": {
+      "noise_score": 0.942308,
+      "correct": 49,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 6,
+          "total": 26,
+          "noise": 0.461538
+        },
+        "qwen2.5-7b": {
+          "correct": 20,
+          "total": 26,
+          "noise": 0.461538
+        },
+        "qwen3-32b": {
+          "correct": 2,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-72b": {
+          "correct": 21,
+          "total": 26,
+          "noise": 0.384615
+        }
+      },
+      "exp1_correct": 35,
+      "exp1_total": 72,
+      "exp2_correct": 14,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_413299": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_415473": {
+      "noise_score": 0.365385,
+      "correct": 85,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 11,
+          "total": 26,
+          "noise": 0.846154
+        },
+        "qwen2.5-7b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 59,
+      "exp1_total": 72,
+      "exp2_correct": 26,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_416167": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_416169": {
+      "noise_score": 0.038462,
+      "correct": 102,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 70,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "Mercury_SC_LBS10265": {
+      "noise_score": 0.480769,
+      "correct": 79,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 7,
+          "total": 26,
+          "noise": 0.538462
+        },
+        "qwen2.5-7b": {
+          "correct": 20,
+          "total": 26,
+          "noise": 0.461538
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 54,
+      "exp1_total": 72,
+      "exp2_correct": 25,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "NAEP_2000_8_S11+11": {
+      "noise_score": 0.057692,
+      "correct": 101,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-7b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 29,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "NYSEDREGENTS_2008_4_11": {
+      "noise_score": 0.211538,
+      "correct": 93,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 15,
+          "total": 26,
+          "noise": 0.846154
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 66,
+      "exp1_total": 72,
+      "exp2_correct": 27,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "NYSEDREGENTS_2008_8_27": {
+      "noise_score": 0.096154,
+      "correct": 99,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 21,
+          "total": 26,
+          "noise": 0.384615
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 68,
+      "exp1_total": 72,
+      "exp2_correct": 31,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "NYSEDREGENTS_2012_4_9": {
+      "noise_score": 0.153846,
+      "correct": 96,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 20,
+          "total": 26,
+          "noise": 0.461538
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 68,
+      "exp1_total": 72,
+      "exp2_correct": 28,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "NYSEDREGENTS_2012_8_19": {
+      "noise_score": 0.019231,
+      "correct": 103,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        }
+      },
+      "exp1_correct": 71,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "NYSEDREGENTS_2015_4_29": {
+      "noise_score": 0.288462,
+      "correct": 89,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 14,
+          "total": 26,
+          "noise": 0.923077
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 64,
+      "exp1_total": 72,
+      "exp2_correct": 25,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "TAKS_2009_5_36": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "TIMSS_1995_8_N2": {
+      "noise_score": 0.115385,
+      "correct": 98,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 24,
+          "total": 26,
+          "noise": 0.153846
+        },
+        "qwen3-32b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-72b": {
+          "correct": 23,
+          "total": 26,
+          "noise": 0.230769
+        }
+      },
+      "exp1_correct": 67,
+      "exp1_total": 72,
+      "exp2_correct": 31,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "TIMSS_2003_8_pg87": {
+      "noise_score": 0.75,
+      "correct": 65,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 8,
+          "total": 26,
+          "noise": 0.615385
+        },
+        "qwen2.5-7b": {
+          "correct": 16,
+          "total": 26,
+          "noise": 0.769231
+        },
+        "qwen3-32b": {
+          "correct": 15,
+          "total": 26,
+          "noise": 0.846154
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 48,
+      "exp1_total": 72,
+      "exp2_correct": 17,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "TIMSS_2007_4_pg19": {
+      "noise_score": 0.0,
+      "correct": 104,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 72,
+      "exp1_total": 72,
+      "exp2_correct": 32,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "TIMSS_2007_8_pg109": {
+      "noise_score": 0.096154,
+      "correct": 99,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 25,
+          "total": 26,
+          "noise": 0.076923
+        },
+        "qwen2.5-7b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        }
+      },
+      "exp1_correct": 68,
+      "exp1_total": 72,
+      "exp2_correct": 31,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    },
+    "TIMSS_2011_8_pg15": {
+      "noise_score": 0.173077,
+      "correct": 95,
+      "total": 104,
+      "per_model": {
+        "llama-3.1-8b": {
+          "correct": 21,
+          "total": 26,
+          "noise": 0.384615
+        },
+        "qwen2.5-7b": {
+          "correct": 22,
+          "total": 26,
+          "noise": 0.307692
+        },
+        "qwen3-32b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        },
+        "qwen2.5-72b": {
+          "correct": 26,
+          "total": 26,
+          "noise": 0.0
+        }
+      },
+      "exp1_correct": 65,
+      "exp1_total": 72,
+      "exp2_correct": 30,
+      "exp2_total": 32,
+      "sources": [
+        "exp1",
+        "exp2"
+      ]
+    }
+  },
+  "removal_sets": {
+    "10": {
+      "removed_qids": [
+        "Mercury_SC_402276",
+        "Mercury_SC_412374",
+        "Mercury_7212888",
+        "MSA_2012_5_2",
+        "Mercury_404820",
+        "CSZ20754",
+        "Mercury_400084",
+        "Mercury_184730",
+        "Mercury_7236740",
+        "Mercury_401912",
+        "Mercury_7214498",
+        "Mercury_7094290",
+        "MCAS_2009_8_12",
+        "TIMSS_2003_8_pg87",
+        "Mercury_7016800"
+      ],
+      "kept_qids": [
+        "Mercury_417137",
+        "MCAS_2006_9_44",
+        "Mercury_7172708",
+        "Mercury_415086",
+        "MCAS_2005_9_21",
+        "Mercury_SC_402981",
+        "Mercury_SC_400134",
+        "AIMS_2009_8_14",
+        "Mercury_SC_402164",
+        "Mercury_401428",
+        "AKDE&ED_2012_8_6",
+        "Mercury_7024273",
+        "Mercury_412463",
+        "Mercury_7068635",
+        "Mercury_416646",
+        "AKDE&ED_2008_4_35",
+        "Mercury_7223493",
+        "Mercury_183033",
+        "Mercury_SC_LBS10265",
+        "Mercury_7210210",
+        "Mercury_401699",
+        "Mercury_405143",
+        "LEAP__7_10351",
+        "Mercury_7129640",
+        "Mercury_SC_401656",
+        "Mercury_7212818",
+        "Mercury_SC_415473",
+        "Mercury_402132",
+        "Mercury_405685",
+        "NYSEDREGENTS_2015_4_29",
+        "Mercury_7082443",
+        "Mercury_7271758",
+        "MCAS_2012_5_23614",
+        "MCAS_2004_9_2",
+        "NYSEDREGENTS_2008_4_11",
+        "Mercury_7158935",
+        "MCAS_2003_8_29",
+        "Mercury_SC_400697",
+        "TIMSS_2011_8_pg15",
+        "MEA_2010_8_15",
+        "MCAS_2006_8_24",
+        "NYSEDREGENTS_2012_4_9",
+        "Mercury_7043820",
+        "MCAS_2003_5_33",
+        "Mercury_7058135",
+        "Mercury_402341",
+        "MCAS_2005_8_12",
+        "LEAP_2000_8_4",
+        "TIMSS_1995_8_N2",
+        "Mercury_SC_408663",
+        "Mercury_7201740",
+        "TIMSS_2007_8_pg109",
+        "NYSEDREGENTS_2008_8_27",
+        "Mercury_SC_401373",
+        "Mercury_SC_400985",
+        "Mercury_7213413",
+        "Mercury_7206378",
+        "Mercury_7027248",
+        "Mercury_SC_406836",
+        "Mercury_LBS10302",
+        "Mercury_7222460",
+        "Mercury_7111178",
+        "Mercury_7099190",
+        "Mercury_7090790",
+        "Mercury_405136",
+        "Mercury_401684",
+        "MDSA_2007_8_30",
+        "NAEP_2000_8_S11+11",
+        "Mercury_7212993",
+        "Mercury_7017938",
+        "Mercury_417465",
+        "Mercury_417118",
+        "Mercury_400500",
+        "ACTAAP_2007_7_3",
+        "Mercury_SC_416169",
+        "Mercury_SC_400661",
+        "Mercury_7210455",
+        "Mercury_7133945",
+        "Mercury_7126263",
+        "MDSA_2008_8_3",
+        "NYSEDREGENTS_2012_8_19",
+        "Mercury_SC_416167",
+        "Mercury_SC_409171",
+        "Mercury_SC_402257",
+        "Mercury_SC_401360",
+        "Mercury_SC_401277",
+        "Mercury_7263183",
+        "Mercury_7221988",
+        "Mercury_7186358",
+        "Mercury_7174213",
+        "Mercury_7159303",
+        "Mercury_7159023",
+        "Mercury_7142520",
+        "Mercury_7071523",
+        "Mercury_7016538",
+        "Mercury_7012880",
+        "Mercury_411224",
+        "Mercury_406777",
+        "Mercury_402539",
+        "Mercury_402502",
+        "Mercury_177748",
+        "MCAS_2004_9_5",
+        "MCAS_2002_8_11",
+        "MCAS_2000_8_22",
+        "CSZ_2005_5_CSZ10021",
+        "TIMSS_2007_4_pg19",
+        "TAKS_2009_5_36",
+        "Mercury_SC_413299",
+        "Mercury_SC_407572",
+        "Mercury_SC_406089",
+        "Mercury_SC_402985",
+        "Mercury_SC_402103",
+        "Mercury_SC_401265",
+        "Mercury_SC_400059",
+        "Mercury_7218015",
+        "Mercury_7210473",
+        "Mercury_7187373",
+        "Mercury_7164623",
+        "Mercury_7132405",
+        "Mercury_7130655",
+        "Mercury_7102323",
+        "Mercury_7082758",
+        "Mercury_7068583",
+        "Mercury_417117",
+        "Mercury_407517",
+        "Mercury_406639",
+        "Mercury_403907",
+        "Mercury_401195",
+        "MDSA_2013_8_32",
+        "MDSA_2011_5_3",
+        "MCAS_2014_5_15",
+        "MCAS_2005_9_17",
+        "LEAP__4_10225",
+        "LEAP_2002_4_10247",
+        "LEAP_2001_8_10379"
+      ],
+      "noise_cutoff": 0.75,
+      "n_removed": 15,
+      "n_kept": 135
+    },
+    "20": {
+      "removed_qids": [
+        "Mercury_SC_402276",
+        "Mercury_SC_412374",
+        "Mercury_7212888",
+        "MSA_2012_5_2",
+        "Mercury_404820",
+        "CSZ20754",
+        "Mercury_400084",
+        "Mercury_184730",
+        "Mercury_7236740",
+        "Mercury_401912",
+        "Mercury_7214498",
+        "Mercury_7094290",
+        "MCAS_2009_8_12",
+        "TIMSS_2003_8_pg87",
+        "Mercury_7016800",
+        "Mercury_417137",
+        "MCAS_2006_9_44",
+        "Mercury_7172708",
+        "Mercury_415086",
+        "MCAS_2005_9_21",
+        "Mercury_SC_402981",
+        "Mercury_SC_400134",
+        "AIMS_2009_8_14",
+        "Mercury_SC_402164",
+        "Mercury_401428",
+        "AKDE&ED_2012_8_6",
+        "Mercury_7024273",
+        "Mercury_412463",
+        "Mercury_7068635",
+        "Mercury_416646"
+      ],
+      "kept_qids": [
+        "AKDE&ED_2008_4_35",
+        "Mercury_7223493",
+        "Mercury_183033",
+        "Mercury_SC_LBS10265",
+        "Mercury_7210210",
+        "Mercury_401699",
+        "Mercury_405143",
+        "LEAP__7_10351",
+        "Mercury_7129640",
+        "Mercury_SC_401656",
+        "Mercury_7212818",
+        "Mercury_SC_415473",
+        "Mercury_402132",
+        "Mercury_405685",
+        "NYSEDREGENTS_2015_4_29",
+        "Mercury_7082443",
+        "Mercury_7271758",
+        "MCAS_2012_5_23614",
+        "MCAS_2004_9_2",
+        "NYSEDREGENTS_2008_4_11",
+        "Mercury_7158935",
+        "MCAS_2003_8_29",
+        "Mercury_SC_400697",
+        "TIMSS_2011_8_pg15",
+        "MEA_2010_8_15",
+        "MCAS_2006_8_24",
+        "NYSEDREGENTS_2012_4_9",
+        "Mercury_7043820",
+        "MCAS_2003_5_33",
+        "Mercury_7058135",
+        "Mercury_402341",
+        "MCAS_2005_8_12",
+        "LEAP_2000_8_4",
+        "TIMSS_1995_8_N2",
+        "Mercury_SC_408663",
+        "Mercury_7201740",
+        "TIMSS_2007_8_pg109",
+        "NYSEDREGENTS_2008_8_27",
+        "Mercury_SC_401373",
+        "Mercury_SC_400985",
+        "Mercury_7213413",
+        "Mercury_7206378",
+        "Mercury_7027248",
+        "Mercury_SC_406836",
+        "Mercury_LBS10302",
+        "Mercury_7222460",
+        "Mercury_7111178",
+        "Mercury_7099190",
+        "Mercury_7090790",
+        "Mercury_405136",
+        "Mercury_401684",
+        "MDSA_2007_8_30",
+        "NAEP_2000_8_S11+11",
+        "Mercury_7212993",
+        "Mercury_7017938",
+        "Mercury_417465",
+        "Mercury_417118",
+        "Mercury_400500",
+        "ACTAAP_2007_7_3",
+        "Mercury_SC_416169",
+        "Mercury_SC_400661",
+        "Mercury_7210455",
+        "Mercury_7133945",
+        "Mercury_7126263",
+        "MDSA_2008_8_3",
+        "NYSEDREGENTS_2012_8_19",
+        "Mercury_SC_416167",
+        "Mercury_SC_409171",
+        "Mercury_SC_402257",
+        "Mercury_SC_401360",
+        "Mercury_SC_401277",
+        "Mercury_7263183",
+        "Mercury_7221988",
+        "Mercury_7186358",
+        "Mercury_7174213",
+        "Mercury_7159303",
+        "Mercury_7159023",
+        "Mercury_7142520",
+        "Mercury_7071523",
+        "Mercury_7016538",
+        "Mercury_7012880",
+        "Mercury_411224",
+        "Mercury_406777",
+        "Mercury_402539",
+        "Mercury_402502",
+        "Mercury_177748",
+        "MCAS_2004_9_5",
+        "MCAS_2002_8_11",
+        "MCAS_2000_8_22",
+        "CSZ_2005_5_CSZ10021",
+        "TIMSS_2007_4_pg19",
+        "TAKS_2009_5_36",
+        "Mercury_SC_413299",
+        "Mercury_SC_407572",
+        "Mercury_SC_406089",
+        "Mercury_SC_402985",
+        "Mercury_SC_402103",
+        "Mercury_SC_401265",
+        "Mercury_SC_400059",
+        "Mercury_7218015",
+        "Mercury_7210473",
+        "Mercury_7187373",
+        "Mercury_7164623",
+        "Mercury_7132405",
+        "Mercury_7130655",
+        "Mercury_7102323",
+        "Mercury_7082758",
+        "Mercury_7068583",
+        "Mercury_417117",
+        "Mercury_407517",
+        "Mercury_406639",
+        "Mercury_403907",
+        "Mercury_401195",
+        "MDSA_2013_8_32",
+        "MDSA_2011_5_3",
+        "MCAS_2014_5_15",
+        "MCAS_2005_9_17",
+        "LEAP__4_10225",
+        "LEAP_2002_4_10247",
+        "LEAP_2001_8_10379"
+      ],
+      "noise_cutoff": 0.538462,
+      "n_removed": 30,
+      "n_kept": 120
+    },
+    "30": {
+      "removed_qids": [
+        "Mercury_SC_402276",
+        "Mercury_SC_412374",
+        "Mercury_7212888",
+        "MSA_2012_5_2",
+        "Mercury_404820",
+        "CSZ20754",
+        "Mercury_400084",
+        "Mercury_184730",
+        "Mercury_7236740",
+        "Mercury_401912",
+        "Mercury_7214498",
+        "Mercury_7094290",
+        "MCAS_2009_8_12",
+        "TIMSS_2003_8_pg87",
+        "Mercury_7016800",
+        "Mercury_417137",
+        "MCAS_2006_9_44",
+        "Mercury_7172708",
+        "Mercury_415086",
+        "MCAS_2005_9_21",
+        "Mercury_SC_402981",
+        "Mercury_SC_400134",
+        "AIMS_2009_8_14",
+        "Mercury_SC_402164",
+        "Mercury_401428",
+        "AKDE&ED_2012_8_6",
+        "Mercury_7024273",
+        "Mercury_412463",
+        "Mercury_7068635",
+        "Mercury_416646",
+        "AKDE&ED_2008_4_35",
+        "Mercury_7223493",
+        "Mercury_183033",
+        "Mercury_SC_LBS10265",
+        "Mercury_7210210",
+        "Mercury_401699",
+        "Mercury_405143",
+        "LEAP__7_10351",
+        "Mercury_7129640",
+        "Mercury_SC_401656",
+        "Mercury_7212818",
+        "Mercury_SC_415473",
+        "Mercury_402132",
+        "Mercury_405685",
+        "NYSEDREGENTS_2015_4_29"
+      ],
+      "kept_qids": [
+        "Mercury_7082443",
+        "Mercury_7271758",
+        "MCAS_2012_5_23614",
+        "MCAS_2004_9_2",
+        "NYSEDREGENTS_2008_4_11",
+        "Mercury_7158935",
+        "MCAS_2003_8_29",
+        "Mercury_SC_400697",
+        "TIMSS_2011_8_pg15",
+        "MEA_2010_8_15",
+        "MCAS_2006_8_24",
+        "NYSEDREGENTS_2012_4_9",
+        "Mercury_7043820",
+        "MCAS_2003_5_33",
+        "Mercury_7058135",
+        "Mercury_402341",
+        "MCAS_2005_8_12",
+        "LEAP_2000_8_4",
+        "TIMSS_1995_8_N2",
+        "Mercury_SC_408663",
+        "Mercury_7201740",
+        "TIMSS_2007_8_pg109",
+        "NYSEDREGENTS_2008_8_27",
+        "Mercury_SC_401373",
+        "Mercury_SC_400985",
+        "Mercury_7213413",
+        "Mercury_7206378",
+        "Mercury_7027248",
+        "Mercury_SC_406836",
+        "Mercury_LBS10302",
+        "Mercury_7222460",
+        "Mercury_7111178",
+        "Mercury_7099190",
+        "Mercury_7090790",
+        "Mercury_405136",
+        "Mercury_401684",
+        "MDSA_2007_8_30",
+        "NAEP_2000_8_S11+11",
+        "Mercury_7212993",
+        "Mercury_7017938",
+        "Mercury_417465",
+        "Mercury_417118",
+        "Mercury_400500",
+        "ACTAAP_2007_7_3",
+        "Mercury_SC_416169",
+        "Mercury_SC_400661",
+        "Mercury_7210455",
+        "Mercury_7133945",
+        "Mercury_7126263",
+        "MDSA_2008_8_3",
+        "NYSEDREGENTS_2012_8_19",
+        "Mercury_SC_416167",
+        "Mercury_SC_409171",
+        "Mercury_SC_402257",
+        "Mercury_SC_401360",
+        "Mercury_SC_401277",
+        "Mercury_7263183",
+        "Mercury_7221988",
+        "Mercury_7186358",
+        "Mercury_7174213",
+        "Mercury_7159303",
+        "Mercury_7159023",
+        "Mercury_7142520",
+        "Mercury_7071523",
+        "Mercury_7016538",
+        "Mercury_7012880",
+        "Mercury_411224",
+        "Mercury_406777",
+        "Mercury_402539",
+        "Mercury_402502",
+        "Mercury_177748",
+        "MCAS_2004_9_5",
+        "MCAS_2002_8_11",
+        "MCAS_2000_8_22",
+        "CSZ_2005_5_CSZ10021",
+        "TIMSS_2007_4_pg19",
+        "TAKS_2009_5_36",
+        "Mercury_SC_413299",
+        "Mercury_SC_407572",
+        "Mercury_SC_406089",
+        "Mercury_SC_402985",
+        "Mercury_SC_402103",
+        "Mercury_SC_401265",
+        "Mercury_SC_400059",
+        "Mercury_7218015",
+        "Mercury_7210473",
+        "Mercury_7187373",
+        "Mercury_7164623",
+        "Mercury_7132405",
+        "Mercury_7130655",
+        "Mercury_7102323",
+        "Mercury_7082758",
+        "Mercury_7068583",
+        "Mercury_417117",
+        "Mercury_407517",
+        "Mercury_406639",
+        "Mercury_403907",
+        "Mercury_401195",
+        "MDSA_2013_8_32",
+        "MDSA_2011_5_3",
+        "MCAS_2014_5_15",
+        "MCAS_2005_9_17",
+        "LEAP__4_10225",
+        "LEAP_2002_4_10247",
+        "LEAP_2001_8_10379"
+      ],
+      "noise_cutoff": 0.288462,
+      "n_removed": 45,
+      "n_kept": 105
+    }
+  },
+  "qualitative_analysis": {
+    "top_noisy_items": [
+      {
+        "qid": "Mercury_SC_402276",
+        "noise_score": 0.961538,
+        "correct": 50,
+        "total": 104,
+        "accuracy": 0.4807692307692308,
+        "question": "Which of the following best describes a learned behavior?",
+        "n_choices": 4,
+        "answer_key": "D",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0,
+          "qwen2.5-7b": 0.1154,
+          "qwen3-32b": 0.8077,
+          "qwen2.5-72b": 1.0
+        }
+      },
+      {
+        "qid": "Mercury_SC_412374",
+        "noise_score": 0.942308,
+        "correct": 49,
+        "total": 104,
+        "accuracy": 0.47115384615384615,
+        "question": "Beavers build their homes in ponds and streams. Which characteristic is least critical to building homes in an aquatic environment?",
+        "n_choices": 4,
+        "answer_key": "C",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.2308,
+          "qwen2.5-7b": 0.7692,
+          "qwen3-32b": 0.0769,
+          "qwen2.5-72b": 0.8077
+        }
+      },
+      {
+        "qid": "Mercury_7212888",
+        "noise_score": 0.942308,
+        "correct": 55,
+        "total": 104,
+        "accuracy": 0.5288461538461539,
+        "question": "Researchers at a science laboratory have found ways to make carbon nanotubes from recycled plastic grocery bags. These nanotubes are then used as components of batteries. This approach best illustrates the ability of technology to",
+        "n_choices": 4,
+        "answer_key": "A",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.6923,
+          "qwen2.5-7b": 0.0385,
+          "qwen3-32b": 0.9615,
+          "qwen2.5-72b": 0.4231
+        }
+      },
+      {
+        "qid": "MSA_2012_5_2",
+        "noise_score": 0.923077,
+        "correct": 56,
+        "total": 104,
+        "accuracy": 0.5384615384615384,
+        "question": "A student walks to school one morning and notices the grass is wet but the streets are dry. Which of these processes most likely caused the grass to be wet?",
+        "n_choices": 4,
+        "answer_key": "A",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.1538,
+          "qwen2.5-7b": 0.1923,
+          "qwen3-32b": 0.9231,
+          "qwen2.5-72b": 0.8846
+        }
+      },
+      {
+        "qid": "Mercury_404820",
+        "noise_score": 0.903846,
+        "correct": 47,
+        "total": 104,
+        "accuracy": 0.4519230769230769,
+        "question": "An atom of chromium has 24 protons, 28 neutrons, and 24 electrons. How many subatomic particles are in the nucleus of a chromium atom?",
+        "n_choices": 4,
+        "answer_key": "D",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.2308,
+          "qwen2.5-7b": 0.3077,
+          "qwen3-32b": 1.0,
+          "qwen2.5-72b": 0.2692
+        }
+      },
+      {
+        "qid": "CSZ20754",
+        "noise_score": 0.903846,
+        "correct": 47,
+        "total": 104,
+        "accuracy": 0.4519230769230769,
+        "question": "Which characteristic of motion could change without changing the velocity of an object?",
+        "n_choices": 4,
+        "answer_key": "B",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0769,
+          "qwen2.5-7b": 0.0769,
+          "qwen3-32b": 0.8846,
+          "qwen2.5-72b": 0.7692
+        }
+      },
+      {
+        "qid": "Mercury_400084",
+        "noise_score": 0.884615,
+        "correct": 46,
+        "total": 104,
+        "accuracy": 0.4423076923076923,
+        "question": "An unbalanced equation for the reaction of methane gas (CH_{4}) with oxygen is shown below. CH_{4} + \\Box O_{2} -> 2CO_{2} + 4H_{2}O How many molecules of oxygen gas (O_{2}) are needed to properly balance this equation?",
+        "n_choices": 4,
+        "answer_key": "D",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.1923,
+          "qwen2.5-7b": 0.2308,
+          "qwen3-32b": 0.6538,
+          "qwen2.5-72b": 0.6923
+        }
+      },
+      {
+        "qid": "Mercury_184730",
+        "noise_score": 0.884615,
+        "correct": 46,
+        "total": 104,
+        "accuracy": 0.4423076923076923,
+        "question": "Two organisms mate and produce offspring. Which of the following statements best explains why the offspring are unable to reproduce?",
+        "n_choices": 4,
+        "answer_key": "B",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0769,
+          "qwen2.5-7b": 0.0769,
+          "qwen3-32b": 0.7692,
+          "qwen2.5-72b": 0.8462
+        }
+      },
+      {
+        "qid": "Mercury_7236740",
+        "noise_score": 0.865385,
+        "correct": 59,
+        "total": 104,
+        "accuracy": 0.5673076923076923,
+        "question": "If two tectonic plates are each moving in opposite directions away from the mid-ocean ridge at a rate of 10 millimeters per year, how long will it take for the ridge to become 100 millimeters broader?",
+        "n_choices": 4,
+        "answer_key": "B",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.2692,
+          "qwen2.5-7b": 0.1538,
+          "qwen3-32b": 0.8846,
+          "qwen2.5-72b": 0.9615
+        }
+      },
+      {
+        "qid": "Mercury_401912",
+        "noise_score": 0.865385,
+        "correct": 59,
+        "total": 104,
+        "accuracy": 0.5673076923076923,
+        "question": "One parent has brown eyes (BB) and has offspring with another parent who has blue eyes (bb). What is the probability that one of their children will have blue eyes?",
+        "n_choices": 4,
+        "answer_key": "A",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0,
+          "qwen2.5-7b": 0.4615,
+          "qwen3-32b": 0.8462,
+          "qwen2.5-72b": 0.9615
+        }
+      },
+      {
+        "qid": "Mercury_7214498",
+        "noise_score": 0.807692,
+        "correct": 62,
+        "total": 104,
+        "accuracy": 0.5961538461538461,
+        "question": "Which object in the solar system is orbited by a belt of asteroids?",
+        "n_choices": 4,
+        "answer_key": "C",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.1538,
+          "qwen2.5-7b": 0.3077,
+          "qwen3-32b": 0.9231,
+          "qwen2.5-72b": 1.0
+        }
+      },
+      {
+        "qid": "Mercury_7094290",
+        "noise_score": 0.769231,
+        "correct": 64,
+        "total": 104,
+        "accuracy": 0.6153846153846154,
+        "question": "It was once thought that living organisms could come from non-living matter. For example, people believed that flies would develop from rotting meat. This idea was later disproved primarily because of",
+        "n_choices": 4,
+        "answer_key": "C",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0,
+          "qwen2.5-7b": 0.5385,
+          "qwen3-32b": 1.0,
+          "qwen2.5-72b": 0.9231
+        }
+      },
+      {
+        "qid": "MCAS_2009_8_12",
+        "noise_score": 0.769231,
+        "correct": 64,
+        "total": 104,
+        "accuracy": 0.6153846153846154,
+        "question": "How is a skin cell from a mouse similar to an amoeba?",
+        "n_choices": 4,
+        "answer_key": "A",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0,
+          "qwen2.5-7b": 0.7692,
+          "qwen3-32b": 0.8462,
+          "qwen2.5-72b": 0.8462
+        }
+      },
+      {
+        "qid": "TIMSS_2003_8_pg87",
+        "noise_score": 0.75,
+        "correct": 65,
+        "total": 104,
+        "accuracy": 0.625,
+        "question": "David makes a solution by dissolving 10 grams of salt in 100 ml of water. He wants a solution that is half as concentrated. What should he add to the original solution to obtain a solution that is about half as concentrated?",
+        "n_choices": 4,
+        "answer_key": "B",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.3077,
+          "qwen2.5-7b": 0.6154,
+          "qwen3-32b": 0.5769,
+          "qwen2.5-72b": 1.0
+        }
+      },
+      {
+        "qid": "Mercury_7016800",
+        "noise_score": 0.75,
+        "correct": 65,
+        "total": 104,
+        "accuracy": 0.625,
+        "question": "When there is an accidental spill in the lab, it is most important to know",
+        "n_choices": 4,
+        "answer_key": "D",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0385,
+          "qwen2.5-7b": 0.8846,
+          "qwen3-32b": 0.6923,
+          "qwen2.5-72b": 0.8846
+        }
+      },
+      {
+        "qid": "Mercury_417137",
+        "noise_score": 0.75,
+        "correct": 39,
+        "total": 104,
+        "accuracy": 0.375,
+        "question": "Where does evaporation occur at the HIGHEST rate?",
+        "n_choices": 4,
+        "answer_key": "C",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.5,
+          "qwen2.5-7b": 0.6538,
+          "qwen3-32b": 0.2692,
+          "qwen2.5-72b": 0.0769
+        }
+      },
+      {
+        "qid": "MCAS_2006_9_44",
+        "noise_score": 0.737864,
+        "correct": 38,
+        "total": 103,
+        "accuracy": 0.36893203883495146,
+        "question": "An astronaut drops a 1.0 kg object and a 5.0 kg object on the Moon. Both objects fall a total distance of 2.0 m vertically. Which of the following best describes the objects after they have fallen a distance of 1.0 m?",
+        "n_choices": 4,
+        "answer_key": "D",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.5385,
+          "qwen2.5-7b": 0.0,
+          "qwen3-32b": 0.8462,
+          "qwen2.5-72b": 0.0769
+        }
+      },
+      {
+        "qid": "Mercury_7172708",
+        "noise_score": 0.730769,
+        "correct": 38,
+        "total": 104,
+        "accuracy": 0.36538461538461536,
+        "question": "There are several theories that exist concerning the way dinosaurs became extinct. If new evidence is found that appears to challenge a particular theory on dinosaur extinction, what happens to the old theory?",
+        "n_choices": 4,
+        "answer_key": "B",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.8846,
+          "qwen2.5-7b": 0.2692,
+          "qwen3-32b": 0.1538,
+          "qwen2.5-72b": 0.1538
+        }
+      },
+      {
+        "qid": "Mercury_415086",
+        "noise_score": 0.730769,
+        "correct": 66,
+        "total": 104,
+        "accuracy": 0.6346153846153846,
+        "question": "An airplane flies in a straight line between two cities that are separated by 840 kilometers. If it takes 4 hours for the airplane to make the trip, what is its average speed?",
+        "n_choices": 4,
+        "answer_key": "D",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.3462,
+          "qwen2.5-7b": 0.1923,
+          "qwen3-32b": 1.0,
+          "qwen2.5-72b": 1.0
+        }
+      },
+      {
+        "qid": "MCAS_2005_9_21",
+        "noise_score": 0.730769,
+        "correct": 66,
+        "total": 104,
+        "accuracy": 0.6346153846153846,
+        "question": "A man ran on a treadmill for 1,800 seconds. At the end of his run, the treadmill indicated his energy output as 240,000 J. What average power did he generate?",
+        "n_choices": 4,
+        "answer_key": "B",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.3462,
+          "qwen2.5-7b": 0.1923,
+          "qwen3-32b": 1.0,
+          "qwen2.5-72b": 1.0
+        }
+      },
+      {
+        "qid": "Mercury_SC_402981",
+        "noise_score": 0.711538,
+        "correct": 67,
+        "total": 104,
+        "accuracy": 0.6442307692307693,
+        "question": "During which activity should a student wear a laboratory apron or coat?",
+        "n_choices": 4,
+        "answer_key": "D",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.9231,
+          "qwen2.5-7b": 0.6923,
+          "qwen3-32b": 0.0,
+          "qwen2.5-72b": 0.9615
+        }
+      },
+      {
+        "qid": "Mercury_SC_400134",
+        "noise_score": 0.692308,
+        "correct": 36,
+        "total": 104,
+        "accuracy": 0.34615384615384615,
+        "question": "Which tool would be the most helpful in an investigation of the life cycle of a monarch butterfly?",
+        "n_choices": 4,
+        "answer_key": "D",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0,
+          "qwen2.5-7b": 0.0,
+          "qwen3-32b": 0.4615,
+          "qwen2.5-72b": 0.9231
+        }
+      },
+      {
+        "qid": "AIMS_2009_8_14",
+        "noise_score": 0.692308,
+        "correct": 68,
+        "total": 104,
+        "accuracy": 0.6538461538461539,
+        "question": "Bromine (Br) is a liquid at room temperature. Oxygen (O) is a gas at room temperature. Room temperature is 25° C. Which of the following statements is true?",
+        "n_choices": 4,
+        "answer_key": "A",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0,
+          "qwen2.5-7b": 0.8462,
+          "qwen3-32b": 0.7692,
+          "qwen2.5-72b": 1.0
+        }
+      },
+      {
+        "qid": "Mercury_SC_402164",
+        "noise_score": 0.673077,
+        "correct": 69,
+        "total": 104,
+        "accuracy": 0.6634615384615384,
+        "question": "A student sets up an experiment to learn which colors of light are refracted by a prism. Which method will the student most likely use to collect data?",
+        "n_choices": 4,
+        "answer_key": "C",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.8462,
+          "qwen2.5-7b": 0.0385,
+          "qwen3-32b": 1.0,
+          "qwen2.5-72b": 0.7692
+        }
+      },
+      {
+        "qid": "Mercury_401428",
+        "noise_score": 0.596154,
+        "correct": 73,
+        "total": 104,
+        "accuracy": 0.7019230769230769,
+        "question": "Which statement accurately describes an interaction between plants and animals?",
+        "n_choices": 4,
+        "answer_key": "B",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0769,
+          "qwen2.5-7b": 0.9615,
+          "qwen3-32b": 0.9231,
+          "qwen2.5-72b": 0.8462
+        }
+      },
+      {
+        "qid": "AKDE&ED_2012_8_6",
+        "noise_score": 0.576923,
+        "correct": 74,
+        "total": 104,
+        "accuracy": 0.7115384615384616,
+        "question": "Which change in Earth's surface is most directly related to the water cycle?",
+        "n_choices": 4,
+        "answer_key": "A",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0385,
+          "qwen2.5-7b": 1.0,
+          "qwen3-32b": 0.9615,
+          "qwen2.5-72b": 0.8462
+        }
+      },
+      {
+        "qid": "Mercury_7024273",
+        "noise_score": 0.557692,
+        "correct": 29,
+        "total": 104,
+        "accuracy": 0.27884615384615385,
+        "question": "Which of these illustrates that sound waves can travel through two different types of media?",
+        "n_choices": 4,
+        "answer_key": "C",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0,
+          "qwen2.5-7b": 0.0,
+          "qwen3-32b": 0.1154,
+          "qwen2.5-72b": 1.0
+        }
+      },
+      {
+        "qid": "Mercury_412463",
+        "noise_score": 0.557692,
+        "correct": 75,
+        "total": 104,
+        "accuracy": 0.7211538461538461,
+        "question": "There are a total of eight planets that orbit the Sun. How many of the other planets orbit in the same direction as Earth?",
+        "n_choices": 4,
+        "answer_key": "D",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0,
+          "qwen2.5-7b": 0.8846,
+          "qwen3-32b": 1.0,
+          "qwen2.5-72b": 1.0
+        }
+      },
+      {
+        "qid": "Mercury_7068635",
+        "noise_score": 0.538462,
+        "correct": 76,
+        "total": 104,
+        "accuracy": 0.7307692307692307,
+        "question": "Which nonrenewable resource is used extensively in computers and electronics?",
+        "n_choices": 4,
+        "answer_key": "C",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.0,
+          "qwen2.5-7b": 0.9231,
+          "qwen3-32b": 1.0,
+          "qwen2.5-72b": 1.0
+        }
+      },
+      {
+        "qid": "Mercury_416646",
+        "noise_score": 0.538462,
+        "correct": 76,
+        "total": 104,
+        "accuracy": 0.7307692307692307,
+        "question": "Both euglenas and volvox are classified as plant-like protists. But volvox has more structures in common with plants than euglenas do. Which structure found in plant cells is also found in volvox but not in euglenas?",
+        "n_choices": 4,
+        "answer_key": "B",
+        "has_paraphrases": true,
+        "per_model_accuracy": {
+          "llama-3.1-8b": 0.4615,
+          "qwen2.5-7b": 0.8462,
+          "qwen3-32b": 0.7308,
+          "qwen2.5-72b": 0.8846
+        }
+      }
+    ],
+    "category_distribution": {},
+    "noise_score_distribution": {
+      "bins": [
+        0.0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+        1.0
+      ],
+      "counts": [
+        84,
+        14,
+        8,
+        5,
+        6,
+        9,
+        3,
+        10,
+        5,
+        6
+      ]
+    },
+    "model_agreement": {
+      "all_agree_correct": 69,
+      "all_agree_wrong": 1,
+      "mixed": 80
+    }
+  }
+}

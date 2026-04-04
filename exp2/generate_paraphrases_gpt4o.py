@@ -186,7 +186,16 @@ def parse_paraphrases(raw: str, original: str) -> list[str]:
 # ============================================================
 
 def load_questions(dataset_key: str) -> list[dict]:
-    """Load raw dataset questions (first N_QUESTIONS)."""
+    """Load N_QUESTIONS via stratified random sampling (seed=42).
+
+    For MMLU-Pro, stratifies by 'category' so the sampled subset mirrors the
+    overall subject distribution.  For ARC (uniform structure), falls back to
+    simple random sampling.  The fixed seed guarantees reproducibility.
+
+    If N_QUESTIONS >= total items, all items are returned (original order).
+    """
+    import random as _random
+
     cfg = DATASETS[dataset_key]
     input_path = Path(__file__).parent / cfg["input"]
 
@@ -196,7 +205,41 @@ def load_questions(dataset_key: str) -> list[dict]:
             line = line.strip()
             if line:
                 items.append(json.loads(line))
-    return items[:N_QUESTIONS]
+
+    if N_QUESTIONS >= len(items):
+        return items
+
+    rng = _random.Random(42)
+
+    # Stratified sampling for MMLU-Pro (by category)
+    if cfg["type"] == "mmlu":
+        from collections import defaultdict
+        by_cat = defaultdict(list)
+        for item in items:
+            by_cat[item.get("category", "unknown")].append(item)
+
+        # Proportional allocation
+        sampled = []
+        total = len(items)
+        for cat, cat_items in sorted(by_cat.items()):
+            n_cat = max(1, round(len(cat_items) / total * N_QUESTIONS))
+            rng.shuffle(cat_items)
+            sampled.extend(cat_items[:n_cat])
+
+        # Adjust to exact N_QUESTIONS (rounding may over/under-sample)
+        rng.shuffle(sampled)
+        if len(sampled) > N_QUESTIONS:
+            sampled = sampled[:N_QUESTIONS]
+        elif len(sampled) < N_QUESTIONS:
+            remaining = [it for it in items if it not in sampled]
+            rng.shuffle(remaining)
+            sampled.extend(remaining[:N_QUESTIONS - len(sampled)])
+
+        return sampled
+    else:
+        # ARC: simple random sampling
+        rng.shuffle(items)
+        return items[:N_QUESTIONS]
 
 
 def format_choices(q: dict, dataset_type: str) -> str:

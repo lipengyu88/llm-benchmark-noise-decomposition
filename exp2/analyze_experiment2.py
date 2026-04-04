@@ -6,7 +6,8 @@ Reads:   exp2_{dataset}_{model}_{source}.json
 Writes:  analysis_exp2/analysis_{dataset}.json
 
 Supports multiple paraphrase sources (gpt4o, qwen) and performs:
-  - Per-source accuracy, flip rate, pairwise gaps, rank distribution
+  - Primary analysis on the full question set, treating parse failures as wrong
+  - Supplemental clean-subset analysis for sensitivity checking
   - BH-corrected pairwise comparisons
   - Cross-source comparison (if both sources available)
   - Cross-experiment comparison with Exp I (if available)
@@ -60,6 +61,25 @@ def get_clean_qids(df: pd.DataFrame) -> set:
         mdf = df[df.model_short == m]
         keep -= set(mdf.loc[mdf.parse_failure == True, "question_id"])
     return keep
+
+
+def prepare_analysis_views(df_raw: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, set]:
+    """Build analysis views.
+
+    Full-set view keeps every attempt and treats parse failures / missing parses
+    as incorrect. Clean view keeps only questions with no parse failures for any
+    model. This mirrors Exp I's philosophy: retain the task and report parsing
+    issues rather than silently dropping the item from the primary analysis.
+    """
+    df_full = df_raw.copy()
+    df_full["is_correct"] = df_full["is_correct"].fillna(False).astype(int)
+
+    clean_qids = get_clean_qids(df_raw)
+    df_clean = df_raw[df_raw.question_id.isin(clean_qids)].copy()
+    if len(df_clean) > 0:
+        df_clean["is_correct"] = df_clean["is_correct"].fillna(False).astype(int)
+
+    return df_full, df_clean, clean_qids
 
 
 # ============================================================
@@ -251,20 +271,18 @@ def paraphrase_diversity(dataset_key: str, source: str) -> dict:
 def cross_source_comparison(
     stats_gpt4o: dict, stats_qwen: dict, dataset_key: str
 ) -> dict:
-    """Compare results between GPT-4o and Qwen paraphrase sources.
-
-    Note: Each source may have a different clean_qids set (due to different
-    parse failure patterns), so accuracy/flip values are computed on slightly
-    different question subsets. This is documented in the output.
-    """
+    """Compare results between GPT-4o and Qwen paraphrase sources."""
     comparison = {}
-    n_gpt4o = stats_gpt4o.get("n_evaluable", 0)
-    n_qwen = stats_qwen.get("n_evaluable", 0)
-    comparison["n_evaluable_gpt4o"] = n_gpt4o
-    comparison["n_evaluable_qwen"] = n_qwen
+    n_gpt4o = stats_gpt4o.get("n_questions_total", 0)
+    n_qwen = stats_qwen.get("n_questions_total", 0)
+    comparison["n_questions_gpt4o"] = n_gpt4o
+    comparison["n_questions_qwen"] = n_qwen
+    comparison["n_clean_gpt4o"] = stats_gpt4o.get("n_questions_clean", 0)
+    comparison["n_clean_qwen"] = stats_qwen.get("n_questions_clean", 0)
     comparison["note"] = (
-        f"GPT-4o clean set: {n_gpt4o} questions, Qwen clean set: {n_qwen} questions. "
-        f"Accuracy values are computed on each source's own clean subset."
+        "Primary comparisons use the full question set with parse failures "
+        "counted as incorrect. Clean-subset counts are provided for sensitivity "
+        "analysis."
     )
 
     # Accuracy comparison
@@ -326,7 +344,7 @@ def cross_source_comparison(
 # Cross-experiment (Exp I)
 # ============================================================
 
-def cross_experiment(dataset_key: str, source: str, clean_flip, clean_acc_summary):
+def cross_experiment(dataset_key: str, source: str, flip_stats, acc_summary):
     """Compare with Experiment I results."""
     exp1_analysis_dir = ROOT.parent / "exp1" / "analysis_exp1"
     if not exp1_analysis_dir.exists():
@@ -352,10 +370,10 @@ def cross_experiment(dataset_key: str, source: str, clean_flip, clean_acc_summar
     # Flip rate comparison
     flip_comp = []
     for m1, m2 in e1_map.items():
-        if m1 not in analysis or m2 not in clean_flip:
+        if m1 not in analysis or m2 not in flip_stats:
             continue
         e1_all = analysis[m1]["item_flip_rate"] * 100
-        e2 = clean_flip[m2]["rate"] * 100
+        e2 = flip_stats[m2]["rate"] * 100
         flip_comp.append({"model": m2, "exp1_all": e1_all, "exp2": e2})
     cross["flip_comparison"] = flip_comp
 
@@ -366,7 +384,7 @@ def cross_experiment(dataset_key: str, source: str, clean_flip, clean_acc_summar
             continue
         pv = analysis[m1]["accuracy_stats"]["per_variant"]
         vs = analysis[m1].get("variance_decomposition", {}).get("var_sampling", 0)
-        e2_acc = [s for s in clean_acc_summary if s["model_short"] == m2]
+        e2_acc = [s for s in acc_summary if s["model_short"] == m2]
         if not e2_acc:
             continue
         vt = e2_acc[0]["std"] ** 2
@@ -396,7 +414,13 @@ def analyze_source(ds_key: str, source: str) -> dict | None:
         log.warning(f"No data for {bench}/{source}")
         return None
 
-    stats = {"source": source}
+    stats = {
+        "source": source,
+        "analysis_policy": {
+            "primary": "full_set_parse_failures_count_as_incorrect",
+            "supplemental": "clean_subset_no_parse_failures",
+        },
+    }
 
     # Parse failure report
     pf = {}
@@ -412,40 +436,44 @@ def analyze_source(ds_key: str, source: str) -> dict | None:
                      f"({n_pf/len(mdf)*100:.1f}%)")
     stats["parse_failure"] = pf
 
-    # Filter to clean subset
-    clean_qids = get_clean_qids(df_raw)
-    df = df_raw[df_raw.question_id.isin(clean_qids)].copy()
+    df_full, df_clean, clean_qids = prepare_analysis_views(df_raw)
+    stats["n_questions_total"] = int(df_raw.question_id.nunique())
+    stats["n_questions_clean"] = len(clean_qids)
+    # Keep legacy key for downstream scripts that still expect the clean size.
     stats["n_evaluable"] = len(clean_qids)
-    log.info(f"  [{source}] Evaluable questions: {len(clean_qids)} "
+    log.info(f"  [{source}] Full-set questions: {stats['n_questions_total']}")
+    log.info(f"  [{source}] Clean-subset questions: {len(clean_qids)} "
              f"(of {df_raw.question_id.nunique()})")
 
-    # Two-layer accuracy (if there are PFs)
-    if any(p["total"] > 0 for p in pf.values()):
-        two_layer = []
-        for m in MODELS:
-            mdf = df_raw[df_raw.model_short == m]
-            if len(mdf) == 0:
-                continue
-            acc_all = float(mdf.groupby("version")["is_correct"].mean().mean())
-            mdf_c = mdf[mdf.question_id.isin(clean_qids)]
-            acc_clean = float(mdf_c.groupby("version")["is_correct"].mean().mean())
-            two_layer.append({"model": m, "acc_all_150": acc_all,
-                              "acc_clean": acc_clean, "n_pf": pf.get(m, {}).get("total", 0)})
-        stats["two_layer_accuracy"] = two_layer
+    # Two-layer accuracy (full set vs clean subset)
+    two_layer = []
+    for m in MODELS:
+        mdf_all = df_full[df_full.model_short == m]
+        if len(mdf_all) == 0:
+            continue
+        acc_all = float(mdf_all.groupby("version")["is_correct"].mean().mean())
+        mdf_clean = df_clean[df_clean.model_short == m]
+        acc_clean = float(mdf_clean.groupby("version")["is_correct"].mean().mean()) if len(mdf_clean) else 0.0
+        two_layer.append({
+            "model": m,
+            "acc_all_questions": acc_all,
+            "acc_all_150": acc_all,
+            "acc_clean": acc_clean,
+            "n_pf": pf.get(m, {}).get("total", 0),
+        })
+    stats["two_layer_accuracy"] = two_layer
 
-    # Accuracy
-    acc_summary, acc_per_v = accuracy_summary(df)
+    # Primary analysis: full set
+    acc_summary, acc_per_v = accuracy_summary(df_full)
     stats["accuracy_summary"] = acc_summary
     for a in sorted(acc_summary, key=lambda x: x["mean"]):
         log.info(f"  [{source}] {a['model_short']:15s}: "
-                 f"{a['mean']*100:.2f}% +/- {a['std']*100:.2f}%")
+                 f"{a['mean']*100:.2f}% +/- {a['std']*100:.2f}% (full set)")
 
-    # Flip rate
-    flip = item_flip_rate(df)
+    flip = item_flip_rate(df_full)
     stats["item_flip_rate"] = flip
 
-    # Pairwise gaps with BH correction
-    gaps = pairwise_bootstrap(df)
+    gaps = pairwise_bootstrap(df_full)
     gaps = apply_bh_correction(gaps)
     stats["pairwise_gaps"] = gaps
     for g in gaps:
@@ -456,13 +484,31 @@ def analyze_source(ds_key: str, source: str) -> dict | None:
                  f"[{g['ci_lower']*100:+.2f}, {g['ci_upper']*100:+.2f}] "
                  f"{sig_raw} | p={g['p_value']:.4f} -> p_bh={g['p_value_bh']:.4f} {sig_bh}")
 
-    # Reversals
-    rev = reversal_frequency(df)
+    rev = reversal_frequency(df_full)
     stats["reversals"] = rev
 
-    # Rank distribution
-    rankd = rank_distribution(df)
+    rankd = rank_distribution(df_full)
     stats["rank_distribution"] = rankd
+
+    # Supplemental clean-subset analysis for sensitivity checks.
+    clean_stats = {
+        "n_questions": len(clean_qids),
+    }
+    if len(df_clean) > 0:
+        clean_acc_summary, _ = accuracy_summary(df_clean)
+        clean_stats["accuracy_summary"] = clean_acc_summary
+        clean_stats["item_flip_rate"] = item_flip_rate(df_clean)
+        clean_gaps = apply_bh_correction(pairwise_bootstrap(df_clean))
+        clean_stats["pairwise_gaps"] = clean_gaps
+        clean_stats["reversals"] = reversal_frequency(df_clean)
+        clean_stats["rank_distribution"] = rank_distribution(df_clean)
+    else:
+        clean_stats["accuracy_summary"] = []
+        clean_stats["item_flip_rate"] = {}
+        clean_stats["pairwise_gaps"] = []
+        clean_stats["reversals"] = []
+        clean_stats["rank_distribution"] = []
+    stats["clean_subset"] = clean_stats
 
     # Paraphrase diversity
     div = paraphrase_diversity(ds_key, source)
@@ -530,7 +576,11 @@ def main():
         for source, stats in ds_results.items():
             if source == "cross_source":
                 continue
-            print(f"\n{bench} / {source} (N={stats['n_evaluable']}):")
+            print(
+                f"\n{bench} / {source} "
+                f"(full={stats.get('n_questions_total', 0)}, "
+                f"clean={stats.get('n_questions_clean', stats.get('n_evaluable', 0))}):"
+            )
             for a in sorted(stats["accuracy_summary"], key=lambda x: x["mean"]):
                 fr = stats["item_flip_rate"].get(a["model_short"], {}).get("rate", 0)
                 print(f"  {a['model_short']:15s}: {a['mean']*100:.2f}% +/- {a['std']*100:.2f}%  "

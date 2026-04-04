@@ -72,6 +72,9 @@ plt.rcParams.update({
 sns.set_style("whitegrid")
 
 
+NOISE_TAG = ""   # set by main() from CLI --noise-tag
+
+
 def save(fig, name):
     fig.savefig(FIGDIR / name, bbox_inches="tight", pad_inches=.25)
     plt.close(fig)
@@ -79,11 +82,11 @@ def save(fig, name):
 
 
 def load_noise(ds):
-    return json.loads((NOISE_DIR / f"noise_{ds}.json").read_text())
+    return json.loads((NOISE_DIR / f"noise_{ds}{NOISE_TAG}.json").read_text())
 
 
 def load_analysis(ds):
-    return json.loads((ANALYSIS_DIR / f"analysis_{ds}.json").read_text())
+    return json.loads((ANALYSIS_DIR / f"analysis_{ds}{NOISE_TAG}.json").read_text())
 
 
 # ============================================================
@@ -646,7 +649,22 @@ def fig11_summary_dashboard():
 # ============================================================
 
 def main():
-    print("Generating Experiment III figures...")
+    import argparse
+    parser = argparse.ArgumentParser(description="Experiment III: Visualizations")
+    parser.add_argument("--noise-tag", type=str, default="",
+                        help="Suffix of noise/analysis files, e.g. '_shared150'")
+    args = parser.parse_args()
+
+    global NOISE_TAG, FIGDIR
+    NOISE_TAG = args.noise_tag
+
+    # Put tagged figures in a separate sub-directory to avoid overwriting
+    if NOISE_TAG:
+        FIGDIR = ROOT / f"figures_exp3{NOISE_TAG}"
+        FIGDIR.mkdir(exist_ok=True)
+
+    tag_label = NOISE_TAG if NOISE_TAG else "(default)"
+    print(f"Generating Experiment III figures [{tag_label}]...")
 
     fig1_noise_distribution()
     fig2_exp1_stability_improvement()

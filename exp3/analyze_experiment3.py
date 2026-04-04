@@ -67,9 +67,14 @@ RNG = np.random.RandomState(42)
 # Data loading helpers
 # ============================================================
 
-def load_noise_data(dataset_key: str) -> dict:
-    """Load pre-computed noise data from run_experiment3.py."""
-    path = NOISE_DIR / f"noise_{dataset_key}.json"
+def load_noise_data(dataset_key: str, noise_tag: str = "") -> dict:
+    """Load pre-computed noise data from run_experiment3.py.
+
+    Args:
+        noise_tag: suffix appended after dataset_key, e.g. "_shared150"
+                   so the file becomes noise_{dataset_key}{noise_tag}.json
+    """
+    path = NOISE_DIR / f"noise_{dataset_key}{noise_tag}.json"
     if not path.exists():
         raise FileNotFoundError(f"Run run_experiment3.py first: {path}")
     return json.loads(path.read_text(encoding="utf-8"))
@@ -108,17 +113,20 @@ def load_exp1_matrix(model_e1: str, dataset_key: str) -> tuple:
 
 def load_exp2_dataframe(dataset_key: str) -> pd.DataFrame:
     """Load Exp II results as a DataFrame.
-    Tries new naming convention (with source suffix) first, then falls back."""
+    Loads ALL available sources (gpt4o + qwen) for maximum coverage."""
     bench = DATASETS[dataset_key]
     frames = []
     for m in MODELS_EXP2:
-        loaded = False
-        for suffix in ["_gpt4o", "_qwen", ""]:
+        for suffix in ["_gpt4o", "_qwen"]:
             p = EXP2_DIR / f"exp2_{bench}_{m}{suffix}.json"
             if p.exists():
                 frames.append(pd.DataFrame(json.loads(p.read_text(encoding="utf-8"))))
-                loaded = True
-                break
+        # Legacy fallback (no source suffix)
+        if not any((EXP2_DIR / f"exp2_{bench}_{m}_{s}.json").exists()
+                   for s in ["gpt4o", "qwen"]):
+            p = EXP2_DIR / f"exp2_{bench}_{m}.json"
+            if p.exists():
+                frames.append(pd.DataFrame(json.loads(p.read_text(encoding="utf-8"))))
     if not frames:
         return pd.DataFrame()
     df = pd.concat(frames, ignore_index=True)
@@ -546,13 +554,13 @@ def scale_analysis(threshold_results: dict) -> dict:
 # Main analysis pipeline
 # ============================================================
 
-def analyze_dataset(dataset_key: str) -> dict:
+def analyze_dataset(dataset_key: str, noise_tag: str = "") -> dict:
     log.info(f"\n{'='*60}")
-    log.info(f"Analyzing {DATASETS[dataset_key]}")
+    log.info(f"Analyzing {DATASETS[dataset_key]} (noise_tag={noise_tag!r})")
     log.info(f"{'='*60}")
 
     # Load noise data
-    noise_data = load_noise_data(dataset_key)
+    noise_data = load_noise_data(dataset_key, noise_tag=noise_tag)
     noise_scores = noise_data["noise_scores"]
     all_qids = set(noise_scores.keys())
 
@@ -752,15 +760,25 @@ def generate_summary(all_results: dict):
 # ============================================================
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Experiment III: Analysis")
+    parser.add_argument("--noise-tag", type=str, default="",
+                        help="Suffix of noise file to load, e.g. '_shared150' "
+                             "reads noise_{dataset}_shared150.json")
+    args = parser.parse_args()
+
+    noise_tag = args.noise_tag
+    tag_label = noise_tag if noise_tag else "(default)"
+
     all_results = {}
 
     for ds_key in DATASETS:
         try:
-            analysis = analyze_dataset(ds_key)
+            analysis = analyze_dataset(ds_key, noise_tag=noise_tag)
             all_results[ds_key] = analysis
 
-            # Save
-            outpath = ANALYSIS_DIR / f"analysis_{ds_key}.json"
+            # Save — include tag in output filename so different runs don't overwrite
+            outpath = ANALYSIS_DIR / f"analysis_{ds_key}{noise_tag}.json"
             outpath.write_text(json.dumps(analysis, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
             log.info(f"Saved to {outpath}")
         except FileNotFoundError as e:
@@ -770,7 +788,7 @@ def main():
         generate_summary(all_results)
 
     print("\n" + "=" * 70)
-    print("EXPERIMENT III ANALYSIS COMPLETE")
+    print(f"EXPERIMENT III ANALYSIS COMPLETE  [{tag_label}]")
     print("=" * 70)
 
 

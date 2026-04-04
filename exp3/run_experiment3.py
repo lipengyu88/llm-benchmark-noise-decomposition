@@ -82,16 +82,36 @@ def load_exp1_results(model_e1: str, dataset_key: str) -> dict:
         return json.load(f)
 
 
-def load_exp2_results(dataset_key: str, model_e2: str) -> list[dict]:
+def load_exp2_results(dataset_key: str, model_e2: str,
+                      exp2_source: str = "both") -> list[dict]:
     """Load Exp II results: list of record dicts.
-    Tries new naming convention (with source suffix) first, then falls back."""
+
+    exp2_source: "gpt4o", "qwen", or "both" (merge both sources).
+    """
     bench = DATASETS[dataset_key]
-    # Try source-tagged files (gpt4o preferred, then qwen, then legacy)
-    for suffix in ["_gpt4o", "_qwen", ""]:
-        path = EXP2_DIR / f"exp2_{bench}_{model_e2}{suffix}.json"
+
+    if exp2_source == "both":
+        all_records = []
+        for src in ["gpt4o", "qwen"]:
+            path = EXP2_DIR / f"exp2_{bench}_{model_e2}_{src}.json"
+            if path.exists():
+                all_records.extend(json.loads(path.read_text(encoding="utf-8")))
+        if all_records:
+            return all_records
+        # Legacy fallback (no source suffix)
+        path = EXP2_DIR / f"exp2_{bench}_{model_e2}.json"
         if path.exists():
             return json.loads(path.read_text(encoding="utf-8"))
-    return []
+        return []
+    else:
+        path = EXP2_DIR / f"exp2_{bench}_{model_e2}_{exp2_source}.json"
+        if path.exists():
+            return json.loads(path.read_text(encoding="utf-8"))
+        # Legacy fallback
+        path = EXP2_DIR / f"exp2_{bench}_{model_e2}.json"
+        if path.exists():
+            return json.loads(path.read_text(encoding="utf-8"))
+        return []
 
 
 def load_dataset_items(dataset_key: str) -> dict:
@@ -142,9 +162,18 @@ def compute_noise_scores(
     dataset_key: str,
     use_exp1: bool = True,
     use_exp2: bool = True,
+    exp2_source: str = "both",
+    shared_only: bool = False,
 ) -> dict:
     """
     Compute per-question noise scores combining Exp I and Exp II results.
+
+    Args:
+        exp2_source: "gpt4o", "qwen", or "both" — which Exp II source(s) to use.
+        shared_only: If True, only include questions that appear in BOTH Exp I
+                     and Exp II.  This avoids the bias where the 150 questions
+                     without Exp II data receive systematically lower noise
+                     scores due to fewer observation dimensions.
 
     Returns dict: qid -> {
         "noise_score": float,
@@ -158,6 +187,7 @@ def compute_noise_scores(
     """
     # Aggregate: qid -> model -> list of (is_correct, source)
     item_data = defaultdict(lambda: defaultdict(list))
+    exp2_qids = set()  # track which qids have Exp II data
 
     # Load Exp I results
     if use_exp1:
@@ -173,12 +203,24 @@ def compute_noise_scores(
     # Load Exp II results
     if use_exp2:
         for model_e2 in MODELS_EXP2:
-            records = load_exp2_results(dataset_key, model_e2)
+            records = load_exp2_results(dataset_key, model_e2,
+                                        exp2_source=exp2_source)
             for rec in records:
                 qid = str(rec["question_id"])
                 ic = rec.get("is_correct")
                 if ic is not None:
                     item_data[qid][model_e2].append((int(ic), "exp2"))
+                    exp2_qids.add(qid)
+
+    # If shared_only, keep only questions present in both Exp I and Exp II
+    if shared_only and use_exp1 and use_exp2:
+        exp1_qids = {qid for qid in item_data
+                     if any(src == "exp1" for entries in item_data[qid].values()
+                            for _, src in entries)}
+        shared = exp1_qids & exp2_qids
+        item_data = {qid: v for qid, v in item_data.items() if qid in shared}
+        log.info(f"  shared_only: keeping {len(shared)} questions "
+                 f"(exp1={len(exp1_qids)}, exp2={len(exp2_qids)})")
 
     # Compute noise scores
     noise_data = {}
@@ -414,18 +456,23 @@ def compute_per_source_noise(noise_data: dict) -> dict:
 # Main
 # ============================================================
 
-def run(dataset_keys: list[str], use_exp1: bool, use_exp2: bool):
+def run(dataset_keys: list[str], use_exp1: bool, use_exp2: bool,
+        exp2_source: str = "both", shared_only: bool = False):
     all_outputs = {}
 
     for ds_key in dataset_keys:
         bench = DATASETS[ds_key]
         log.info(f"\n{'='*60}")
         log.info(f"Dataset: {bench}")
-        log.info(f"Sources: {'Exp I' if use_exp1 else ''} {'Exp II' if use_exp2 else ''}")
+        log.info(f"Sources: {'Exp I' if use_exp1 else ''} {'Exp II' if use_exp2 else ''}"
+                 f" | exp2_source={exp2_source} | shared_only={shared_only}")
         log.info(f"{'='*60}")
 
         # Compute noise scores
-        noise_data = compute_noise_scores(ds_key, use_exp1=use_exp1, use_exp2=use_exp2)
+        noise_data = compute_noise_scores(
+            ds_key, use_exp1=use_exp1, use_exp2=use_exp2,
+            exp2_source=exp2_source, shared_only=shared_only,
+        )
         log.info(f"Computed noise scores for {len(noise_data)} questions")
 
         if not noise_data:
@@ -483,6 +530,10 @@ def run(dataset_keys: list[str], use_exp1: bool, use_exp2: bool):
             tag = "_exp1only"
         elif use_exp2 and not use_exp1:
             tag = "_exp2only"
+        if shared_only:
+            tag += "_shared150"
+        if exp2_source != "both" and use_exp2:
+            tag += f"_{exp2_source}"
         outpath = OUTPUT_DIR / f"noise_{ds_key}{tag}.json"
         outpath.write_text(json.dumps(output, indent=2, ensure_ascii=False), encoding="utf-8")
         log.info(f"Saved to {outpath}")
@@ -495,10 +546,16 @@ if __name__ == "__main__":
     parser.add_argument("--dataset", choices=list(DATASETS.keys()), default=None)
     parser.add_argument("--exp1-only", action="store_true", help="Use only Exp I results")
     parser.add_argument("--exp2-only", action="store_true", help="Use only Exp II results")
+    parser.add_argument("--exp2-source", choices=["gpt4o", "qwen", "both"], default="both",
+                        help="Which Exp II paraphrase source to use (default: both)")
+    parser.add_argument("--shared-only", action="store_true",
+                        help="Only include questions present in both Exp I and Exp II "
+                             "(avoids bias from unequal coverage)")
     args = parser.parse_args()
 
     dataset_keys = [args.dataset] if args.dataset else list(DATASETS.keys())
     use_exp1 = not args.exp2_only
     use_exp2 = not args.exp1_only
 
-    run(dataset_keys, use_exp1=use_exp1, use_exp2=use_exp2)
+    run(dataset_keys, use_exp1=use_exp1, use_exp2=use_exp2,
+        exp2_source=args.exp2_source, shared_only=args.shared_only)

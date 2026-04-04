@@ -72,6 +72,12 @@ def get_clean_qids(df):
     return keep
 
 
+def prepare_full_view(df):
+    df = df.copy()
+    df["is_correct"] = df["is_correct"].fillna(False).astype(int)
+    return df
+
+
 def load_analyses():
     analyses = {}
     for ds in ["arc", "mmlu"]:
@@ -499,15 +505,14 @@ def main():
         print("Run analyze_experiment2.py first!")
         return
 
-    # Load raw data for accuracy plots
+    # Load raw data for accuracy plots using the primary full-set policy.
     data = {}
     for ds in ["arc", "mmlu"]:
         data[ds] = {}
         for source in SOURCES:
             df = load_raw(ds, source)
             if len(df) > 0:
-                clean = get_clean_qids(df)
-                data[ds][source] = df[df.question_id.isin(clean)].copy()
+                data[ds][source] = prepare_full_view(df)
 
     print(f"Generating figures to {FIGDIR}/")
     fig1_accuracy_by_version(data)
