@@ -1,0 +1,80 @@
+{
+  "judge_model": "openai/gpt-4o",
+  "judge_temperature": 0.0,
+  "methodology": "Bidirectional NLI via GPT-4o. For each paraphrase, we check: (1) paraphrase -> original (meaning preserved?) and (2) original -> paraphrase (info added?). A paraphrase is 'faithful' iff BOTH directions return entailment.",
+  "by_source_dataset": {
+    "gpt4o_arc": {
+      "n": 450,
+      "n_faithful_bidirectional": 433,
+      "faithful_rate": 0.9622222222222222,
+      "dir1_para_to_orig": {
+        "entailment": 433,
+        "neutral": 17
+      },
+      "dir2_orig_to_para": {
+        "entailment": 444,
+        "neutral": 6
+      }
+    },
+    "gpt4o_mmlu": {
+      "n": 450,
+      "n_faithful_bidirectional": 428,
+      "faithful_rate": 0.9511111111111111,
+      "dir1_para_to_orig": {
+        "entailment": 429,
+        "contradiction": 5,
+        "neutral": 16
+      },
+      "dir2_orig_to_para": {
+        "entailment": 444,
+        "neutral": 3,
+        "contradiction": 3
+      }
+    },
+    "qwen_arc": {
+      "n": 450,
+      "n_faithful_bidirectional": 435,
+      "faithful_rate": 0.9666666666666667,
+      "dir1_para_to_orig": {
+        "entailment": 436,
+        "neutral": 12,
+        "contradiction": 2
+      },
+      "dir2_orig_to_para": {
+        "entailment": 441,
+        "neutral": 8,
+        "contradiction": 1
+      }
+    },
+    "qwen_mmlu": {
+      "n": 450,
+      "n_faithful_bidirectional": 443,
+      "faithful_rate": 0.9844444444444445,
+      "dir1_para_to_orig": {
+        "entailment": 444,
+        "neutral": 6
+      },
+      "dir2_orig_to_para": {
+        "entailment": 448,
+        "neutral": 2
+      }
+    }
+  },
+  "by_source": {
+    "gpt4o": {
+      "n": 900,
+      "n_faithful_bidirectional": 861,
+      "faithful_rate": 0.9566666666666667
+    },
+    "qwen": {
+      "n": 900,
+      "n_faithful_bidirectional": 878,
+      "faithful_rate": 0.9755555555555555
+    }
+  },
+  "overall": {
+    "n": 1800,
+    "n_faithful_bidirectional": 1739,
+    "faithful_rate": 0.9661111111111111
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "judge_model": "openai/gpt-4o",
+  "judge_temperature": 0.0,
+  "n_samples": 50,
+  "by_source": {
+    "gpt4o": {
+      "n": 25,
+      "n_passed": 25,
+      "pass_rate": 1.0,
+      "mean_semantic_equivalence": 4.96,
+      "mean_answer_invariance": 5.0,
+      "mean_information_preservation": 5.0
+    },
+    "qwen": {
+      "n": 25,
+      "n_passed": 25,
+      "pass_rate": 1.0,
+      "mean_semantic_equivalence": 5.0,
+      "mean_answer_invariance": 5.0,
+      "mean_information_preservation": 5.0
+    }
+  },
+  "overall": {
+    "n": 50,
+    "n_passed": 50,
+    "pass_rate": 1.0,
+    "mean_semantic_equivalence": 4.98,
+    "mean_answer_invariance": 5.0,
+    "mean_information_preservation": 5.0
+  },
+  "note": "This is LLM-assisted QC using GPT-4o as judge. A sample PASSES if all three scores (semantic_equivalence, answer_invariance, information_preservation) are >= 4/5."
+}
