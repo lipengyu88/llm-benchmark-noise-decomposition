@@ -1,34 +1,56 @@
 """
-Experiment I: Prompt Perturbation - Variant Generation
+Experiment I-Extended: 100 Prompt Variants
 
-4 orthogonal dimensions:
-  - Instruction (3 levels)
-  - Answer Format (3 levels)
-  - Option Format (3 levels)
-  - Framing (2 levels)
+Expands the original 18-variant factorial design to 100 variants covering
+5 orthogonal dimensions, to satisfy the project specification's
+"50-200 different prompt variations" guideline.
 
-Total factor space: 3x3x3x2 = 54
-We select: 1 base + 7 OFAT + 10 random factorial = 18 variants
+Design rationale
+----------------
+Original (18 variants, 4 dimensions):
+    instruction(3) x answer_format(3) x option_format(3) x framing(2) = 54
+
+For 100 variants, we extend the design space by adding a 5th dimension
+(delimiter style), giving:
+    instruction(3) x answer_format(3) x option_format(3) x framing(2)
+    x delimiter(3) = 162 total combinations.
+
+We sample 100 variants as follows:
+  - 1 base variant (all zeros)
+  - 10 one-factor-at-a-time (OFAT) variants: every non-zero level of every
+    dimension held singly
+  - 89 random factorial combinations drawn from the remaining 151-combination
+    space (seed = 42), avoiding collisions with base / OFAT
+
+This gives every dimension-level both main-effect coverage (via OFAT) and
+interaction coverage (via factorial sampling).
+
+Dimensions
+----------
+1. instruction: 3 levels (task phrasing)
+2. answer_format: 3 levels (letter-only / tag / explanation)
+3. option_format: 3 levels (A. / (A) / A))
+4. framing: 2 levels (no prefix / role prefix)
+5. delimiter: 3 levels (blank lines / dashes / markdown headers)
 """
-
 import random
 import itertools
+
 
 # ============================================================
 # Dimension definitions
 # ============================================================
 
 INSTRUCTIONS = [
-    "Choose the correct answer.",                  # base (level 0)
-    "Select the best answer.",                     # level 1
-    "Which is correct?",                           # level 2
+    "Choose the correct answer.",
+    "Select the best answer.",
+    "Which is correct?",
 ]
 
-# Answer format: defines how we instruct the model to format its answer
 ANSWER_FORMATS = [
-    "letter_only",       # base: "Only output the letter of the answer."
-    "answer_x",          # "Answer with the format 'Answer: [X]' where X is the letter."
-    "with_explanation",  # "Provide a brief explanation, then give your answer."
+    "letter_only",
+    "answer_x",
+    "with_explanation",
 ]
 
 ANSWER_FORMAT_INSTRUCTIONS = {
@@ -38,92 +60,80 @@ ANSWER_FORMAT_INSTRUCTIONS = {
 }
 
 OPTION_FORMATS = [
-    "dot",        # base: "A. text"
-    "paren",      # "(A) text"
-    "half_paren", # "A) text"
+    "dot",
+    "paren",
+    "half_paren",
 ]
 
 FRAMINGS = [
-    "",                                              # base: no prefix
-    "You are a knowledgeable assistant.",             # role prefix
+    "",
+    "You are a knowledgeable assistant.",
 ]
 
+DELIMITERS = [
+    "blank",      # base: blank lines (current style)
+    "dashes",     # use --- separators
+    "headers",    # use markdown ### headers
+]
+
+
 # ============================================================
-# Base prompt index: (0, 0, 0, 0)
+# Base and variant construction
 # ============================================================
 
-BASE_INDEX = (0, 0, 0, 0)
+BASE_INDEX = (0, 0, 0, 0, 0)
+N_DIMENSIONS = 5
+N_LEVELS = (3, 3, 3, 2, 3)  # 162 total combinations
+
 
 def get_ofat_variants():
-    """
-    One-Factor-At-a-Time: change exactly one dimension from the base.
-    Instruction: 2 non-base levels -> 2 variants
-    Answer Format: 2 non-base levels -> 2 variants
-    Option Format: 2 non-base levels -> 2 variants
-    Framing: 1 non-base level -> 1 variant
-    Total: 7 OFAT variants
+    """All one-factor-at-a-time variants (base with exactly one dim non-zero).
+
+    Non-zero levels per dimension:
+      instruction(2) + answer_format(2) + option_format(2) + framing(1)
+      + delimiter(2) = 9 + 1 = 10 OFAT variants.
     """
     variants = []
-    # Instruction
-    variants.append((1, 0, 0, 0))
-    variants.append((2, 0, 0, 0))
-    # Answer Format
-    variants.append((0, 1, 0, 0))
-    variants.append((0, 2, 0, 0))
-    # Option Format
-    variants.append((0, 0, 1, 0))
-    variants.append((0, 0, 2, 0))
-    # Framing
-    variants.append((0, 0, 0, 1))
+    for d in range(N_DIMENSIONS):
+        for lvl in range(1, N_LEVELS[d]):
+            v = list(BASE_INDEX)
+            v[d] = lvl
+            variants.append(tuple(v))
     return variants
 
 
-def get_factorial_variants(n=10, seed=42):
-    """
-    Random sample from the full factorial space, excluding base and OFAT variants.
-
-    The full factorial space has 54 combinations; after removing 1 base + 7 OFAT = 8,
-    there are 46 candidates. We sample 10 (~22%) to keep total API cost manageable
-    (18 variants × 4 models × 2 datasets × 300 questions = 43,200 calls) while still
-    providing enough interaction terms for OLS regression on the 4 factors. With 18
-    total variants (8 main-effect + 10 interaction) and only 4 main effects plus up
-    to 6 two-way interactions, the design is well-identified (df_residual >= 2).
-    Seed is fixed for full reproducibility.
-    """
+def get_factorial_variants(n=90, seed=42):
+    """Random sample from the full factorial space, excluding base + OFAT."""
     rng = random.Random(seed)
-    all_combos = set(itertools.product(range(3), range(3), range(3), range(2)))
+    all_combos = set(itertools.product(*(range(n) for n in N_LEVELS)))
     exclude = {BASE_INDEX} | set(get_ofat_variants())
-    candidates = sorted(all_combos - exclude)  # sort for reproducibility
+    candidates = sorted(all_combos - exclude)
     sampled = rng.sample(candidates, min(n, len(candidates)))
     return sampled
 
 
 def get_all_variants():
-    """
-    Returns list of (variant_id, index_tuple) for all 18 prompt variants.
-    """
+    """Returns list of (variant_id, index_tuple) for all 100 prompt variants."""
     variants = []
     variants.append(("base", BASE_INDEX))
     for i, idx in enumerate(get_ofat_variants()):
         variants.append((f"ofat_{i+1}", idx))
-    for i, idx in enumerate(get_factorial_variants(n=10, seed=42)):
+    for i, idx in enumerate(get_factorial_variants(n=90, seed=42)):
         variants.append((f"fact_{i+1}", idx))
     return variants
 
 
-def format_options(question_data, dataset_type, option_format_idx):
-    """
-    Format the answer options according to the option format dimension.
+# ============================================================
+# Prompt rendering
+# ============================================================
 
-    dataset_type: "arc" or "mmlu"
-    """
+def format_options(question_data, dataset_type, option_format_idx):
     if dataset_type == "arc":
         labels = question_data["choices"]["label"]
         texts = question_data["choices"]["text"]
-    else:  # mmlu
-        # MMLU-Pro uses letter labels A-J (up to 10 options)
+    else:
         texts = question_data["options"]
-        labels = [chr(65 + i) for i in range(len(texts))]  # A, B, C, ...
+        labels = [chr(65 + i) for i in range(len(texts))]
 
     fmt = OPTION_FORMATS[option_format_idx]
     lines = []
@@ -137,51 +147,68 @@ def format_options(question_data, dataset_type, option_format_idx):
     return "\n".join(lines)
 
 
+def assemble_prompt(instruction, question_stem, options_str, ans_fmt_instr, delimiter_idx):
+    """Assemble the user message using the chosen delimiter style."""
+    delim = DELIMITERS[delimiter_idx]
+    if delim == "blank":
+        return f"{instruction}\n\n{question_stem}\n\n{options_str}\n\n{ans_fmt_instr}"
+    elif delim == "dashes":
+        return (f"{instruction}\n---\n{question_stem}\n---\n{options_str}\n---\n{ans_fmt_instr}")
+    elif delim == "headers":
+        return (f"### Task\n{instruction}\n\n"
+                f"### Question\n{question_stem}\n\n"
+                f"### Options\n{options_str}\n\n"
+                f"### Response format\n{ans_fmt_instr}")
+    # fallback
+    return f"{instruction}\n\n{question_stem}\n\n{options_str}\n\n{ans_fmt_instr}"
+
+
 def build_prompt(question_data, dataset_type, variant_index):
-    """
-    Build the full prompt for a given question and variant index.
+    """Build the full prompt for a given question and variant index.
 
     Returns: (system_message, user_message)
     """
-    instr_idx, ans_fmt_idx, opt_fmt_idx, framing_idx = variant_index
+    instr_idx, ans_fmt_idx, opt_fmt_idx, framing_idx, delim_idx = variant_index
 
-    # System message (framing)
     system_msg = FRAMINGS[framing_idx] if FRAMINGS[framing_idx] else None
 
-    # Question stem
-    if dataset_type == "arc":
-        question_stem = question_data["question"]
-    else:
-        question_stem = question_data["question"]
-
-    # Format options
+    question_stem = question_data["question"]
     options_str = format_options(question_data, dataset_type, opt_fmt_idx)
-
-    # Instruction
     instruction = INSTRUCTIONS[instr_idx]
-
-    # Answer format instruction
     ans_fmt_instr = ANSWER_FORMAT_INSTRUCTIONS[ANSWER_FORMATS[ans_fmt_idx]]
 
-    # Compose user message
-    user_msg = f"{instruction}\n\n{question_stem}\n\n{options_str}\n\n{ans_fmt_instr}"
-
+    user_msg = assemble_prompt(instruction, question_stem, options_str,
+                                ans_fmt_instr, delim_idx)
     return system_msg, user_msg
 
 
 def describe_variant(variant_id, variant_index):
-    """Human-readable description of a variant."""
-    instr_idx, ans_fmt_idx, opt_fmt_idx, framing_idx = variant_index
+    instr_idx, ans_fmt_idx, opt_fmt_idx, framing_idx, delim_idx = variant_index
     return (
         f"{variant_id}: instruction={INSTRUCTIONS[instr_idx]!r}, "
         f"answer_format={ANSWER_FORMATS[ans_fmt_idx]!r}, "
         f"option_format={OPTION_FORMATS[opt_fmt_idx]!r}, "
-        f"framing={'role_prefix' if framing_idx == 1 else 'none'}"
+        f"framing={'role_prefix' if framing_idx == 1 else 'none'}, "
+        f"delimiter={DELIMITERS[delim_idx]!r}"
     )
 
 
 if __name__ == "__main__":
     variants = get_all_variants()
-    print(f"Total variants: {len(variants)}\n")
-    for vid, vidx in variants:
-        print(describe_variant(vid, vidx))
+    print(f"Total variants: {len(variants)}")
+    print(f"  base: 1")
+    print(f"  OFAT: {len(get_ofat_variants())}")
+    print(f"  factorial: 90")
+    print()
+    # Sanity: ensure all variants are unique
+    all_idx = [v[1] for v in variants]
+    assert len(set(all_idx)) == len(all_idx), "Duplicate variants!"
+    print(f"All {len(variants)} variants are unique. ✓")
+    print()
+    # Show first few and last few
+    print("First 5 variants:")
+    for vid, vidx in variants[:5]:
+        print(f"  {describe_variant(vid, vidx)}")
+    print("\nLast 3 variants:")
+    for vid, vidx in variants[-3:]:
+        print(f"  {describe_variant(vid, vidx)}")

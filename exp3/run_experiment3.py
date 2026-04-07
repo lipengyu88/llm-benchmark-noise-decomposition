@@ -116,10 +116,11 @@ def load_exp2_results(dataset_key: str, model_e2: str,
 
 def load_dataset_items(dataset_key: str) -> dict:
     """Load raw dataset items for qualitative analysis."""
+    orig_exp1 = EXP1_DIR
     if dataset_key == "arc":
-        path = EXP1_DIR / "arc_challenge_300.json"
+        path = orig_exp1 / "arc_challenge_300.json"
     else:
-        path = EXP1_DIR / "mmlu_pro_300.json"
+        path = orig_exp1 / "mmlu_pro_300.json"
     items = {}
     with open(path, encoding="utf-8") as f:
         for line in f:

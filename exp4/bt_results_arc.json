@@ -1,0 +1,141 @@
+{
+  "dataset": "arc_challenge",
+  "n_conditions_exp1": 5399,
+  "n_conditions_exp2": 1200,
+  "n_conditions_total": 6599,
+  "models": [
+    "llama-3.1-8b",
+    "qwen2.5-7b",
+    "qwen3-32b",
+    "qwen2.5-72b"
+  ],
+  "pairwise_wins": [
+    [
+      0.0,
+      333.0,
+      267.0,
+      363.0
+    ],
+    [
+      925.0,
+      0.0,
+      261.0,
+      280.0
+    ],
+    [
+      1191.0,
+      593.0,
+      0.0,
+      345.0
+    ],
+    [
+      1206.0,
+      531.0,
+      264.0,
+      0.0
+    ]
+  ],
+  "log_ratings": [
+    -2.4723036445182998,
+    -1.634215912939509,
+    -0.8988135563600612,
+    -1.1601085260480835
+  ],
+  "normalized_strengths": [
+    0.08439022981909039,
+    0.19510529087422576,
+    0.4070523179943804,
+    0.31345216131230347
+  ],
+  "ranking": [
+    "qwen3-32b",
+    "qwen2.5-72b",
+    "qwen2.5-7b",
+    "llama-3.1-8b"
+  ],
+  "bootstrap_ci_low": [
+    -2.571973844270823,
+    -1.7246262442946454,
+    -0.9716027459661426,
+    -1.2423260035800243
+  ],
+  "bootstrap_ci_high": [
+    -2.378932524778781,
+    -1.5480923821881332,
+    -0.8289612255281946,
+    -1.0795520728941412
+  ],
+  "rank_posterior": [
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      0.9999,
+      0.0001,
+      0.0,
+      0.0
+    ],
+    [
+      0.0001,
+      0.9999,
+      0.0,
+      0.0
+    ]
+  ],
+  "sample_size_simulation": {
+    "true_top1": "qwen3-32b",
+    "true_top2": [
+      "Qwen2.5-72B",
+      "Qwen3-32B"
+    ],
+    "n_total_conditions": 6599,
+    "sample_curves": [
+      {
+        "n_comparisons": 50,
+        "pr_correct_top1": 0.59,
+        "pr_correct_top2_set": 0.634
+      },
+      {
+        "n_comparisons": 100,
+        "pr_correct_top1": 0.692,
+        "pr_correct_top2_set": 0.768
+      },
+      {
+        "n_comparisons": 200,
+        "pr_correct_top1": 0.718,
+        "pr_correct_top2_set": 0.832
+      },
+      {
+        "n_comparisons": 500,
+        "pr_correct_top1": 0.848,
+        "pr_correct_top2_set": 0.978
+      },
+      {
+        "n_comparisons": 1000,
+        "pr_correct_top1": 0.91,
+        "pr_correct_top2_set": 0.996
+      },
+      {
+        "n_comparisons": 2000,
+        "pr_correct_top1": 0.964,
+        "pr_correct_top2_set": 1.0
+      },
+      {
+        "n_comparisons": 5000,
+        "pr_correct_top1": 0.998,
+        "pr_correct_top2_set": 1.0
+      }
+    ],
+    "n_needed_top1_95": 2000,
+    "n_needed_top2_95": 500
+  }
+}

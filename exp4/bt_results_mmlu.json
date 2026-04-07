@@ -1,0 +1,141 @@
+{
+  "dataset": "mmlu_pro",
+  "n_conditions_exp1": 5165,
+  "n_conditions_exp2": 1021,
+  "n_conditions_total": 6186,
+  "models": [
+    "llama-3.1-8b",
+    "qwen2.5-7b",
+    "qwen3-32b",
+    "qwen2.5-72b"
+  ],
+  "pairwise_wins": [
+    [
+      0.0,
+      720.0,
+      547.0,
+      519.0
+    ],
+    [
+      1064.0,
+      0.0,
+      550.0,
+      472.0
+    ],
+    [
+      1752.0,
+      1411.0,
+      0.0,
+      987.0
+    ],
+    [
+      1498.0,
+      1107.0,
+      761.0,
+      0.0
+    ]
+  ],
+  "log_ratings": [
+    -2.1677342925019563,
+    -1.8582803119496953,
+    -0.920202273998912,
+    -1.1050799938218572
+  ],
+  "normalized_strengths": [
+    0.11443660327646468,
+    0.15594056904964332,
+    0.3984384391965394,
+    0.33118438847735265
+  ],
+  "ranking": [
+    "qwen3-32b",
+    "qwen2.5-72b",
+    "qwen2.5-7b",
+    "llama-3.1-8b"
+  ],
+  "bootstrap_ci_low": [
+    -2.243648544960165,
+    -1.9261975976241945,
+    -0.9698392309371395,
+    -1.159080480070934
+  ],
+  "bootstrap_ci_high": [
+    -2.097578928804175,
+    -1.7924987752511208,
+    -0.8713955209496348,
+    -1.053163648452218
+  ],
+  "rank_posterior": [
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ]
+  ],
+  "sample_size_simulation": {
+    "true_top1": "qwen3-32b",
+    "true_top2": [
+      "Qwen2.5-72B",
+      "Qwen3-32B"
+    ],
+    "n_total_conditions": 6186,
+    "sample_curves": [
+      {
+        "n_comparisons": 50,
+        "pr_correct_top1": 0.62,
+        "pr_correct_top2_set": 0.874
+      },
+      {
+        "n_comparisons": 100,
+        "pr_correct_top1": 0.7,
+        "pr_correct_top2_set": 0.972
+      },
+      {
+        "n_comparisons": 200,
+        "pr_correct_top1": 0.764,
+        "pr_correct_top2_set": 0.996
+      },
+      {
+        "n_comparisons": 500,
+        "pr_correct_top1": 0.872,
+        "pr_correct_top2_set": 1.0
+      },
+      {
+        "n_comparisons": 1000,
+        "pr_correct_top1": 0.946,
+        "pr_correct_top2_set": 1.0
+      },
+      {
+        "n_comparisons": 2000,
+        "pr_correct_top1": 0.984,
+        "pr_correct_top2_set": 1.0
+      },
+      {
+        "n_comparisons": 5000,
+        "pr_correct_top1": 1.0,
+        "pr_correct_top2_set": 1.0
+      }
+    ],
+    "n_needed_top1_95": 2000,
+    "n_needed_top2_95": 100
+  }
+}

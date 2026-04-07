@@ -86,47 +86,51 @@ QC     (Paraphrase Validation)   — Are our paraphrases semantically faithful?
 
 **Location**: `exp1/`
 
-**Design**: 18 prompt variants along 4 orthogonal dimensions:
+**Design**: 100 prompt variants along 5 orthogonal dimensions:
 | Dimension | Levels | Examples |
 |-----------|--------|---------|
 | Instruction phrasing | 3 | "Choose the correct answer" / "Select the best answer" / "Which is correct?" |
 | Answer format | 3 | letter-only / "Answer: [X]" / with explanation |
 | Option formatting | 3 | A. text / (A) text / A) text |
 | Contextual framing | 2 | no prefix / "You are a knowledgeable assistant" |
+| Delimiter style | 3 | blank lines / dashes / markdown headers |
 
-**Structure**: 1 base + 7 OFAT + 10 factorial = 18 variants
-**Scale**: 18 × 300 questions × 4 models × 2 datasets = 43,200 API calls
+**Structure**: 1 base + 9 OFAT + 90 factorial = 100 variants
+**Scale**: 100 × 150 questions × 4 models × 2 datasets = 120,000 API calls
 
 **Key results (ARC-Challenge)**:
 | Model | Mean Acc | Std | Range | Flip Rate |
 |-------|----------|-----|-------|-----------|
-| LLaMA-3.1-8B | 79.2% | 3.5% | 10.3% | 35.0% |
-| Qwen2.5-7B | 86.9% | 5.3% | 20.3% | 41.3% |
-| Qwen3-32B | 91.7% | 5.2% | 14.7% | 30.3% |
-| Qwen2.5-72B | 89.6% | 11.5% | **33.3%** | 48.7% |
+| LLaMA-3.1-8B | 75.1% | 4.8% | 27.3% | 79.3% |
+| Qwen2.5-7B | 83.5% | 5.6% | 28.0% | 74.0% |
+| Qwen3-32B | 90.0% | 3.9% | 16.0% | 50.7% |
+| Qwen2.5-72B | 88.9% | **9.7%** | **33.3%** | 65.3% |
 
 **Key results (MMLU-Pro)**:
 | Model | Mean Acc | Std | Range | Flip Rate |
 |-------|----------|-----|-------|-----------|
-| LLaMA-3.1-8B | 39.9% | 3.8% | 12.4% | 66.0% |
-| Qwen2.5-7B | 45.3% | 3.0% | 10.3% | 67.0% |
-| Qwen3-32B | 58.2% | 3.3% | 13.1% | 65.7% |
-| Qwen2.5-72B | 54.5% | 5.3% | 21.4% | 62.7% |
+| LLaMA-3.1-8B | 37.3% | 4.9% | 26.4% | 88.7% |
+| Qwen2.5-7B | 42.2% | 4.1% | 21.1% | 84.7% |
+| Qwen3-32B | 57.4% | 4.7% | 22.0% | 86.0% |
+| Qwen2.5-72B | 54.9% | 5.3% | 27.0% | 77.3% |
 
 **Core insights**:
-1. `with_explanation` answer format dominates variance (especially for larger models)
-   - Qwen2.5-72B ARC range drops from 33.3% → 1.3% when excluding explanation variants
-2. MMLU-Pro has ~2× higher flip rates than ARC across all models
-3. Bigger models are NOT always more robust (Qwen2.5-72B is most volatile on ARC)
+1. `with_explanation` answer format dominates variance (~73% on ARC, ~58% on MMLU)
+   - Qwen2.5-72B ARC: excluding explanation variants reduces range from 33.3% → 2.0%
+2. New `delimiter` dimension contributes ~8% of variance on both benchmarks
+3. MMLU-Pro has ~2× higher flip rates than ARC across all models
+4. Bigger models are NOT always more robust (Qwen2.5-72B is most volatile on ARC)
+5. Main-effects OLS R²_adj = 0.61–0.84 (100 obs, 10 params)
 
 **Analysis methods**:
-- OFAT main effects (per-dimension delta from base)
-- Main-effects OLS regression with dummy coding (R²_adj = 0.72–0.98)
+- OFAT main effects (per-dimension delta from base, 5 dimensions)
+- Main-effects OLS regression with dummy coding
+- Main + 2-way interaction model
 - Variance decomposition: Var(prompt) vs Var(sampling) via bootstrap
-- Dimension-level variance attribution
+- Dimension-level variance attribution (5 dimensions)
 - MMLU-Pro category-level sensitivity heatmap
 
-**Key figures**: `exp1/figures_exp1/fig1-fig9`
+**Key figures**: `exp1/figures_exp1/fig1-fig11`
 
 ---
 
@@ -163,7 +167,7 @@ instead of letter answers on harder questions. Handled by:
 **Key figures**: `exp2/figures_exp2/fig1-fig9`
 
 ---
-
+ 
 ## 7. Experiment III: High-Noise Item Analysis
 
 **Location**: `exp3/`
@@ -205,7 +209,7 @@ MMLU-Pro is 2× noisier than ARC overall.
 
 ## 8. Experiment IV: Bradley-Terry Ranking Stability
 
-**Location**: `exp4_bt/`
+**Location**: `exp4/`
 
 **Design**: Converts item-level correctness from Exp I + Exp II into pairwise
 model comparisons, then fits a Bradley-Terry model.
@@ -241,7 +245,7 @@ For each (question, condition) cell and model pair (A, B):
 distinguishing the #1 from #2 model requires ~2,000 comparisons. Arena-style
 leaderboards with <500 comparisons between close competitors are unreliable.
 
-**Key figures**: `exp4_bt/figures_bt/fig1-fig3`
+**Key figures**: `exp4/figures_bt/fig1-fig3`
 
 ---
 
@@ -321,18 +325,16 @@ Exp IV: "Even after pooling all conditions, you need ~2,000 comparisons
 
 ```
 ST5230/
-├── exp1/                          # Experiment I: Prompt Perturbation (18 variants)
-│   ├── prompt_variants.py         # Variant definitions
-│   ├── run_experiment1_async.py   # Runner (2-phase)
+├── exp1/                          # Experiment I: Prompt Perturbation (100 variants)
+│   ├── prompt_variants.py         # 100-variant design (5 dimensions)
+│   ├── run_experiment1.py         # Runner (2-phase async)
 │   ├── analyze_experiment1.py     # Analysis pipeline
-│   ├── visualize_experiment1.py   # 9 figures
-│   ├── results_exp1/             # Raw results (JSON per model×dataset)
+│   ├── visualize_experiment1.py   # 11 figures
+│   ├── arc_challenge_300.json     # ARC-Challenge dataset (300 questions)
+│   ├── mmlu_pro_300.json          # MMLU-Pro dataset (300 questions)
+│   ├── results_exp1/             # Raw results (JSON per model x dataset)
 │   ├── analysis_exp1/            # Analysis outputs
-│   └── figures_exp1/             # fig1-fig9 PNG
-│
-├── exp1_extended/                 # Experiment I Extended (100 variants, running)
-│   ├── prompt_variants_100.py     # 100-variant design (5 dimensions)
-│   └── run_experiment1_extended.py
+│   └── figures_exp1/             # fig1-fig11 PNG
 │
 ├── exp2/                          # Experiment II: Paraphrase Resampling
 │   ├── generate_paraphrases_gpt4o.py  # Dual-source generation
@@ -355,34 +357,33 @@ ST5230/
 │   ├── run_experiment3.py         # Noise score computation
 │   ├── analyze_experiment3.py     # Threshold analysis
 │   ├── visualize_experiment3.py   # 11 figures
-│   ├── noise_data/               # Noise scores (shared150)
+│   ├── noise_data/               # Noise scores (shared 150 questions)
 │   ├── analysis_exp3/            # Analysis outputs
 │   └── figures_exp3_shared150/   # fig1-fig11 PNG
 │
-├── exp4_bt/                       # Experiment IV: Bradley-Terry
+├── exp4/                       # Experiment IV: Bradley-Terry
 │   ├── run_bradley_terry.py       # BT fit + bootstrap + simulation
 │   ├── visualize_bt.py            # 3 figures
 │   ├── bt_results_*.json          # BT ratings + rank posteriors
 │   └── figures_bt/               # fig1-fig3 PNG
 │
 ├── Papers/                        # Reference literature (17 papers)
-├── DETAILED_PROJECT_REPORT.md     # Internal debug report (Chinese)
+├── DETAILED_PROJECT_REPORT.md     # Internal report (Chinese)
 ├── LITERATURE_REVIEW_AND_GAP_ANALYSIS.md
-├── PROJECT_BRIEFING.md            # ← THIS FILE
+├── PROJECT_BRIEFING.md            # <- THIS FILE
 └── ST5230_group project.pdf       # Course requirements
 ```
 
 ---
 
-## 14. Status of Ongoing Work
+## 14. Status
 
 | Item | Status |
 |------|--------|
-| Exp I (18 variants) | ✅ Complete |
-| Exp I Extended (100 variants) | 🔄 Running (~80% done, LLaMA/ARC) |
-| Exp II (dual-source paraphrases) | ✅ Complete |
-| Exp III (noise analysis, shared150) | ✅ Complete |
-| Exp IV (Bradley-Terry) | ✅ Complete |
-| Paraphrase QC (50 manual + 1800 NLI) | ✅ Complete |
-| English conference-style report | ❌ Not yet written |
-| PPT presentation | 🔄 In progress |
+| Exp I (100 variants, 5 dimensions) | Complete |
+| Exp II (dual-source paraphrases) | Complete |
+| Exp III (noise analysis, shared 150 questions, using Exp I 100 variants) | Complete |
+| Exp IV (Bradley-Terry) | Complete |
+| Paraphrase QC (50 manual + 1800 NLI) | Complete |
+| English conference-style report | Not yet written |
+| PPT presentation | In progress |

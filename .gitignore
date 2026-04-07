@@ -15,3 +15,21 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+~$*
+
+# Large result files (raw API responses) — reproduce via run scripts
+**/results_exp1/
+**/checkpoint_*.json
+**/run.log
+**/run_log.txt
+
+# Large binary files
+*.pptx
+*.ppt
+
+# Experiment outputs that can be regenerated
+**/analysis_exp1/
+**/analysis_exp3/
+**/figures_exp1/
+**/figures_exp3*/
+**/noise_data/
