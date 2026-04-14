@@ -27,7 +27,29 @@ Thumbs.db
 # Large binary files
 *.pptx
 *.ppt
+
+# LaTeX build artifacts
 *.aux
 *.log
 *.out
 *.synctex.gz
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+
+# Paper source (not for public repo)
+paper.tex
+template.tex
+*.pdf
+
+# Internal docs
+PROJECT_BRIEFING.md
+DETAILED_PROJECT_REPORT.md
+LITERATURE_REVIEW_AND_GAP_ANALYSIS.md
+paper_review_report.md
+Papers/
+
+# Memory/config
+.claude/
+memory/
