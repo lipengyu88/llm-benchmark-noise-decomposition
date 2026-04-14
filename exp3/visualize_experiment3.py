@@ -47,7 +47,6 @@ MC = {
     "llama-3.1-8b": "#E8565C", "qwen2.5-7b": "#F5A623",
     "qwen3-32b": "#4A90D9", "qwen2.5-72b": "#45B87F",
 }
-# Same colors for exp1 keys
 MC_E1 = {
     "llama": "#E8565C", "qwen7b": "#F5A623",
     "qwen32b": "#4A90D9", "qwen72b": "#45B87F",
@@ -72,7 +71,7 @@ plt.rcParams.update({
 sns.set_style("whitegrid")
 
 
-NOISE_TAG = ""   # set by main() from CLI --noise-tag
+NOISE_TAG = ""
 
 
 def save(fig, name):
@@ -89,9 +88,6 @@ def load_analysis(ds):
     return json.loads((ANALYSIS_DIR / f"analysis_{ds}{NOISE_TAG}.json").read_text())
 
 
-# ============================================================
-# Figure 1: Noise Score Distribution
-# ============================================================
 
 def fig1_noise_distribution():
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
@@ -100,12 +96,10 @@ def fig1_noise_distribution():
         noise = load_noise(ds)
         scores = [nd["noise_score"] for nd in noise["noise_scores"].values()]
 
-        # Histogram
         bins = np.linspace(0, 1, 21)
         ax.hist(scores, bins=bins, color="#4A90D9", alpha=0.7, edgecolor="white",
                 linewidth=1.2, zorder=3)
 
-        # Threshold lines
         sorted_scores = sorted(scores, reverse=True)
         n = len(sorted_scores)
         for pct, color, ls in [(10, "#E74C3C", "--"), (20, "#F39C12", "-."), (30, "#8E44AD", ":")]:
@@ -120,7 +114,6 @@ def fig1_noise_distribution():
         ax.set_title(B_DISP[ds])
         ax.legend(fontsize=9, loc="upper left")
 
-        # Stats annotation
         mean_ns = np.mean(scores)
         median_ns = np.median(scores)
         ax.text(0.98, 0.95, f"N={n}\nMean={mean_ns:.3f}\nMedian={median_ns:.3f}",
@@ -133,9 +126,6 @@ def fig1_noise_distribution():
     save(fig, "fig1_noise_distribution.png")
 
 
-# ============================================================
-# Figure 2: Accuracy Stability Improvement (Exp I)
-# ============================================================
 
 def fig2_exp1_stability_improvement():
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
@@ -175,9 +165,6 @@ def fig2_exp1_stability_improvement():
     save(fig, "fig2_exp1_stability.png")
 
 
-# ============================================================
-# Figure 3: Flip Rate Reduction
-# ============================================================
 
 def fig3_flip_rate_reduction():
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
@@ -210,9 +197,6 @@ def fig3_flip_rate_reduction():
     save(fig, "fig3_flip_rate_reduction.png")
 
 
-# ============================================================
-# Figure 4: Variance Ratio Improvement
-# ============================================================
 
 def fig4_variance_ratio():
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
@@ -248,9 +232,6 @@ def fig4_variance_ratio():
     save(fig, "fig4_variance_ratio.png")
 
 
-# ============================================================
-# Figure 5: Ranking Reversal Reduction
-# ============================================================
 
 def fig5_reversal_reduction():
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
@@ -260,7 +241,6 @@ def fig5_reversal_reduction():
         analysis = load_analysis(ds)
         tr = analysis["threshold_results"]
 
-        # Collect all pairs from baseline
         baseline_rev = tr.get("baseline", {}).get("exp1_ranking", {}).get("reversals", {})
         pairs = list(baseline_rev.keys())
 
@@ -293,9 +273,6 @@ def fig5_reversal_reduction():
     save(fig, "fig5_reversal_reduction.png")
 
 
-# ============================================================
-# Figure 6: Three-Way Variance Decomposition
-# ============================================================
 
 def fig6_three_way_variance():
     fig, axes = plt.subplots(1, 2, figsize=(16, 6))
@@ -325,7 +302,6 @@ def fig6_three_way_variance():
         bottom2 = [a + b for a, b in zip(pp, ps)]
         ax.bar(x, pt, w, bottom=bottom2, label="Var(test-set)", color="#4A90D9", alpha=.85, edgecolor="white")
 
-        # Annotate
         for i in range(len(labels)):
             cum = 0
             for pct in [pp[i], ps[i], pt[i]]:
@@ -347,9 +323,6 @@ def fig6_three_way_variance():
     save(fig, "fig6_three_way_variance.png")
 
 
-# ============================================================
-# Figure 7: Noise Correlation Heatmap
-# ============================================================
 
 def fig7_noise_correlation():
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
@@ -390,9 +363,6 @@ def fig7_noise_correlation():
     save(fig, "fig7_noise_correlation.png")
 
 
-# ============================================================
-# Figure 8: Noise vs Difficulty
-# ============================================================
 
 def fig8_noise_vs_difficulty():
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
@@ -412,7 +382,6 @@ def fig8_noise_vs_difficulty():
         ax.scatter(difficulties, noises, alpha=0.4, s=30, color="#4A90D9",
                    edgecolors="white", linewidth=0.3, zorder=3)
 
-        # Trend line
         z = np.polyfit(difficulties, noises, 2)
         x_fit = np.linspace(0, 1, 100)
         y_fit = np.polyval(z, x_fit)
@@ -436,9 +405,6 @@ def fig8_noise_vs_difficulty():
     save(fig, "fig8_noise_vs_difficulty.png")
 
 
-# ============================================================
-# Figure 9: Category-Level Noise (MMLU-Pro)
-# ============================================================
 
 def fig9_category_noise():
     noise = load_noise("mmlu")
@@ -476,9 +442,6 @@ def fig9_category_noise():
     save(fig, "fig9_category_noise.png")
 
 
-# ============================================================
-# Figure 10: Exp II Stability Under Noise Removal
-# ============================================================
 
 def fig10_exp2_stability():
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
@@ -514,15 +477,11 @@ def fig10_exp2_stability():
     save(fig, "fig10_exp2_stability.png")
 
 
-# ============================================================
-# Figure 11: Summary Dashboard
-# ============================================================
 
 def fig11_summary_dashboard():
     fig = plt.figure(figsize=(18, 10))
     gs = gridspec.GridSpec(2, 3, hspace=0.45, wspace=0.35)
 
-    # Panel A: Noise score distribution comparison
     ax1 = fig.add_subplot(gs[0, 0])
     for ds, color in [("arc", "#4A90D9"), ("mmlu", "#E8565C")]:
         noise = load_noise(ds)
@@ -534,7 +493,6 @@ def fig11_summary_dashboard():
     ax1.set_title("(A) Noise Distribution", fontsize=11)
     ax1.legend(fontsize=8)
 
-    # Panel B: Accuracy Std reduction (Exp I)
     ax2 = fig.add_subplot(gs[0, 1])
     for ds, ls in [("arc", "-"), ("mmlu", "--")]:
         analysis = load_analysis(ds)
@@ -555,7 +513,6 @@ def fig11_summary_dashboard():
     ax2.set_xticks(THRESHOLD_PCTS)
     ax2.legend(fontsize=6, ncol=2)
 
-    # Panel C: Flip rate reduction
     ax3 = fig.add_subplot(gs[0, 2])
     for ds, ls in [("arc", "-"), ("mmlu", "--")]:
         analysis = load_analysis(ds)
@@ -576,7 +533,6 @@ def fig11_summary_dashboard():
     ax3.set_xticks(THRESHOLD_PCTS)
     ax3.legend(fontsize=6, ncol=2)
 
-    # Panel D: Variance ratio
     ax4 = fig.add_subplot(gs[1, 0])
     for ds, ls in [("arc", "-"), ("mmlu", "--")]:
         analysis = load_analysis(ds)
@@ -597,7 +553,6 @@ def fig11_summary_dashboard():
     ax4.set_yscale("log")
     ax4.set_xticks(THRESHOLD_PCTS)
 
-    # Panel E: Noise vs difficulty
     ax5 = fig.add_subplot(gs[1, 1])
     for ds, color in [("arc", "#4A90D9"), ("mmlu", "#E8565C")]:
         noise = load_noise(ds)
@@ -614,7 +569,6 @@ def fig11_summary_dashboard():
     ax5.set_title("(E) Noise vs Difficulty", fontsize=11)
     ax5.legend(fontsize=8)
 
-    # Panel F: Model noise correlation (average)
     ax6 = fig.add_subplot(gs[1, 2])
     pair_labels = []
     corr_vals_arc = []
@@ -644,9 +598,6 @@ def fig11_summary_dashboard():
     print("  saved fig11_summary_dashboard.png")
 
 
-# ============================================================
-# Main
-# ============================================================
 
 def main():
     import argparse
@@ -658,7 +609,6 @@ def main():
     global NOISE_TAG, FIGDIR
     NOISE_TAG = args.noise_tag
 
-    # Put tagged figures in a separate sub-directory to avoid overwriting
     if NOISE_TAG:
         FIGDIR = ROOT / f"figures_exp3{NOISE_TAG}"
         FIGDIR.mkdir(exist_ok=True)

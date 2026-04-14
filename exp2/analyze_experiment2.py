@@ -33,9 +33,6 @@ SOURCES = ["gpt4o", "qwen"]
 BOOTSTRAP_N = 10_000
 
 
-# ============================================================
-# Data loading
-# ============================================================
 
 def load_results(dataset_key: str, source: str) -> pd.DataFrame:
     bench = DATASETS[dataset_key]
@@ -82,9 +79,6 @@ def prepare_analysis_views(df_raw: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataF
     return df_full, df_clean, clean_qids
 
 
-# ============================================================
-# Metrics
-# ============================================================
 
 def accuracy_summary(df: pd.DataFrame):
     acc = (df.groupby(["model_short", "version"])
@@ -131,9 +125,8 @@ def pairwise_bootstrap(df: pd.DataFrame, n_boot=BOOTSTRAP_N):
         lo, hi = np.percentile(boot, [2.5, 97.5])
         sig = (lo > 0) or (hi < 0)
 
-        # Two-sided p-value: proportion of bootstrap samples that cross zero
         if d.mean() > 0:
-            p_value = float(np.mean(boot <= 0)) * 2  # two-sided
+            p_value = float(np.mean(boot <= 0)) * 2
         else:
             p_value = float(np.mean(boot >= 0)) * 2
         p_value = min(p_value, 1.0)
@@ -157,12 +150,10 @@ def apply_bh_correction(gaps: list[dict]) -> list[dict]:
     p_values = [g["p_value"] for g in gaps]
     n = len(p_values)
 
-    # BH procedure
     sorted_indices = np.argsort(p_values)
     sorted_p = np.array(p_values)[sorted_indices]
     corrected = np.zeros(n)
 
-    # Step-up procedure
     for i in range(n - 1, -1, -1):
         rank = i + 1
         if i == n - 1:
@@ -171,7 +162,6 @@ def apply_bh_correction(gaps: list[dict]) -> list[dict]:
             corrected[i] = min(sorted_p[i] * n / rank, corrected[i + 1])
         corrected[i] = min(corrected[i], 1.0)
 
-    # Map back
     result_corrected = np.zeros(n)
     for i, orig_idx in enumerate(sorted_indices):
         result_corrected[orig_idx] = corrected[i]
@@ -227,9 +217,6 @@ def reversal_frequency(df: pd.DataFrame) -> list[dict]:
     return rows
 
 
-# ============================================================
-# Paraphrase quality metrics
-# ============================================================
 
 def paraphrase_diversity(dataset_key: str, source: str) -> dict:
     """Measure paraphrase diversity: unique rate, avg edit distance."""
@@ -247,7 +234,6 @@ def paraphrase_diversity(dataset_key: str, source: str) -> dict:
     n_all_unique = sum(1 for q in questions if len(set(q["paraphrases"])) == 3)
     n_any_dup = sum(1 for q in questions if len(set(q["paraphrases"])) < 3)
 
-    # Simple character-level edit distance ratio
     edit_ratios = []
     for q in questions:
         for p in q["paraphrases"]:
@@ -264,9 +250,6 @@ def paraphrase_diversity(dataset_key: str, source: str) -> dict:
     }
 
 
-# ============================================================
-# Cross-source comparison
-# ============================================================
 
 def cross_source_comparison(
     stats_gpt4o: dict, stats_qwen: dict, dataset_key: str
@@ -285,7 +268,6 @@ def cross_source_comparison(
         "analysis."
     )
 
-    # Accuracy comparison
     acc_comp = []
     for m in MODELS:
         g = next((a for a in stats_gpt4o.get("accuracy_summary", [])
@@ -301,7 +283,6 @@ def cross_source_comparison(
             })
     comparison["accuracy"] = acc_comp
 
-    # Flip rate comparison
     flip_comp = []
     gfr = stats_gpt4o.get("item_flip_rate", {})
     qfr = stats_qwen.get("item_flip_rate", {})
@@ -315,7 +296,6 @@ def cross_source_comparison(
             })
     comparison["flip_rate"] = flip_comp
 
-    # Significance agreement
     g_gaps = {(g["model_1"], g["model_2"]): g
               for g in stats_gpt4o.get("pairwise_gaps", [])}
     q_gaps = {(g["model_1"], g["model_2"]): g
@@ -340,9 +320,6 @@ def cross_source_comparison(
     return comparison
 
 
-# ============================================================
-# Cross-experiment (Exp I)
-# ============================================================
 
 def cross_experiment(dataset_key: str, source: str, flip_stats, acc_summary):
     """Compare with Experiment I results."""
@@ -367,7 +344,6 @@ def cross_experiment(dataset_key: str, source: str, flip_stats, acc_summary):
 
     cross = {"source": source}
 
-    # Flip rate comparison
     flip_comp = []
     for m1, m2 in e1_map.items():
         if m1 not in analysis or m2 not in flip_stats:
@@ -377,7 +353,6 @@ def cross_experiment(dataset_key: str, source: str, flip_stats, acc_summary):
         flip_comp.append({"model": m2, "exp1_all": e1_all, "exp2": e2})
     cross["flip_comparison"] = flip_comp
 
-    # Three-way variance decomposition
     var_decomp = []
     for m1, m2 in e1_map.items():
         if m1 not in analysis:
@@ -403,9 +378,6 @@ def cross_experiment(dataset_key: str, source: str, flip_stats, acc_summary):
     return cross
 
 
-# ============================================================
-# Analyze one source
-# ============================================================
 
 def analyze_source(ds_key: str, source: str) -> dict | None:
     bench = DATASETS[ds_key]
@@ -422,7 +394,6 @@ def analyze_source(ds_key: str, source: str) -> dict | None:
         },
     }
 
-    # Parse failure report
     pf = {}
     for m in MODELS:
         mdf = df_raw[df_raw.model_short == m]
@@ -439,13 +410,11 @@ def analyze_source(ds_key: str, source: str) -> dict | None:
     df_full, df_clean, clean_qids = prepare_analysis_views(df_raw)
     stats["n_questions_total"] = int(df_raw.question_id.nunique())
     stats["n_questions_clean"] = len(clean_qids)
-    # Keep legacy key for downstream scripts that still expect the clean size.
     stats["n_evaluable"] = len(clean_qids)
     log.info(f"  [{source}] Full-set questions: {stats['n_questions_total']}")
     log.info(f"  [{source}] Clean-subset questions: {len(clean_qids)} "
              f"(of {df_raw.question_id.nunique()})")
 
-    # Two-layer accuracy (full set vs clean subset)
     two_layer = []
     for m in MODELS:
         mdf_all = df_full[df_full.model_short == m]
@@ -463,7 +432,6 @@ def analyze_source(ds_key: str, source: str) -> dict | None:
         })
     stats["two_layer_accuracy"] = two_layer
 
-    # Primary analysis: full set
     acc_summary, acc_per_v = accuracy_summary(df_full)
     stats["accuracy_summary"] = acc_summary
     for a in sorted(acc_summary, key=lambda x: x["mean"]):
@@ -490,7 +458,6 @@ def analyze_source(ds_key: str, source: str) -> dict | None:
     rankd = rank_distribution(df_full)
     stats["rank_distribution"] = rankd
 
-    # Supplemental clean-subset analysis for sensitivity checks.
     clean_stats = {
         "n_questions": len(clean_qids),
     }
@@ -510,13 +477,11 @@ def analyze_source(ds_key: str, source: str) -> dict | None:
         clean_stats["rank_distribution"] = []
     stats["clean_subset"] = clean_stats
 
-    # Paraphrase diversity
     div = paraphrase_diversity(ds_key, source)
     stats["paraphrase_diversity"] = div
     if div:
         log.info(f"  [{source}] Paraphrase diversity: all_unique={div['all_unique_rate']*100:.1f}%")
 
-    # Cross-experiment
     cross = cross_experiment(ds_key, source, flip, acc_summary)
     if cross:
         stats["cross_experiment"] = cross
@@ -524,9 +489,6 @@ def analyze_source(ds_key: str, source: str) -> dict | None:
     return stats
 
 
-# ============================================================
-# Main
-# ============================================================
 
 def main():
     all_results = {}
@@ -538,7 +500,6 @@ def main():
 
         ds_results = {}
 
-        # Analyze each available source
         for source in SOURCES:
             stats = analyze_source(ds_key, source)
             if stats:
@@ -548,7 +509,6 @@ def main():
             log.warning(f"No data for {bench}")
             continue
 
-        # Cross-source comparison
         if "gpt4o" in ds_results and "qwen" in ds_results:
             log.info(f"\n--- Cross-Source Comparison ({bench}) ---")
             cross_src = cross_source_comparison(
@@ -562,12 +522,10 @@ def main():
 
         all_results[ds_key] = ds_results
 
-        # Save
         outpath = ANALYSIS_DIR / f"analysis_{ds_key}.json"
         outpath.write_text(json.dumps(ds_results, indent=2, ensure_ascii=False, default=str))
         log.info(f"  Saved {outpath}")
 
-    # Print summary
     print("\n" + "=" * 70)
     print("EXPERIMENT II ANALYSIS SUMMARY")
     print("=" * 70)

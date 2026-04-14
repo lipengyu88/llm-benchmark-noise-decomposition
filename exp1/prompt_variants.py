@@ -37,9 +37,6 @@ import random
 import itertools
 
 
-# ============================================================
-# Dimension definitions
-# ============================================================
 
 INSTRUCTIONS = [
     "Choose the correct answer.",
@@ -71,19 +68,16 @@ FRAMINGS = [
 ]
 
 DELIMITERS = [
-    "blank",      # base: blank lines (current style)
-    "dashes",     # use --- separators
-    "headers",    # use markdown ### headers
+    "blank",
+    "dashes",
+    "headers",
 ]
 
 
-# ============================================================
-# Base and variant construction
-# ============================================================
 
 BASE_INDEX = (0, 0, 0, 0, 0)
 N_DIMENSIONS = 5
-N_LEVELS = (3, 3, 3, 2, 3)  # 162 total combinations
+N_LEVELS = (3, 3, 3, 2, 3)
 
 
 def get_ofat_variants():
@@ -123,9 +117,6 @@ def get_all_variants():
     return variants
 
 
-# ============================================================
-# Prompt rendering
-# ============================================================
 
 def format_options(question_data, dataset_type, option_format_idx):
     if dataset_type == "arc":
@@ -159,7 +150,6 @@ def assemble_prompt(instruction, question_stem, options_str, ans_fmt_instr, deli
                 f"### Question\n{question_stem}\n\n"
                 f"### Options\n{options_str}\n\n"
                 f"### Response format\n{ans_fmt_instr}")
-    # fallback
     return f"{instruction}\n\n{question_stem}\n\n{options_str}\n\n{ans_fmt_instr}"
 
 
@@ -200,12 +190,10 @@ if __name__ == "__main__":
     print(f"  OFAT: {len(get_ofat_variants())}")
     print(f"  factorial: 90")
     print()
-    # Sanity: ensure all variants are unique
     all_idx = [v[1] for v in variants]
     assert len(set(all_idx)) == len(all_idx), "Duplicate variants!"
     print(f"All {len(variants)} variants are unique. ✓")
     print()
-    # Show first few and last few
     print("First 5 variants:")
     for vid, vidx in variants[:5]:
         print(f"  {describe_variant(vid, vidx)}")

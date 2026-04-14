@@ -36,7 +36,6 @@ RESULTS_DIR = ROOT / "results_exp5"
 ANALYSIS_DIR = ROOT / "analysis_exp5"
 ANALYSIS_DIR.mkdir(exist_ok=True)
 
-# Re-import Exp I analysis paths for the comparison
 EXP1_ANALYSIS_DIR = ROOT.parent / "exp1" / "analysis_exp1"
 
 MODELS = ["llama", "qwen7b", "qwen32b", "qwen72b"]
@@ -89,7 +88,6 @@ def analyze_dataset(dataset_key: str) -> dict:
     print(f"  Loaded {len(results)} trials across {len(groups)} (qid,model) cells, "
           f"{n_repeats} repeats each")
 
-    # ============ Per-cell TAR ============
     per_model = {m: {"tarr": [], "tara": [], "qids": []} for m in MODELS}
     for (qid, model), trials in groups.items():
         parsed_ans = [t["parsed_answer"] for t in trials]
@@ -98,8 +96,6 @@ def analyze_dataset(dataset_key: str) -> dict:
         per_model[model]["tara"].append(tar_at_n(is_correct, n_repeats))
         per_model[model]["qids"].append(qid)
 
-    # ============ Per-model aggregate accuracy across runs ============
-    # For each repeat r, compute the accuracy across all questions
     acc_per_run = {m: [] for m in MODELS}
     for r in range(n_repeats):
         for model in MODELS:
@@ -110,7 +106,6 @@ def analyze_dataset(dataset_key: str) -> dict:
             acc = n_correct / n_valid if n_valid > 0 else 0.0
             acc_per_run[model].append(acc)
 
-    # ============ Pretty print per-model summary ============
     summary = {}
     for model in MODELS:
         tarr = np.array(per_model[model]["tarr"])
@@ -203,19 +198,15 @@ def compare_pairwise_disagreement(stability: dict) -> dict:
 
     output = {}
     for ds_key, label in DATASETS.items():
-        # Run-to-run pair disagreement (mean of 1 - TARa@5 across questions)
         run_results = load_results(ds_key)
         run_groups = group_by_qmodel(run_results)
 
-        # Identify the qids used in stability experiment
         stab_qids = set(qid for (qid, _) in run_groups.keys())
 
-        # Build prompt disagreement from Exp I results, restricted to same qids
         rows = []
         print(f"\n  {label}")
         print(f"  {'Model':<18} {'Run disagree':>14} {'Prompt disagree':>17} {'Ratio':>8}")
         for model in MODELS:
-            # Run disagreement
             run_pair_dis = []
             for (qid, m), trials in run_groups.items():
                 if m != model:
@@ -228,7 +219,6 @@ def compare_pairwise_disagreement(stability: dict) -> dict:
                 run_pair_dis.append(disagree)
             run_dis_mean = float(np.mean(run_pair_dis)) if run_pair_dis else 0.0
 
-            # Prompt disagreement (from Exp I results)
             exp1_path = EXP1_RESULTS_DIR / f"results_{model}_{ds_key}.json"
             prompt_pair_dis = []
             try:
@@ -279,7 +269,6 @@ def main():
     out_path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"\nSaved analysis to {out_path}")
 
-    # ============ Final verdict ============
     print(f"\n{'='*60}")
     print("Final verdict")
     print(f"{'='*60}")

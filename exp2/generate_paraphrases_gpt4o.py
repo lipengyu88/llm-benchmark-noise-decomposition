@@ -32,9 +32,6 @@ from pathlib import Path
 
 import httpx
 
-# ============================================================
-# Configuration
-# ============================================================
 
 API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 if not API_KEY:
@@ -75,9 +72,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 log = logging.getLogger(__name__)
 
 
-# ============================================================
-# Paraphrase prompt — structured for diverse outputs
-# ============================================================
 
 PARAPHRASE_PROMPT = """\
 You are a careful test-item paraphraser. Given a multiple-choice question, \
@@ -100,9 +94,6 @@ Output format (JSON array of 3 strings):
 ["paraphrase 1", "paraphrase 2", "paraphrase 3"]"""
 
 
-# ============================================================
-# API call
-# ============================================================
 
 async def call_api(client: httpx.AsyncClient, sem: asyncio.Semaphore,
                    model_id: str, prompt: str) -> str | None:
@@ -131,7 +122,6 @@ async def call_api(client: httpx.AsyncClient, sem: asyncio.Semaphore,
                 if "error" in data:
                     raise Exception(data["error"].get("message", "API error"))
                 raw = data["choices"][0]["message"]["content"].strip()
-                # Strip thinking blocks (Qwen3)
                 raw = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
                 return raw
             except Exception as e:
@@ -147,25 +137,20 @@ def parse_paraphrases(raw: str, original: str) -> list[str]:
     if not raw:
         return [original] * N_PARAPHRASES
 
-    # Try direct JSON parse
     try:
-        # Find JSON array in response
         match = re.search(r'\[.*\]', raw, re.DOTALL)
         if match:
             parsed = json.loads(match.group())
             if isinstance(parsed, list) and len(parsed) >= N_PARAPHRASES:
                 result = [str(p).strip() for p in parsed[:N_PARAPHRASES]]
-                # Validate non-empty
                 if all(len(p) > 10 for p in result):
                     return result
     except (json.JSONDecodeError, ValueError):
         pass
 
-    # Fallback: try to extract numbered items
     lines = [l.strip() for l in raw.split('\n') if l.strip()]
     paras = []
     for line in lines:
-        # Remove numbering like "1.", "1)", "- "
         cleaned = re.sub(r'^[\d]+[\.\)]\s*', '', line)
         cleaned = re.sub(r'^[-\*]\s*', '', cleaned)
         cleaned = cleaned.strip().strip('"').strip("'")
@@ -175,15 +160,11 @@ def parse_paraphrases(raw: str, original: str) -> list[str]:
     if len(paras) >= N_PARAPHRASES:
         return paras[:N_PARAPHRASES]
 
-    # Pad with original if not enough
     while len(paras) < N_PARAPHRASES:
         paras.append(original)
     return paras
 
 
-# ============================================================
-# Data loading
-# ============================================================
 
 def load_questions(dataset_key: str) -> list[dict]:
     """Load N_QUESTIONS via stratified random sampling (seed=42).
@@ -211,14 +192,12 @@ def load_questions(dataset_key: str) -> list[dict]:
 
     rng = _random.Random(42)
 
-    # Stratified sampling for MMLU-Pro (by category)
     if cfg["type"] == "mmlu":
         from collections import defaultdict
         by_cat = defaultdict(list)
         for item in items:
             by_cat[item.get("category", "unknown")].append(item)
 
-        # Proportional allocation
         sampled = []
         total = len(items)
         for cat, cat_items in sorted(by_cat.items()):
@@ -226,7 +205,6 @@ def load_questions(dataset_key: str) -> list[dict]:
             rng.shuffle(cat_items)
             sampled.extend(cat_items[:n_cat])
 
-        # Adjust to exact N_QUESTIONS (rounding may over/under-sample)
         rng.shuffle(sampled)
         if len(sampled) > N_QUESTIONS:
             sampled = sampled[:N_QUESTIONS]
@@ -237,7 +215,6 @@ def load_questions(dataset_key: str) -> list[dict]:
 
         return sampled
     else:
-        # ARC: simple random sampling
         rng.shuffle(items)
         return items[:N_QUESTIONS]
 
@@ -261,7 +238,6 @@ def build_output_record(q: dict, dataset_type: str, idx: int, paraphrases: list[
     }
 
     if dataset_type == "arc":
-        # Normalize labels
         label_map = {"1": "A", "2": "B", "3": "C", "4": "D"}
         labels = [label_map.get(lb, lb) for lb in q["choices"]["label"]]
         record["choices"] = q["choices"]["text"]
@@ -283,9 +259,6 @@ def build_output_record(q: dict, dataset_type: str, idx: int, paraphrases: list[
     return record
 
 
-# ============================================================
-# Main generation
-# ============================================================
 
 async def generate_for_model(model_key: str, dataset_key: str):
     cfg = DATASETS[dataset_key]
@@ -302,7 +275,6 @@ async def generate_for_model(model_key: str, dataset_key: str):
     n_all_unique = 0
 
     async with httpx.AsyncClient() as client:
-        # Build all tasks
         tasks = []
         for i, q in enumerate(questions):
             choices_str = format_choices(q, cfg["type"])
@@ -312,7 +284,6 @@ async def generate_for_model(model_key: str, dataset_key: str):
             )
             tasks.append((i, q, prompt))
 
-        # Process in batches for progress reporting
         batch_size = 25
         for batch_start in range(0, len(tasks), batch_size):
             batch = tasks[batch_start:batch_start + batch_size]
@@ -329,7 +300,6 @@ async def generate_for_model(model_key: str, dataset_key: str):
                 record = build_output_record(q, cfg["type"], idx, paraphrases)
                 results.append(record)
 
-                # Track quality
                 if all(p != q["question"] for p in paraphrases):
                     n_parse_ok += 1
                 if len(set(paraphrases)) == N_PARAPHRASES:
@@ -338,7 +308,6 @@ async def generate_for_model(model_key: str, dataset_key: str):
             done = min(batch_start + batch_size, len(tasks))
             log.info(f"  [{model_key}/{dataset_key}] Progress: {done}/{len(tasks)}")
 
-    # Sort by original index
     results.sort(key=lambda r: r["original_idx"])
 
     output_path.write_text(json.dumps(results, indent=2, ensure_ascii=False))

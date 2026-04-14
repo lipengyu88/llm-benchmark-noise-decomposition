@@ -66,9 +66,6 @@ DATASETS = {"arc": "arc_challenge", "mmlu": "mmlu_pro"}
 REMOVAL_THRESHOLDS = [10, 20, 30]
 
 
-# ============================================================
-# Data loading
-# ============================================================
 
 def load_exp1_results(model_e1: str, dataset_key: str) -> dict:
     """Load Exp I results: nested dict qid -> variant_id -> {is_correct, ...}."""
@@ -98,7 +95,6 @@ def load_exp2_results(dataset_key: str, model_e2: str,
                 all_records.extend(json.loads(path.read_text(encoding="utf-8")))
         if all_records:
             return all_records
-        # Legacy fallback (no source suffix)
         path = EXP2_DIR / f"exp2_{bench}_{model_e2}.json"
         if path.exists():
             return json.loads(path.read_text(encoding="utf-8"))
@@ -107,7 +103,6 @@ def load_exp2_results(dataset_key: str, model_e2: str,
         path = EXP2_DIR / f"exp2_{bench}_{model_e2}_{exp2_source}.json"
         if path.exists():
             return json.loads(path.read_text(encoding="utf-8"))
-        # Legacy fallback
         path = EXP2_DIR / f"exp2_{bench}_{model_e2}.json"
         if path.exists():
             return json.loads(path.read_text(encoding="utf-8"))
@@ -155,9 +150,6 @@ def load_exp2_paraphrased(dataset_key: str) -> dict:
     return {str(q["question_id"]): q for q in data}
 
 
-# ============================================================
-# Noise score computation
-# ============================================================
 
 def compute_noise_scores(
     dataset_key: str,
@@ -186,11 +178,9 @@ def compute_noise_scores(
         "sources": ["exp1", "exp2"],
     }
     """
-    # Aggregate: qid -> model -> list of (is_correct, source)
     item_data = defaultdict(lambda: defaultdict(list))
-    exp2_qids = set()  # track which qids have Exp II data
+    exp2_qids = set()
 
-    # Load Exp I results
     if use_exp1:
         for model_e1 in MODELS_EXP1:
             results = load_exp1_results(model_e1, dataset_key)
@@ -201,7 +191,6 @@ def compute_noise_scores(
                     if ic is not None:
                         item_data[qid][model_e2].append((int(ic), "exp1"))
 
-    # Load Exp II results
     if use_exp2:
         for model_e2 in MODELS_EXP2:
             records = load_exp2_results(dataset_key, model_e2,
@@ -213,7 +202,6 @@ def compute_noise_scores(
                     item_data[qid][model_e2].append((int(ic), "exp2"))
                     exp2_qids.add(qid)
 
-    # If shared_only, keep only questions present in both Exp I and Exp II
     if shared_only and use_exp1 and use_exp2:
         exp1_qids = {qid for qid in item_data
                      if any(src == "exp1" for entries in item_data[qid].values()
@@ -223,7 +211,6 @@ def compute_noise_scores(
         log.info(f"  shared_only: keeping {len(shared)} questions "
                  f"(exp1={len(exp1_qids)}, exp2={len(exp2_qids)})")
 
-    # Compute noise scores
     noise_data = {}
     for qid in sorted(item_data.keys()):
         total_correct = 0
@@ -272,9 +259,6 @@ def compute_noise_scores(
     return noise_data
 
 
-# ============================================================
-# Threshold-based filtering
-# ============================================================
 
 def compute_removal_sets(noise_data: dict, thresholds: list[int] = REMOVAL_THRESHOLDS) -> dict:
     """
@@ -288,7 +272,6 @@ def compute_removal_sets(noise_data: dict, thresholds: list[int] = REMOVAL_THRES
         "n_kept": int,
     }
     """
-    # Sort by noise score descending
     sorted_items = sorted(noise_data.items(), key=lambda x: (x[1]["noise_score"], x[0]), reverse=True)
     n_total = len(sorted_items)
 
@@ -310,9 +293,6 @@ def compute_removal_sets(noise_data: dict, thresholds: list[int] = REMOVAL_THRES
     return removal_sets
 
 
-# ============================================================
-# Qualitative analysis of noisy items
-# ============================================================
 
 def analyze_noisy_items(
     noise_data: dict,
@@ -340,13 +320,11 @@ def analyze_noisy_items(
         },
     }
 
-    # Noise score histogram
     for qid, nd in noise_data.items():
         ns = nd["noise_score"]
         bin_idx = min(int(ns * 10), 9)
         analysis["noise_score_distribution"]["counts"][bin_idx] += 1
 
-    # Model agreement analysis
     for qid, nd in noise_data.items():
         per_model = nd["per_model"]
         if not per_model:
@@ -359,7 +337,6 @@ def analyze_noisy_items(
         else:
             analysis["model_agreement"]["mixed"] += 1
 
-    # Top noisy items detail
     for qid, nd in top_noisy:
         item_info = items.get(qid, {})
         para_info = paraphrased.get(qid, {})
@@ -391,7 +368,6 @@ def analyze_noisy_items(
 
         analysis["top_noisy_items"].append(detail)
 
-    # Category analysis for MMLU
     if dataset_key == "mmlu":
         cat_noise = defaultdict(list)
         for qid, nd in noise_data.items():
@@ -407,15 +383,11 @@ def analyze_noisy_items(
             for cat, scores in sorted(cat_noise.items(), key=lambda x: -sum(x[1]) / len(x[1]))
         }
 
-    # Convert defaultdict
     analysis["category_distribution"] = dict(analysis["category_distribution"])
 
     return analysis
 
 
-# ============================================================
-# Per-model noise scores (for Exp I and Exp II separately)
-# ============================================================
 
 def compute_per_source_noise(noise_data: dict) -> dict:
     """Compute aggregate stats for exp1 vs exp2 noise contributions."""
@@ -453,9 +425,6 @@ def compute_per_source_noise(noise_data: dict) -> dict:
     }
 
 
-# ============================================================
-# Main
-# ============================================================
 
 def run(dataset_keys: list[str], use_exp1: bool, use_exp2: bool,
         exp2_source: str = "both", shared_only: bool = False):
@@ -469,7 +438,6 @@ def run(dataset_keys: list[str], use_exp1: bool, use_exp2: bool,
                  f" | exp2_source={exp2_source} | shared_only={shared_only}")
         log.info(f"{'='*60}")
 
-        # Compute noise scores
         noise_data = compute_noise_scores(
             ds_key, use_exp1=use_exp1, use_exp2=use_exp2,
             exp2_source=exp2_source, shared_only=shared_only,
@@ -480,7 +448,6 @@ def run(dataset_keys: list[str], use_exp1: bool, use_exp2: bool,
             log.warning(f"No data for {bench}, skipping.")
             continue
 
-        # Per-source stats
         source_stats = compute_per_source_noise(noise_data)
         log.info(f"Combined: mean_noise={source_stats['combined']['mean']:.4f}, "
                  f"pct_above_0.5={source_stats['combined']['pct_above_0.5']:.1f}%")
@@ -489,13 +456,11 @@ def run(dataset_keys: list[str], use_exp1: bool, use_exp2: bool,
         if source_stats.get("exp2_only"):
             log.info(f"Exp II:   mean_noise={source_stats['exp2_only']['mean']:.4f}")
 
-        # Compute removal sets
         removal_sets = compute_removal_sets(noise_data)
         for pct, rs in removal_sets.items():
             log.info(f"  Remove {pct}%: {rs['n_removed']} items, "
                      f"keep {rs['n_kept']}, cutoff={rs['noise_cutoff']:.4f}")
 
-        # Qualitative analysis
         qualitative = analyze_noisy_items(noise_data, ds_key)
         log.info(f"Model agreement: {qualitative['model_agreement']}")
         log.info(f"Top 5 noisiest items:")
@@ -504,7 +469,6 @@ def run(dataset_keys: list[str], use_exp1: bool, use_exp2: bool,
                      f"acc={item['accuracy']:.2f}, "
                      f"q={item['question'][:60]}...")
 
-        # Package output
         output = {
             "dataset": bench,
             "n_questions": len(noise_data),
@@ -525,7 +489,6 @@ def run(dataset_keys: list[str], use_exp1: bool, use_exp2: bool,
         }
         all_outputs[ds_key] = output
 
-        # Save
         tag = ""
         if use_exp1 and not use_exp2:
             tag = "_exp1only"

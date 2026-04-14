@@ -18,9 +18,6 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
 
-# ============================================================
-# Style
-# ============================================================
 
 plt.rcParams.update({
     "figure.dpi": 200,
@@ -62,9 +59,6 @@ COLORS = {
 DATASETS = {"arc": "ARC-Challenge", "mmlu": "MMLU-Pro"}
 
 
-# ============================================================
-# Figure 1: Accuracy distribution across 100 prompt variants
-# ============================================================
 
 def fig1_accuracy_distribution():
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.4))
@@ -83,7 +77,6 @@ def fig1_accuracy_distribution():
             box_data.append(accs)
             box_colors.append(COLORS[model])
 
-        # Boxplot (clean, no outliers; we add strip plot below)
         bp = ax.boxplot(
             box_data,
             positions=positions,
@@ -100,7 +93,6 @@ def fig1_accuracy_distribution():
             patch.set_alpha(0.4)
             patch.set_edgecolor(color)
 
-        # Strip plot overlay (jittered scatter)
         rng = np.random.RandomState(42)
         for i, (accs, color) in enumerate(zip(box_data, box_colors)):
             jitter = rng.uniform(-0.14, 0.14, len(accs))
@@ -115,7 +107,6 @@ def fig1_accuracy_distribution():
                 zorder=3,
             )
 
-        # Annotate mean and std above each box
         for i, (accs, model) in enumerate(zip(box_data, MODELS)):
             mean_acc = float(np.mean(accs))
             std_acc = float(np.std(accs))
@@ -149,9 +140,6 @@ def fig1_accuracy_distribution():
     print("  saved fig1_accuracy_distribution.png")
 
 
-# ============================================================
-# Figure 2: Bradley Terry sample-size simulation
-# ============================================================
 
 def fig2_bt_sample_size():
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.2))
@@ -169,7 +157,6 @@ def fig2_bt_sample_size():
         n_top1 = ss["n_needed_top1_95"]
         n_top2 = ss["n_needed_top2_95"]
 
-        # Plot the two stability curves
         ax.plot(
             ns, top2, marker="s", linestyle="--",
             color="#4C72B0", linewidth=2.0, markersize=8,
@@ -181,7 +168,6 @@ def fig2_bt_sample_size():
             label="Top-1 model",
         )
 
-        # 95% reference line
         ax.axhline(
             0.95, color="gray", linestyle=":", linewidth=1.2, alpha=0.7,
         )
@@ -191,7 +177,6 @@ def fig2_bt_sample_size():
             color="gray", fontsize=8, ha="right", va="bottom",
         )
 
-        # Mark the threshold for top-1
         if n_top1 is not None:
             ax.axvline(
                 n_top1, color="#C44E52", linestyle=":", linewidth=1.2, alpha=0.6,
@@ -237,9 +222,6 @@ def fig2_bt_sample_size():
     print("  saved fig2_bt_sample_size.png")
 
 
-# ============================================================
-# Figure 3: Three-way variance decomposition
-# ============================================================
 
 def fig3_three_way_variance():
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.4))
@@ -262,14 +244,12 @@ def fig3_three_way_variance():
         )
         vd_baseline = data["variance_decomposition_3way"]["baseline"]
 
-        # Build per-model arrays
         e2_to_e1 = {
             "llama-3.1-8b": "llama",
             "qwen2.5-7b":   "qwen7b",
             "qwen3-32b":    "qwen32b",
             "qwen2.5-72b":  "qwen72b",
         }
-        # Order rows by main MODELS order
         order = {e2_to_e1[v["model"]]: v for v in vd_baseline}
         rows = [order[m] for m in MODELS]
 
@@ -296,7 +276,6 @@ def fig3_three_way_variance():
             label=var_labels["testset"],
         )
 
-        # Annotate prompt-share at top of each bar
         for i, p in enumerate(prompt):
             ax.text(
                 positions[i], 102, f"{p:.0f}%",
@@ -332,9 +311,6 @@ def fig3_three_way_variance():
     print("  saved fig3_three_way_variance.png")
 
 
-# ============================================================
-# Main
-# ============================================================
 
 if __name__ == "__main__":
     print("Generating report figures...")

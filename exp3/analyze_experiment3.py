@@ -36,7 +36,6 @@ NOISE_DIR = ROOT / "noise_data"
 ANALYSIS_DIR = ROOT / "analysis_exp3"
 ANALYSIS_DIR.mkdir(exist_ok=True)
 
-# Consistent model definitions
 MODELS_EXP1 = ["llama", "qwen7b", "qwen32b", "qwen72b"]
 MODELS_EXP2 = ["llama-3.1-8b", "qwen2.5-7b", "qwen3-32b", "qwen2.5-72b"]
 MODEL_MAP_E1_TO_E2 = {
@@ -63,9 +62,6 @@ N_BOOTSTRAP = 10_000
 RNG = np.random.RandomState(42)
 
 
-# ============================================================
-# Data loading helpers
-# ============================================================
 
 def load_noise_data(dataset_key: str, noise_tag: str = "") -> dict:
     """Load pre-computed noise data from run_experiment3.py.
@@ -82,10 +78,9 @@ def load_noise_data(dataset_key: str, noise_tag: str = "") -> dict:
 
 def load_exp1_matrix(model_e1: str, dataset_key: str) -> tuple:
     """Load Exp I results as (qids, variant_ids, matrix)."""
-    # Import variant info from exp1
     import sys
     sys.path.insert(0, str(EXP1_DIR))
-    from prompt_variants import get_all_variants  # type: ignore
+    from prompt_variants import get_all_variants
     sys.path.pop(0)
 
     variants = get_all_variants()
@@ -121,7 +116,6 @@ def load_exp2_dataframe(dataset_key: str) -> pd.DataFrame:
             p = EXP2_DIR / f"exp2_{bench}_{m}{suffix}.json"
             if p.exists():
                 frames.append(pd.DataFrame(json.loads(p.read_text(encoding="utf-8"))))
-        # Legacy fallback (no source suffix)
         if not any((EXP2_DIR / f"exp2_{bench}_{m}_{s}.json").exists()
                    for s in ["gpt4o", "qwen"]):
             p = EXP2_DIR / f"exp2_{bench}_{m}.json"
@@ -135,9 +129,6 @@ def load_exp2_dataframe(dataset_key: str) -> pd.DataFrame:
     return df
 
 
-# ============================================================
-# Filtered metric computation — Experiment I
-# ============================================================
 
 def exp1_accuracy_stats(matrix: np.ndarray) -> dict:
     """Compute accuracy-level metrics for an Exp I matrix."""
@@ -268,9 +259,6 @@ def exp1_rank_distribution(matrices: dict, model_keys: list) -> dict:
     return {m: (counts[m] / total).tolist() for m in model_keys}
 
 
-# ============================================================
-# Filtered metric computation — Experiment II
-# ============================================================
 
 def exp2_accuracy_stats(df: pd.DataFrame) -> list[dict]:
     """Accuracy stats per model for Exp II."""
@@ -374,9 +362,6 @@ def exp2_rank_distribution(df: pd.DataFrame) -> list[dict]:
     } for m in MODELS_EXP2]
 
 
-# ============================================================
-# Noise correlation analysis
-# ============================================================
 
 def noise_correlation_across_models(noise_data: dict) -> dict:
     """Compute correlation of per-model noise scores across questions."""
@@ -391,7 +376,6 @@ def noise_correlation_across_models(noise_data: dict) -> dict:
             else:
                 per_model_noise[m].append(np.nan)
 
-    # Pairwise correlation
     corrs = {}
     for m1, m2 in combinations(MODELS_EXP2, 2):
         a1 = np.array(per_model_noise[m1])
@@ -412,7 +396,7 @@ def noise_vs_difficulty(noise_data: dict) -> dict:
 
     for qid, nd in noise_data["noise_scores"].items():
         if nd["total"] > 0:
-            diff = 1.0 - nd["correct"] / nd["total"]  # higher = harder
+            diff = 1.0 - nd["correct"] / nd["total"]
             difficulties.append(diff)
             noises.append(nd["noise_score"])
 
@@ -420,7 +404,6 @@ def noise_vs_difficulty(noise_data: dict) -> dict:
     arr_n = np.array(noises)
     corr = float(np.corrcoef(arr_d, arr_n)[0, 1])
 
-    # Bin by difficulty
     bins = [(0, 0.2), (0.2, 0.4), (0.4, 0.6), (0.6, 0.8), (0.8, 1.0)]
     binned = {}
     for lo, hi in bins:
@@ -445,9 +428,6 @@ def noise_vs_difficulty(noise_data: dict) -> dict:
     }
 
 
-# ============================================================
-# Three-way variance decomposition
-# ============================================================
 
 def three_way_variance_decomposition(
     exp1_matrices: dict,
@@ -475,7 +455,6 @@ def three_way_variance_decomposition(
         accs_prompt = np.nanmean(filtered, axis=0)
         var_prompt = float(np.var(accs_prompt))
 
-        # Var(sampling) via bootstrap
         var_samp_list = []
         for v in range(filtered.shape[1]):
             col = filtered[:, v]
@@ -486,7 +465,6 @@ def three_way_variance_decomposition(
             var_samp_list.append(float(np.var(col[idx].mean(axis=1))))
         var_sampling = float(np.mean(var_samp_list)) if var_samp_list else 0.0
 
-        # Var(test-set) from Exp II
         mdf = exp2_df[
             (exp2_df.model_short == m_e2) &
             (exp2_df.question_id.astype(str).isin(kept_qids))
@@ -512,9 +490,6 @@ def three_way_variance_decomposition(
     return results
 
 
-# ============================================================
-# Scale analysis
-# ============================================================
 
 def scale_analysis(threshold_results: dict) -> dict:
     """Analyze how noise removal impact varies with model scale."""
@@ -550,21 +525,16 @@ def scale_analysis(threshold_results: dict) -> dict:
     return scale_data
 
 
-# ============================================================
-# Main analysis pipeline
-# ============================================================
 
 def analyze_dataset(dataset_key: str, noise_tag: str = "") -> dict:
     log.info(f"\n{'='*60}")
     log.info(f"Analyzing {DATASETS[dataset_key]} (noise_tag={noise_tag!r})")
     log.info(f"{'='*60}")
 
-    # Load noise data
     noise_data = load_noise_data(dataset_key, noise_tag=noise_tag)
     noise_scores = noise_data["noise_scores"]
     all_qids = set(noise_scores.keys())
 
-    # Load Exp I matrices
     exp1_matrices = {}
     exp1_available = []
     for m_e1 in MODELS_EXP1:
@@ -575,17 +545,14 @@ def analyze_dataset(dataset_key: str, noise_tag: str = "") -> dict:
             exp1_matrices[f"{m_e1}_vids"] = vids
             exp1_available.append(m_e1)
 
-    # Load Exp II data
     exp2_df = load_exp2_dataframe(dataset_key)
     exp2_df["question_id"] = exp2_df["question_id"].astype(str)
 
-    # Baseline (no removal) metrics
     log.info("\n--- Baseline (no removal) ---")
     baseline = compute_threshold_metrics(
         exp1_matrices, exp1_available, exp2_df, all_qids, dataset_key
     )
 
-    # Threshold-based analysis
     threshold_results = {"baseline": baseline}
     for pct_str, rs in noise_data["removal_sets"].items():
         pct = int(pct_str)
@@ -596,18 +563,15 @@ def analyze_dataset(dataset_key: str, noise_tag: str = "") -> dict:
         )
         threshold_results[f"remove_{pct}pct"] = tr
 
-    # Noise correlation
     log.info("\n--- Noise Correlation Across Models ---")
     corrs = noise_correlation_across_models(noise_data)
     for pair, c in corrs.items():
         log.info(f"  {pair}: r={c:.4f}")
 
-    # Noise vs difficulty
     log.info("\n--- Noise vs Difficulty ---")
     nvd = noise_vs_difficulty(noise_data)
     log.info(f"  Correlation: {nvd['correlation']:.4f} ({nvd['interpretation']})")
 
-    # Three-way variance decomposition at each threshold
     log.info("\n--- Three-Way Variance Decomposition ---")
     var_decomp = {}
     for pct_str in ["baseline"] + [f"remove_{p}pct" for p in [10, 20, 30]]:
@@ -622,10 +586,8 @@ def analyze_dataset(dataset_key: str, noise_tag: str = "") -> dict:
             log.info(f"  [{pct_str}] {v['model']}: prompt={v['pct_prompt']:.1f}%, "
                      f"sampling={v['pct_sampling']:.1f}%, testset={v['pct_testset']:.1f}%")
 
-    # Scale analysis
     scale = scale_analysis(threshold_results)
 
-    # Compile results
     analysis = {
         "dataset": DATASETS[dataset_key],
         "n_total_questions": noise_data["n_questions"],
@@ -651,7 +613,6 @@ def compute_threshold_metrics(
     """Compute all metrics for a given set of kept question IDs."""
     result = {"exp1": {}, "exp2": {}}
 
-    # --- Exp I metrics ---
     filtered_matrices = {}
     for m_e1 in exp1_available:
         qids = exp1_matrices[f"{m_e1}_qids"]
@@ -675,7 +636,6 @@ def compute_threshold_metrics(
             "variance_decomposition": var_d,
         }
 
-    # Exp I ranking metrics
     if len(filtered_matrices) >= 2:
         avail = [m for m in exp1_available if m in filtered_matrices]
         gaps = exp1_pairwise_gaps(filtered_matrices, avail)
@@ -692,7 +652,6 @@ def compute_threshold_metrics(
             log.info(f"  [Exp I] Reversal {pair}: {rev['reversal_rate']:.2%} "
                      f"({rev['reversal_count']}/{rev['total_variants']})")
 
-    # --- Exp II metrics ---
     if len(exp2_df) > 0:
         df_filtered = exp2_df[exp2_df.question_id.isin(kept_qids)].copy()
         if len(df_filtered) > 0:
@@ -719,9 +678,6 @@ def compute_threshold_metrics(
     return result
 
 
-# ============================================================
-# Summary tables
-# ============================================================
 
 def generate_summary(all_results: dict):
     """Generate cross-dataset summary tables."""
@@ -755,9 +711,6 @@ def generate_summary(all_results: dict):
         print("\n" + df.to_string(index=False))
 
 
-# ============================================================
-# Main
-# ============================================================
 
 def main():
     import argparse
@@ -777,7 +730,6 @@ def main():
             analysis = analyze_dataset(ds_key, noise_tag=noise_tag)
             all_results[ds_key] = analysis
 
-            # Save — include tag in output filename so different runs don't overwrite
             outpath = ANALYSIS_DIR / f"analysis_{ds_key}{noise_tag}.json"
             outpath.write_text(json.dumps(analysis, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
             log.info(f"Saved to {outpath}")

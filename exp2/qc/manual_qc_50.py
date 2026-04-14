@@ -44,9 +44,6 @@ from pathlib import Path
 
 import httpx
 
-# ============================================================
-# Configuration
-# ============================================================
 
 API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 if not API_KEY:
@@ -75,7 +72,6 @@ ROOT = Path(__file__).parent.parent
 OUT_DIR = Path(__file__).parent
 SEED = 42
 
-# 25 per source, split across datasets
 SAMPLE_PLAN = [
     ("gpt4o", "arc", 13),
     ("gpt4o", "mmlu", 12),
@@ -98,9 +94,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 log = logging.getLogger(__name__)
 
 
-# ============================================================
-# Sampling
-# ============================================================
 
 def sample_paraphrases() -> list[dict]:
     """Stratified random sampling of 50 paraphrases."""
@@ -110,10 +103,8 @@ def sample_paraphrases() -> list[dict]:
     for source, dataset, n in SAMPLE_PLAN:
         path = ROOT / PARAPHRASE_FILES[source][dataset]
         data = json.loads(path.read_text())
-        # Sample n distinct questions
         selected_questions = rng.sample(data, n)
         for q in selected_questions:
-            # Randomly pick one of the 3 paraphrases
             pi = rng.randrange(3)
             samples.append({
                 "source": source,
@@ -129,9 +120,6 @@ def sample_paraphrases() -> list[dict]:
     return samples
 
 
-# ============================================================
-# Judge prompt
-# ============================================================
 
 JUDGE_PROMPT = """\
 You are an expert test-item reviewer. Evaluate whether a paraphrased version \
@@ -176,9 +164,6 @@ Output ONLY valid JSON in this exact format:
 {{"semantic_equivalence": <1-5>, "answer_invariance": <1-5>, "information_preservation": <1-5>, "rationale": "<one short sentence>"}}"""
 
 
-# ============================================================
-# Judge API call
-# ============================================================
 
 async def judge_sample(client, sem, sample: dict) -> dict:
     choices_str = "\n".join(f"{lb}. {ch}" for lb, ch in zip(sample["labels"], sample["choices"]))
@@ -210,7 +195,6 @@ async def judge_sample(client, sem, sample: dict) -> dict:
                 data = resp.json()
                 raw = data["choices"][0]["message"]["content"].strip()
 
-                # Extract JSON
                 m = re.search(r'\{.*\}', raw, re.DOTALL)
                 if not m:
                     raise ValueError(f"No JSON in response: {raw[:200]}")
@@ -239,9 +223,6 @@ async def judge_sample(client, sem, sample: dict) -> dict:
                     }
 
 
-# ============================================================
-# Main
-# ============================================================
 
 async def main():
     log.info("Sampling 50 paraphrases (stratified by source x dataset)...")
@@ -253,7 +234,6 @@ async def main():
     async with httpx.AsyncClient() as client:
         results = await asyncio.gather(*[judge_sample(client, sem, s) for s in samples])
 
-    # Add pass/fail flag
     for r in results:
         scores = [r.get("semantic_equivalence"), r.get("answer_invariance"),
                   r.get("information_preservation")]
@@ -264,7 +244,6 @@ async def main():
             r["min_score"] = min(scores)
             r["passed"] = int(r["min_score"] >= 4)
 
-    # Save CSV
     csv_path = OUT_DIR / "paraphrase_qc_manual.csv"
     fieldnames = ["source", "dataset", "question_id", "paraphrase_index",
                   "semantic_equivalence", "answer_invariance",
@@ -277,7 +256,6 @@ async def main():
             writer.writerow(r)
     log.info(f"Saved {csv_path}")
 
-    # Aggregate by source
     summary = {
         "judge_model": JUDGE_MODEL,
         "judge_temperature": TEMPERATURE,
@@ -303,7 +281,6 @@ async def main():
             "mean_information_preservation": sum(r["information_preservation"] for r in sub) / len(sub),
         }
 
-    # Overall
     valid = [r for r in results if r["passed"] is not None]
     if valid:
         n_pass = sum(r["passed"] for r in valid)
@@ -320,7 +297,6 @@ async def main():
     json_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False))
     log.info(f"Saved {json_path}")
 
-    # Print summary
     print("\n" + "=" * 70)
     print("PARAPHRASE MANUAL QC SUMMARY (GPT-4o as judge)")
     print("=" * 70)

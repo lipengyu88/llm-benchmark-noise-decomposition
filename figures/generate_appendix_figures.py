@@ -17,9 +17,6 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
 
-# ============================================================
-# Style
-# ============================================================
 
 plt.rcParams.update({
     "figure.dpi": 200,
@@ -55,7 +52,6 @@ COLORS = {
 }
 DATASETS = {"arc": "ARC-Challenge", "mmlu": "MMLU-Pro"}
 
-# Pretty labels for the 9 dummy coefficients
 COEF_NAMES = [
     "instruction_L1", "instruction_L2",
     "answer_format_L1", "answer_format_L2",
@@ -72,14 +68,10 @@ COEF_LABELS = [
 ]
 
 
-# ============================================================
-# Figure A1: OLS coefficient heatmap
-# ============================================================
 
 def fig_a1_ols_coefficients():
     fig, axes = plt.subplots(1, 2, figsize=(13, 4.6))
 
-    # Find global vmin/vmax across both datasets for a shared color scale
     all_vals = []
     matrices = {}
     for ds_key in ["arc", "mmlu"]:
@@ -109,7 +101,6 @@ def fig_a1_ols_coefficients():
             aspect="auto",
         )
 
-        # Annotate each cell
         for i in range(mat.shape[0]):
             for j in range(mat.shape[1]):
                 val = mat[i, j]
@@ -127,13 +118,11 @@ def fig_a1_ols_coefficients():
         ax.set_yticklabels([MODEL_LABELS[m] for m in MODELS], fontsize=9)
         ax.set_title(DATASETS[ds_key], fontsize=12)
 
-        # Subtle grid
         ax.set_xticks(np.arange(-0.5, len(COEF_NAMES), 1), minor=True)
         ax.set_yticks(np.arange(-0.5, len(MODELS), 1), minor=True)
         ax.grid(which="minor", color="white", linewidth=1.5)
         ax.tick_params(which="minor", length=0)
 
-    # Single shared colorbar
     cbar = fig.colorbar(
         im,
         ax=axes,
@@ -154,9 +143,6 @@ def fig_a1_ols_coefficients():
     print("  saved fig_a1_ols_coefficients.png")
 
 
-# ============================================================
-# Figure A2: Per-model dimension variance breakdown (stacked bar)
-# ============================================================
 
 def fig_a2_dim_variance_per_model():
     fig, axes = plt.subplots(1, 2, figsize=(13, 4.8))
@@ -188,7 +174,6 @@ def fig_a2_dim_variance_per_model():
             (ROOT / "exp1" / "analysis_exp1" / f"analysis_{ds_key}.json").read_text()
         )
 
-        # Build per-model arrays
         positions = np.arange(len(MODELS))
         bottoms = np.zeros(len(MODELS))
 
@@ -204,7 +189,6 @@ def fig_a2_dim_variance_per_model():
                 edgecolor="white", linewidth=1.0,
                 label=dim_labels[dim] if ax_idx == 1 else None,
             )
-            # Annotate large segments
             for i, v in enumerate(vals):
                 if v >= 6:
                     ax.text(
@@ -227,7 +211,6 @@ def fig_a2_dim_variance_per_model():
         ax.spines["right"].set_visible(False)
         ax.grid(True, axis="x", alpha=0.25)
 
-    # Single shared legend below
     handles, labels = axes[1].get_legend_handles_labels()
     fig.legend(
         handles, labels,
@@ -248,9 +231,6 @@ def fig_a2_dim_variance_per_model():
     print("  saved fig_a2_dim_variance_per_model.png")
 
 
-# ============================================================
-# Figure A3: Surface-only vs full set comparison
-# ============================================================
 
 def fig_a3_surface_vs_full():
     """
@@ -301,7 +281,6 @@ def fig_a3_surface_vs_full():
                 edgecolor="white", linewidth=0.8,
             )
 
-            # Annotate reduction percentage
             for i, (full, surf) in enumerate(zip(full_vals, surf_vals)):
                 if full > 1e-9:
                     pct_drop = (1 - surf / full) * 100
@@ -351,9 +330,6 @@ def fig_a3_surface_vs_full():
     print("  saved fig_a3_surface_vs_full.png")
 
 
-# ============================================================
-# Figure A4: Cross-source comparison for Experiment II
-# ============================================================
 
 def fig_a4_cross_source():
     """
@@ -379,8 +355,7 @@ def fig_a4_cross_source():
     for ax_idx, (ds_key, bench) in enumerate(DATASETS_BENCH.items()):
         ax = axes[ax_idx]
 
-        # Compute per-version accuracy for each (source, model)
-        bars_per_model = {}  # model -> {gpt4o: [v0,v1,v2,v3], qwen: [...]}
+        bars_per_model = {}
         for src in ["gpt4o", "qwen"]:
             for m in MODELS_E2:
                 path = ROOT / "exp2" / f"exp2_{bench}_{m}_{src}.json"
@@ -396,7 +371,6 @@ def fig_a4_cross_source():
 
         positions = np.arange(len(MODELS_E2))
         group_width = 0.86
-        # Each model has 8 mini bars: 4 versions x 2 sources
         n_versions = 4
         n_sources = 2
         n_bars = n_versions * n_sources
@@ -407,7 +381,6 @@ def fig_a4_cross_source():
                 continue
             base_x = positions[m_idx] - group_width / 2 + bar_w / 2
             for v in range(n_versions):
-                # GPT-4o
                 gpt_acc = bars_per_model[m]["gpt4o"][v] if v < len(bars_per_model[m].get("gpt4o", [])) else 0
                 qwen_acc = bars_per_model[m]["qwen"][v] if v < len(bars_per_model[m].get("qwen", [])) else 0
                 ax.bar(
@@ -423,7 +396,6 @@ def fig_a4_cross_source():
                     alpha=0.85,
                 )
 
-        # Compute and annotate per-model mean (averaged over versions and sources)
         for m_idx, m in enumerate(MODELS_E2):
             all_vals = bars_per_model[m]["gpt4o"] + bars_per_model[m]["qwen"]
             mean_acc = float(np.mean(all_vals))
@@ -463,9 +435,6 @@ def fig_a4_cross_source():
     print("  saved fig_a4_cross_source.png")
 
 
-# ============================================================
-# Figure A5: Cross-model noise correlation heatmap
-# ============================================================
 
 def fig_a5_noise_correlation():
     """
@@ -490,7 +459,6 @@ def fig_a5_noise_correlation():
         )
         nc = d["noise_correlation"]
 
-        # Build a symmetric 4x4 matrix
         n = len(MODELS_E2)
         mat = np.eye(n)
         for i in range(n):
@@ -507,7 +475,6 @@ def fig_a5_noise_correlation():
             aspect="equal",
         )
 
-        # Annotate cells
         for i in range(n):
             for j in range(n):
                 v = mat[i, j]
@@ -528,7 +495,6 @@ def fig_a5_noise_correlation():
                            fontsize=9)
         ax.set_title(DATASETS[ds_key], fontsize=12)
 
-        # White grid between cells
         ax.set_xticks(np.arange(-0.5, n, 1), minor=True)
         ax.set_yticks(np.arange(-0.5, n, 1), minor=True)
         ax.grid(which="minor", color="white", linewidth=2)
@@ -550,9 +516,6 @@ def fig_a5_noise_correlation():
     print("  saved fig_a5_noise_correlation.png")
 
 
-# ============================================================
-# Figure A6: MMLU-Pro category sensitivity heatmap
-# ============================================================
 
 def fig_a6_category_sensitivity():
     """
@@ -564,14 +527,12 @@ def fig_a6_category_sensitivity():
         (ROOT / "exp1" / "analysis_exp1" / "analysis_mmlu.json").read_text()
     )
 
-    # Collect categories
     cats = set()
     for m in MODELS:
         for c in d[m].get("category_analysis", {}):
             cats.add(c)
     cats = sorted(cats)
 
-    # Build matrix [n_cats x n_models] of accuracy range
     range_mat = np.full((len(cats), len(MODELS)), np.nan)
     n_q_per_cat = {}
     for j, m in enumerate(MODELS):
@@ -581,7 +542,6 @@ def fig_a6_category_sensitivity():
                 range_mat[i, j] = ca[c]["range"]
                 n_q_per_cat[c] = ca[c]["n_questions"]
 
-    # Sort categories by mean range (most sensitive first)
     mean_ranges = np.nanmean(range_mat, axis=1)
     sort_idx = np.argsort(mean_ranges)[::-1]
     range_mat = range_mat[sort_idx]
@@ -598,7 +558,6 @@ def fig_a6_category_sensitivity():
         aspect="auto",
     )
 
-    # Annotate cells
     for i in range(range_mat.shape[0]):
         for j in range(range_mat.shape[1]):
             v = range_mat[i, j]
@@ -619,7 +578,6 @@ def fig_a6_category_sensitivity():
     ax.set_yticks(np.arange(len(cats_sorted)))
     ax.set_yticklabels(cat_labels, fontsize=9)
 
-    # White grid
     ax.set_xticks(np.arange(-0.5, len(MODELS), 1), minor=True)
     ax.set_yticks(np.arange(-0.5, len(cats_sorted), 1), minor=True)
     ax.grid(which="minor", color="white", linewidth=1.2)
@@ -641,9 +599,6 @@ def fig_a6_category_sensitivity():
     print("  saved fig_a6_category_sensitivity.png")
 
 
-# ============================================================
-# Figure A7: BT log-strengths (forest) + rank posterior heatmap
-# ============================================================
 
 def fig_a7_bt_posterior():
     """
@@ -678,7 +633,6 @@ def fig_a7_bt_posterior():
         ci_hi = d["bootstrap_ci_high"]
         rp = d["rank_posterior"]
 
-        # Reorder by descending log-strength so the strongest is on top
         order = sorted(range(len(models)), key=lambda i: -log_r[i])
         models_o = [models[i] for i in order]
         log_o = [log_r[i] for i in order]
@@ -686,7 +640,6 @@ def fig_a7_bt_posterior():
         hi_o = [ci_hi[i] for i in order]
         rp_o = [rp[i] for i in order]
 
-        # ----- Top row: forest plot -----
         ax = axes[0, col_idx]
         y = np.arange(len(models_o))
         for i, m in enumerate(models_o):
@@ -703,7 +656,6 @@ def fig_a7_bt_posterior():
                 capsize=5,
                 capthick=1.5,
             )
-            # Annotate point estimate to the right of the bar
             ax.text(
                 hi_o[i] + 0.06, y[i],
                 f"{log_o[i]:.2f}",
@@ -718,12 +670,10 @@ def fig_a7_bt_posterior():
         ax.grid(True, axis="x", alpha=0.25)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
-        # Pad x-limits so the annotated number fits
         x_min = min(lo_o) - 0.1
         x_max = max(hi_o) + 0.5
         ax.set_xlim(x_min, x_max)
 
-        # ----- Bottom row: rank posterior heatmap -----
         ax = axes[1, col_idx]
         rp_mat = np.array(rp_o)
         im = ax.imshow(
@@ -764,9 +714,6 @@ def fig_a7_bt_posterior():
     print("  saved fig_a7_bt_posterior.png")
 
 
-# ============================================================
-# Figure A8: Noise removal threshold sweep
-# ============================================================
 
 def fig_a8_threshold_sweep():
     """
@@ -793,7 +740,6 @@ def fig_a8_threshold_sweep():
         )
         tr = d["threshold_results"]
 
-        # ----- Top: accuracy std curve -----
         ax = axes[0, col_idx]
         for m in MODELS:
             stds = []
@@ -817,9 +763,7 @@ def fig_a8_threshold_sweep():
         if col_idx == 0:
             ax.legend(loc="best", fontsize=8, framealpha=0.9, ncol=2)
 
-        # ----- Bottom: pairwise reversal rate -----
         ax = axes[1, col_idx]
-        # Use the closest pair (qwen32b_vs_qwen72b) plus the others
         pair_styles = {
             "qwen32b_vs_qwen72b": ("Qwen3-32B vs Qwen2.5-72B", "#C44E52", "o", "-",  2.4),
             "llama_vs_qwen7b":    ("LLaMA vs Qwen2.5-7B",     "#4C72B0", "s", "--", 1.6),
@@ -860,9 +804,6 @@ def fig_a8_threshold_sweep():
     print("  saved fig_a8_threshold_sweep.png")
 
 
-# ============================================================
-# Figure A10: Per-question TARr@5 distribution
-# ============================================================
 
 def fig_a10_tarr_distribution():
     """
@@ -887,12 +828,10 @@ def fig_a10_tarr_distribution():
         d = json.loads(
             (ROOT / "exp5" / "results_exp5" / f"stability_{ds_key}.json").read_text()
         )
-        # Group by (qid, model)
         groups = defaultdict(list)
         for r in d:
             groups[(r["qid"], r["model"])].append(r)
 
-        # Compute per-cell TARr
         per_model = {m: [] for m in MODELS}
         for (qid, m), trials in groups.items():
             trials.sort(key=lambda x: x["repeat"])
@@ -902,7 +841,6 @@ def fig_a10_tarr_distribution():
             tar = agree / len(pairs)
             per_model[m].append(tar)
 
-        # Stacked bar
         positions = np.arange(len(MODELS))
         width = 0.62
         bottoms = np.zeros(len(MODELS))
@@ -960,9 +898,6 @@ def fig_a10_tarr_distribution():
     print("  saved fig_a10_tarr_distribution.png")
 
 
-# ============================================================
-# Main
-# ============================================================
 
 if __name__ == "__main__":
     print("Generating appendix figures...")

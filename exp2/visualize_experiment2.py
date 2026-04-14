@@ -87,9 +87,6 @@ def load_analyses():
     return analyses
 
 
-# ============================================================
-# Figure 1: Accuracy by version (side-by-side GPT-4o and Qwen)
-# ============================================================
 
 def fig1_accuracy_by_version(data):
     n_sources = sum(1 for s in SOURCES if any(s in data.get(ds, {}) for ds in ["arc", "mmlu"]))
@@ -130,9 +127,6 @@ def fig1_accuracy_by_version(data):
     save(fig, "fig1_accuracy_by_version.png")
 
 
-# ============================================================
-# Figure 2: Flip Rate comparison (GPT-4o vs Qwen)
-# ============================================================
 
 def fig2_flip_rate(analyses):
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
@@ -173,9 +167,6 @@ def fig2_flip_rate(analyses):
     save(fig, "fig2_flip_rate.png")
 
 
-# ============================================================
-# Figure 3: Pairwise CI (with BH significance)
-# ============================================================
 
 def fig3_pairwise_ci(analyses):
     n_sources = sum(1 for s in SOURCES if any(s in analyses.get(ds, {}) for ds in ["arc", "mmlu"]))
@@ -216,13 +207,9 @@ def fig3_pairwise_ci(analyses):
     save(fig, "fig3_pairwise_ci.png")
 
 
-# ============================================================
-# Figure 4: Rank Distribution (primary source)
-# ============================================================
 
 def fig4_rank_distribution(analyses):
     RC = ["#F1C40F", "#BDC3C7", "#CD7F32", "#8E44AD"]
-    # Use first available source
     source = next((s for s in SOURCES if any(s in analyses.get(ds, {}) for ds in ["arc", "mmlu"])), None)
     if not source:
         return
@@ -260,9 +247,6 @@ def fig4_rank_distribution(analyses):
     save(fig, "fig4_rank_distribution.png")
 
 
-# ============================================================
-# Figure 5: Two-layer accuracy (MMLU parse failures)
-# ============================================================
 
 def fig5_two_layer(analyses):
     source = next((s for s in SOURCES if "mmlu" in analyses and s in analyses["mmlu"]
@@ -292,9 +276,6 @@ def fig5_two_layer(analyses):
     save(fig, "fig5_two_layer_mmlu.png")
 
 
-# ============================================================
-# Figure 6: Cross-source accuracy comparison
-# ============================================================
 
 def fig6_cross_source_accuracy(analyses):
     """Side-by-side accuracy under GPT-4o vs Qwen paraphrases."""
@@ -316,7 +297,6 @@ def fig6_cross_source_accuracy(analyses):
         ax.bar(x + w / 2, [a["qwen_mean"] * 100 for a in acc], w,
                label="Qwen paraphrases", color="#E8565C", alpha=.85, edgecolor="white")
 
-        # Error bars for std
         ax.errorbar(x - w / 2, [a["gpt4o_mean"] * 100 for a in acc],
                     yerr=[a["gpt4o_std"] * 100 for a in acc],
                     fmt="none", ecolor="black", capsize=4, zorder=5)
@@ -336,9 +316,6 @@ def fig6_cross_source_accuracy(analyses):
     save(fig, "fig6_cross_source_accuracy.png")
 
 
-# ============================================================
-# Figure 7: Cross-source significance agreement
-# ============================================================
 
 def fig7_cross_source_significance(analyses):
     """Show which pairwise comparisons agree/disagree between sources."""
@@ -354,13 +331,11 @@ def fig7_cross_source_significance(analyses):
             continue
 
         for i, s in enumerate(sig_comp):
-            # Plot both gaps
             ax.scatter(s["gpt4o_gap"] * 100, i - 0.1, marker="D", s=100,
                        color="#4A90D9", zorder=4, label="GPT-4o" if i == 0 else None)
             ax.scatter(s["qwen_gap"] * 100, i + 0.1, marker="s", s=100,
                        color="#E8565C", zorder=4, label="Qwen" if i == 0 else None)
 
-            # Agreement indicator
             bg = "#90EE90" if s["agree"] else "#FFB6C1"
             ax.axhspan(i - 0.4, i + 0.4, alpha=0.15, color=bg, zorder=1)
 
@@ -371,7 +346,6 @@ def fig7_cross_source_significance(analyses):
         ax.set_title(B_DISP[ds])
         ax.legend(fontsize=9)
 
-        # Agreement rate
         agree_rate = cs.get("agreement_rate", 0)
         ax.text(0.98, 0.02, f"Agreement: {agree_rate:.0%}",
                 transform=ax.transAxes, ha="right", va="bottom",
@@ -384,9 +358,6 @@ def fig7_cross_source_significance(analyses):
     save(fig, "fig7_cross_source_significance.png")
 
 
-# ============================================================
-# Figure 8: Cross-experiment flip rate
-# ============================================================
 
 def fig8_cross_experiment_flip(analyses):
     """Three-bar cross-experiment flip rate comparison."""
@@ -434,9 +405,6 @@ def fig8_cross_experiment_flip(analyses):
     save(fig, "fig8_cross_experiment_flip.png")
 
 
-# ============================================================
-# Figure 9: Three-way variance decomposition
-# ============================================================
 
 def fig9_cross_variance(analyses):
     """Variance decomposition ALL vs NO-EXPL."""
@@ -494,9 +462,6 @@ def fig9_cross_variance(analyses):
     save(fig, "fig9_variance_decomposition.png")
 
 
-# ============================================================
-# Main
-# ============================================================
 
 def main():
     print("Loading data...")
@@ -505,7 +470,6 @@ def main():
         print("Run analyze_experiment2.py first!")
         return
 
-    # Load raw data for accuracy plots using the primary full-set policy.
     data = {}
     for ds in ["arc", "mmlu"]:
         data[ds] = {}

@@ -26,9 +26,6 @@ from pathlib import Path
 
 import httpx
 
-# ============================================================
-# Configuration
-# ============================================================
 
 API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 if not API_KEY:
@@ -55,7 +52,6 @@ DATASETS = {
     "mmlu": "mmlu_pro",
 }
 
-# Paraphrase source -> file name pattern
 PARAPHRASE_FILES = {
     "gpt4o": {
         "arc":  "arc_challenge_paraphrased_gpt4o.json",
@@ -67,7 +63,6 @@ PARAPHRASE_FILES = {
     },
 }
 
-# Qwen3 thinking mode
 THINKING_MODELS = {"qwen/qwen3-32b"}
 
 TEMPERATURE = 0.0
@@ -85,9 +80,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 log = logging.getLogger(__name__)
 
 
-# ============================================================
-# Prompt rendering (v00_base)
-# ============================================================
 
 def render_prompt(question: str, choices: list, labels: list) -> str:
     options = "\n".join(f"{lb}. {ch}" for lb, ch in zip(labels, choices))
@@ -99,18 +91,14 @@ def render_prompt(question: str, choices: list, labels: list) -> str:
     )
 
 
-# ============================================================
-# Answer extraction
-# ============================================================
 
 def extract_answer(response: str, valid_labels: list) -> str | None:
     if not response:
         return None
     text = response.strip()
     valid = set(lb.upper() for lb in valid_labels)
-    vr = "".join(sorted(valid))  # e.g. "ABCDEFGHIJ"
+    vr = "".join(sorted(valid))
 
-    # Pattern 1: explicit "Answer: X" or "Answer is X"
     for pat in [r"[Aa]nswer\s*:\s*\(?([A-Za-z])\)?",
                 r"[Aa]nswer\s+is\s+\(?([A-Za-z])\)?",
                 r"[Ff]inal\s+[Aa]nswer\s*[:\s]\s*\(?([A-Za-z])\)?",
@@ -119,39 +107,32 @@ def extract_answer(response: str, valid_labels: list) -> str | None:
         if m and m.group(1).upper() in valid:
             return m.group(1).upper()
 
-    # Pattern 2: "X. option text" at start
     m = re.match(r"^\(?([A-Za-z])\)?[\.\)]\s+", text)
     if m and m.group(1).upper() in valid:
         return m.group(1).upper()
 
-    # Pattern 3: "X is the correct answer" or "X is correct"
     m = re.search(rf'\b([{vr}])\s+is\s+(?:the\s+)?correct', text, re.IGNORECASE)
     if m and m.group(1).upper() in valid:
         return m.group(1).upper()
 
-    # Pattern 4: "the correct answer is X" or "the correct option is X"
     m = re.search(rf'correct\s+(?:answer|option)\s+is\s+\(?([{vr}a-{vr[-1].lower()}])\)?',
                   text, re.IGNORECASE)
     if m and m.group(1).upper() in valid:
         return m.group(1).upper()
 
-    # Pattern 5: "option X" or "choice X"
     m = re.search(rf'(?:option|choice)\s+\(?([{vr}])\)?', text, re.IGNORECASE)
     if m and m.group(1).upper() in valid:
         return m.group(1).upper()
 
-    # Pattern 6: standalone letter on a line (scan from bottom)
     for line in reversed(text.split("\n")):
         line = line.strip().rstrip(".)")
         if len(line) == 1 and line.upper() in valid:
             return line.upper()
 
-    # Pattern 7: last bold/parenthesized letter
     m = re.search(rf'\*\*\(?([{vr}])\)?\*\*', text)
     if m:
         return m.group(1).upper()
 
-    # Pattern 8: first letter in very short response
     if len(text) <= 5:
         for ch in text:
             if ch.upper() in valid:
@@ -160,9 +141,6 @@ def extract_answer(response: str, valid_labels: list) -> str | None:
     return None
 
 
-# ============================================================
-# API client
-# ============================================================
 
 async def call_api(client, sem, model_id, prompt, max_tokens=None):
     if max_tokens is None:
@@ -196,7 +174,6 @@ async def call_api(client, sem, model_id, prompt, max_tokens=None):
                 if "error" in data:
                     raise Exception(data["error"].get("message", "API error"))
                 raw = data["choices"][0]["message"]["content"].strip()
-                # Strip thinking blocks
                 return re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
             except Exception as e:
                 if attempt < MAX_RETRIES - 1:
@@ -206,21 +183,16 @@ async def call_api(client, sem, model_id, prompt, max_tokens=None):
                     return None
 
 
-# ============================================================
-# Main evaluation
-# ============================================================
 
 async def evaluate(model_key, dataset_key, source):
     model_id, model_short = MODELS[model_key]
     bench = DATASETS[dataset_key]
 
-    # Output file includes source tag
     outpath = Path(__file__).parent / f"exp2_{bench}_{model_short}_{source}.json"
     if outpath.exists():
         log.info(f"Already exists: {outpath}, skipping.")
         return
 
-    # Load paraphrased data
     para_file = Path(__file__).parent / PARAPHRASE_FILES[source][dataset_key]
     if not para_file.exists():
         log.error(f"Paraphrase file not found: {para_file}")
@@ -230,7 +202,6 @@ async def evaluate(model_key, dataset_key, source):
     questions = json.loads(para_file.read_text())
     log.info(f"Loaded {len(questions)} questions from {para_file}")
 
-    # Build tasks: original (v0) + 3 paraphrases (v1-v3) per question
     tasks = []
     for q in questions:
         for v, qtext in enumerate([q["question"]] + q.get("paraphrases", [])):
@@ -276,7 +247,6 @@ async def evaluate(model_key, dataset_key, source):
 
         results = list(await asyncio.gather(*[process(t) for t in tasks]))
 
-    # Phase 2: Retry parse failures with larger max_tokens
     pf_indices = [i for i, r in enumerate(results) if r["parse_failure"]]
     if pf_indices:
         log.info(f"  Phase 2: retrying {len(pf_indices)} parse failures with max_tokens={MAX_TOKENS_PHASE2}")

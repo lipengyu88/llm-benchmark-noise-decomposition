@@ -39,9 +39,6 @@ from collections import Counter
 
 import httpx
 
-# ============================================================
-# Configuration
-# ============================================================
 
 API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 if not API_KEY:
@@ -81,9 +78,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 log = logging.getLogger(__name__)
 
 
-# ============================================================
-# NLI judge prompt
-# ============================================================
 
 NLI_PROMPT = """\
 You are an expert in natural language inference. Given a PREMISE and a \
@@ -112,9 +106,6 @@ Output ONLY valid JSON in this exact format:
 {{"label": "<entailment|neutral|contradiction>", "confidence": <1-5>}}"""
 
 
-# ============================================================
-# API call
-# ============================================================
 
 async def call_nli(client, sem, premise: str, hypothesis: str) -> dict | None:
     prompt = NLI_PROMPT.format(premise=premise, hypothesis=hypothesis)
@@ -157,26 +148,20 @@ async def call_nli(client, sem, premise: str, hypothesis: str) -> dict | None:
                     return None
 
 
-# ============================================================
-# Main processing
-# ============================================================
 
 async def evaluate_file(source: str, dataset: str, max_items: int | None = None):
     out_path = OUT_DIR / f"faithfulness_{dataset}_{source}.json"
 
-    # Resume from checkpoint
     results = {}
     if out_path.exists():
         results = json.loads(out_path.read_text())
         log.info(f"  Resuming from checkpoint with {len(results)} entries")
 
-    # Load paraphrases
     para_path = ROOT / PARAPHRASE_FILES[(source, dataset)]
     paraphrases = json.loads(para_path.read_text())
     if max_items:
         paraphrases = paraphrases[:max_items]
 
-    # Build work list
     tasks = []
     for q in paraphrases:
         qid = str(q["question_id"])
@@ -206,9 +191,7 @@ async def evaluate_file(source: str, dataset: str, max_items: int | None = None)
     async with httpx.AsyncClient() as client:
         async def process(task):
             nonlocal done
-            # Direction 1: paraphrase -> original (does paraphrase preserve meaning?)
             dir1 = await call_nli(client, sem, premise=task["paraphrase"], hypothesis=task["original"])
-            # Direction 2: original -> paraphrase (does paraphrase add info?)
             dir2 = await call_nli(client, sem, premise=task["original"], hypothesis=task["paraphrase"])
 
             bidirectional = (dir1["label"] == "entailment" and dir2["label"] == "entailment") \
@@ -227,7 +210,6 @@ async def evaluate_file(source: str, dataset: str, max_items: int | None = None)
                 "paraphrase_snippet": task["paraphrase"][:150],
             }
 
-        # Process in batches for checkpointing
         for batch_start in range(0, len(tasks), CHECKPOINT_EVERY):
             batch = tasks[batch_start:batch_start + CHECKPOINT_EVERY]
             batch_results = await asyncio.gather(*[process(t) for t in batch])
@@ -267,7 +249,6 @@ def summarize(all_results: dict) -> dict:
         n = len(valid)
         n_faithful = sum(1 for r in valid if r["bidirectional"])
 
-        # Breakdown by direction labels
         d1_labels = Counter(r["dir_para_to_orig"]["label"] for r in valid)
         d2_labels = Counter(r["dir_orig_to_para"]["label"] for r in valid)
 
@@ -321,13 +302,11 @@ async def main():
             results = await evaluate_file(source, dataset, max_items=args.max_items)
             all_results[(source, dataset)] = results
 
-    # Summary
     summary = summarize(all_results)
     summary_path = OUT_DIR / "faithfulness_summary.json"
     summary_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False))
     log.info(f"\nSaved summary: {summary_path}")
 
-    # Print
     print("\n" + "=" * 70)
     print("BIDIRECTIONAL ENTAILMENT FAITHFULNESS SUMMARY (GPT-4o)")
     print("=" * 70)

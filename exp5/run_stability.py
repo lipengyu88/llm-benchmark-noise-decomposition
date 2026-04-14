@@ -39,16 +39,12 @@ from pathlib import Path
 
 import httpx
 
-# Re-use the prompt builder from Exp I (base variant only)
 import sys
 EXP1_DIR = Path(__file__).parent.parent / "exp1"
 sys.path.insert(0, str(EXP1_DIR))
-from prompt_variants import build_prompt, BASE_INDEX  # type: ignore
+from prompt_variants import build_prompt, BASE_INDEX
 sys.path.pop(0)
 
-# ============================================================
-# Configuration
-# ============================================================
 
 API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 if not API_KEY:
@@ -70,7 +66,6 @@ MODELS = {
     "qwen72b": "qwen/qwen-2.5-72b-instruct",
 }
 
-# Reuse Exp I infrastructure
 EXP2_DIR = Path(__file__).parent.parent / "exp2"
 DATASET_SUBSET_FILES = {
     "arc":  EXP2_DIR / "arc_challenge_paraphrased_gpt4o.json",
@@ -98,9 +93,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 log = logging.getLogger(__name__)
 
 
-# ============================================================
-# Data loading (reusing Exp I helpers via re-implementation to avoid coupling)
-# ============================================================
 
 def normalize_arc_labels(item):
     label_map = {"1": "A", "2": "B", "3": "C", "4": "D"}
@@ -153,9 +145,6 @@ def get_num_options(item, dataset_name):
     return len(item["choices"]["label"]) if dataset_name == "arc" else len(item["options"])
 
 
-# ============================================================
-# Answer parsing (copied from Exp I for the base variant: letter_only format)
-# ============================================================
 
 def parse_answer(response_text, num_options=4):
     text = (response_text or "").strip()
@@ -184,9 +173,6 @@ def parse_answer(response_text, num_options=4):
     return None
 
 
-# ============================================================
-# Async API
-# ============================================================
 
 async def call_api(client, model_id, system_msg, user_msg, semaphore):
     messages = []
@@ -244,9 +230,6 @@ async def process_one(client, semaphore, model_name, model_id, item, dataset_nam
     }
 
 
-# ============================================================
-# Main runner
-# ============================================================
 
 async def run_dataset(dataset_name, n_questions, n_repeats, concurrency):
     log.info(f"\n{'='*60}")
@@ -255,7 +238,6 @@ async def run_dataset(dataset_name, n_questions, n_repeats, concurrency):
 
     items = load_subset(dataset_name, n_questions)
 
-    # Build all tasks: (item, model_name, repeat_idx)
     tasks_meta = []
     for item in items:
         correct = get_correct_answer(item, dataset_name)
@@ -274,7 +256,6 @@ async def run_dataset(dataset_name, n_questions, n_repeats, concurrency):
             process_one(client, semaphore, mn, MODELS[mn], item, dataset_name, r, c)
             for item, mn, r, c in tasks_meta
         ]
-        # Run in chunks for progress reporting
         chunk = 100
         for i in range(0, len(coros), chunk):
             batch = await asyncio.gather(*coros[i:i + chunk])

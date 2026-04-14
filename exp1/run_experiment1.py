@@ -34,9 +34,6 @@ import httpx
 
 from prompt_variants import get_all_variants, build_prompt
 
-# ============================================================
-# Configuration
-# ============================================================
 
 API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 if not API_KEY:
@@ -60,14 +57,12 @@ MODELS = {
     "qwen72b": "qwen/qwen-2.5-72b-instruct",
 }
 
-# Use Exp2's paraphrase files to identify the shared 150-question subset
 EXP2_DIR = Path(__file__).parent.parent / "exp2"
 DATASET_SUBSET_FILES = {
     "arc":  EXP2_DIR / "arc_challenge_paraphrased_gpt4o.json",
     "mmlu": EXP2_DIR / "mmlu_pro_paraphrased_gpt4o.json",
 }
 
-# Full dataset files for question text
 EXP1_DIR = Path(__file__).parent.parent / "exp1"
 FULL_DATASET_FILES = {
     "arc":  EXP1_DIR / "arc_challenge_300.json",
@@ -93,9 +88,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 log = logging.getLogger(__name__)
 
 
-# ============================================================
-# Data loading
-# ============================================================
 
 def normalize_arc_labels(item):
     label_map = {"1": "A", "2": "B", "3": "C", "4": "D"}
@@ -108,12 +100,10 @@ def normalize_arc_labels(item):
 def load_shared_150(dataset_name: str) -> list[dict]:
     """Load the 150-question subset that Exp II uses, with full question data
     from the original 300-question file."""
-    # Get the question IDs from Exp2's paraphrase file
     subset_data = json.loads(DATASET_SUBSET_FILES[dataset_name].read_text(encoding="utf-8"))
     subset_qids = [str(q["question_id"]) for q in subset_data]
     subset_qid_set = set(subset_qids)
 
-    # Load full 300-question dataset
     items = []
     with open(FULL_DATASET_FILES[dataset_name], encoding="utf-8") as f:
         for line in f:
@@ -124,13 +114,11 @@ def load_shared_150(dataset_name: str) -> list[dict]:
                     normalize_arc_labels(item)
                 items.append(item)
 
-    # Filter to the 150 shared IDs
     qid_to_item = {}
     for item in items:
         qid = item["id"] if dataset_name == "arc" else str(item["question_id"])
         qid_to_item[qid] = item
 
-    # Keep ordering from Exp2's paraphrase file for perfect alignment
     filtered = [qid_to_item[qid] for qid in subset_qids if qid in qid_to_item]
     log.info(f"  Loaded {len(filtered)}/{len(subset_qids)} shared questions from {dataset_name}")
     return filtered
@@ -148,9 +136,6 @@ def get_num_options(item, dataset_name):
     return len(item["choices"]["label"]) if dataset_name == "arc" else len(item["options"])
 
 
-# ============================================================
-# Answer parsing (reused from original Exp1)
-# ============================================================
 
 def parse_answer(response_text, answer_format_idx, num_options=4):
     text = (response_text or "").strip()
@@ -189,9 +174,6 @@ def parse_answer(response_text, answer_format_idx, num_options=4):
     return None
 
 
-# ============================================================
-# Checkpoint
-# ============================================================
 
 def get_checkpoint_path(model_name, dataset_name):
     return RESULTS_DIR / f"checkpoint_{model_name}_{dataset_name}.json"
@@ -210,9 +192,6 @@ def save_checkpoint(results, model_name, dataset_name):
     path.write_text(json.dumps(results, ensure_ascii=False), encoding="utf-8")
 
 
-# ============================================================
-# Async API
-# ============================================================
 
 async def call_api(client, model_id, system_msg, user_msg, semaphore, max_tokens):
     messages = []
@@ -239,7 +218,6 @@ async def call_api(client, model_id, system_msg, user_msg, semaphore, max_tokens
                 resp.raise_for_status()
                 data = resp.json()
                 content = data["choices"][0]["message"]["content"]
-                # Strip think blocks just in case
                 content = re.sub(r"<think>.*?</think>", "", content or "", flags=re.DOTALL).strip()
                 usage = data.get("usage", {})
                 return content, usage
@@ -272,9 +250,6 @@ async def process_task(client, semaphore, model_id, item, dataset_name,
     }
 
 
-# ============================================================
-# Phase 1: Main run
-# ============================================================
 
 async def run_phase1(model_name, model_id, dataset_name, concurrency):
     log.info(f"\n{'='*60}")
@@ -334,9 +309,6 @@ async def run_phase1(model_name, model_id, dataset_name, concurrency):
     return results
 
 
-# ============================================================
-# Phase 2: Rerun None entries
-# ============================================================
 
 async def run_phase2(model_name, model_id, dataset_name, concurrency, results, data_items):
     variants = get_all_variants()
@@ -357,7 +329,6 @@ async def run_phase2(model_name, model_id, dataset_name, concurrency, results, d
             correct = entry["correct_answer"]
             num_opts = get_num_options(item, dataset_name)
 
-            # Re-parse existing response first
             if raw:
                 parsed = parse_answer(raw, vidx[1], num_opts)
                 if parsed:
@@ -409,18 +380,13 @@ async def run_phase2(model_name, model_id, dataset_name, concurrency, results, d
     return results
 
 
-# ============================================================
-# Main
-# ============================================================
 
 async def run_all(model_names, dataset_names, concurrency, skip_rerun):
     for dataset_name in dataset_names:
         for model_name in model_names:
             model_id = MODELS[model_name]
-            # Phase 1
             results = await run_phase1(model_name, model_id, dataset_name, concurrency)
 
-            # Phase 2
             if not skip_rerun:
                 data = load_shared_150(dataset_name)
                 data_items = {get_question_id(item, dataset_name): item for item in data}

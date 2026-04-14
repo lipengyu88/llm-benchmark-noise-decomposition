@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Data
 models = ["LLaMA-8B", "Qwen-7B", "Qwen-32B", "Qwen-72B"]
 
 prompt_arc   = [4.8, 5.6, 3.9, 9.7]
@@ -24,7 +23,6 @@ for ax, (title, prompt_vals, para_vals) in zip(axes, benchmarks):
     b2 = ax.bar(x + width/2, para_vals, width, label="Paraphrase (4 versions)",
                 color="#4682B4", edgecolor="white", linewidth=0.5)
 
-    # ratio annotations
     for i in range(len(models)):
         ratio = prompt_vals[i] / para_vals[i]
         top = max(prompt_vals[i], para_vals[i])

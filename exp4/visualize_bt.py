@@ -47,9 +47,6 @@ def load_results(ds: str) -> dict:
     return json.loads((ROOT / f"bt_results_{ds}.json").read_text())
 
 
-# ============================================================
-# Figure 1: BT ratings with 95% bootstrap CIs
-# ============================================================
 
 def fig1_bt_ratings():
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
@@ -78,7 +75,6 @@ def fig1_bt_ratings():
         ax.set_xlabel("BT log-strength  (higher = stronger)")
         ax.set_title(B_DISP[ds] + f"  (n={data['n_conditions_total']} conditions)")
         ax.invert_yaxis()
-        # Extend xlim to leave room for labels
         ax.set_xlim(ax.get_xlim()[0] - 0.1, ax.get_xlim()[1] + 0.6)
 
     fig.suptitle("Bradley-Terry Ratings with 95% Bootstrap CIs",
@@ -87,18 +83,14 @@ def fig1_bt_ratings():
     save(fig, "fig1_bt_ratings.png")
 
 
-# ============================================================
-# Figure 2: Rank posterior heatmap
-# ============================================================
 
 def fig2_rank_posterior():
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
     for ax, ds in zip(axes, ["arc", "mmlu"]):
         data = load_results(ds)
-        post = np.array(data["rank_posterior"])  # (n_models, n_ranks)
+        post = np.array(data["rank_posterior"])
         ranking = data["ranking"]
 
-        # Reorder rows to match the ranking
         order_idx = [MODELS.index(m) for m in ranking]
         post_ordered = post[order_idx]
 
@@ -122,16 +114,12 @@ def fig2_rank_posterior():
 
         ax.set_title(B_DISP[ds])
 
-    # Shared colorbar
     fig.colorbar(im, ax=axes, label="Posterior probability", shrink=0.8)
     fig.suptitle("Rank Posterior (Pr(model holds rank k)) from 10,000 Bootstraps",
                  fontsize=17, fontweight="bold", y=1.01)
     save(fig, "fig2_rank_posterior.png")
 
 
-# ============================================================
-# Figure 3: Sample-size stability curves
-# ============================================================
 
 def fig3_sample_size_curves():
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
@@ -152,7 +140,6 @@ def fig3_sample_size_curves():
         ax.axhline(0.95, color="#888", linestyle="--", linewidth=1.5,
                    label="95% threshold")
 
-        # Annotate required N
         n1 = sim.get("n_needed_top1_95")
         n2 = sim.get("n_needed_top2_95")
         txt = f"N to reach 95%:\n  top-1: {n1 if n1 else 'not reached'}\n  top-2: {n2 if n2 else 'not reached'}"
@@ -174,9 +161,6 @@ def fig3_sample_size_curves():
     save(fig, "fig3_sample_size_curves.png")
 
 
-# ============================================================
-# Main
-# ============================================================
 
 def main():
     print(f"Generating BT figures to {FIGDIR}/")

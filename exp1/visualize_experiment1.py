@@ -26,9 +26,6 @@ import seaborn as sns
 from pathlib import Path
 from itertools import combinations
 
-# ============================================================
-# Style setup
-# ============================================================
 
 sns.set_theme(style="whitegrid", font_scale=1.1)
 plt.rcParams.update({
@@ -68,9 +65,6 @@ def load_analysis(dataset):
         return json.load(f)
 
 
-# ============================================================
-# Figure 1: Accuracy distribution (box + strip)
-# ============================================================
 
 def fig1_accuracy_distribution():
     fig, axes = plt.subplots(1, 2, figsize=(16, 6))
@@ -100,7 +94,6 @@ def fig1_accuracy_distribution():
             patch.set_alpha(0.5)
             patch.set_edgecolor(color)
 
-        # Strip plot overlay
         for i, (accs, color) in enumerate(zip(box_data, box_colors)):
             jitter = np.random.RandomState(42).uniform(-0.12, 0.12, len(accs))
             ax.scatter([i] * len(accs) + jitter, accs,
@@ -111,7 +104,6 @@ def fig1_accuracy_distribution():
         ax.set_ylabel("Accuracy")
         ax.set_title(DATASET_LABELS[dataset])
 
-        # Annotate stats
         for i, (accs, model) in enumerate(zip(box_data, MODELS)):
             mean_acc = np.mean(accs)
             std_acc = np.std(accs)
@@ -127,9 +119,6 @@ def fig1_accuracy_distribution():
     print("  Saved fig1_accuracy_distribution.png")
 
 
-# ============================================================
-# Figure 2: OFAT Main Effects (5 dimensions)
-# ============================================================
 
 def fig2_ofat_main_effects():
     fig, axes = plt.subplots(2, 3, figsize=(18, 10))
@@ -186,7 +175,6 @@ def fig2_ofat_main_effects():
         if d_idx == 0:
             ax.legend(fontsize=6, ncol=2, loc="upper right")
 
-    # Hide unused subplot
     axes_flat[5].set_visible(False)
 
     fig.suptitle("OFAT Main Effects by Dimension (5 Dimensions)",
@@ -197,9 +185,6 @@ def fig2_ofat_main_effects():
     print("  Saved fig2_ofat_main_effects.png")
 
 
-# ============================================================
-# Figure 3: Variance Decomposition
-# ============================================================
 
 def fig3_variance_decomposition():
     fig, ax = plt.subplots(figsize=(12, 5.5))
@@ -250,9 +235,6 @@ def fig3_variance_decomposition():
     print("  Saved fig3_variance_decomposition.png")
 
 
-# ============================================================
-# Figure 4: Dimension-level variance attribution
-# ============================================================
 
 def fig4_dimension_variance():
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
@@ -264,7 +246,6 @@ def fig4_dimension_variance():
     for ax_row, dataset in enumerate(["arc", "mmlu"]):
         data = load_analysis(dataset)
 
-        # Left: stacked bar per model
         ax_bar = axes[ax_row][0]
         dim_keys = DIM_NAMES + ["interaction"]
         dim_colors = ["#4C72B0", "#C44E52", "#DD8452", "#55A868", "#8172B2", "#CCCCCC"]
@@ -291,7 +272,6 @@ def fig4_dimension_variance():
         if ax_row == 0:
             ax_bar.legend(fontsize=8, loc="upper right")
 
-        # Right: average pie chart
         ax_pie = axes[ax_row][1]
         avg_pcts = []
         for dim_key in dim_keys:
@@ -301,7 +281,6 @@ def fig4_dimension_variance():
                     vals.append(data[model]["dimension_variance"]["percentages"].get(dim_key, 0))
             avg_pcts.append(np.mean(vals) if vals else 0)
 
-        # Only show slices > 1%
         labels_pie = [dk.replace("_", " ").title() if p > 1 else ""
                       for dk, p in zip(dim_keys, avg_pcts)]
         wedges, texts, autotexts = ax_pie.pie(
@@ -319,9 +298,6 @@ def fig4_dimension_variance():
     print("  Saved fig4_dimension_variance.png")
 
 
-# ============================================================
-# Figure 5: Pairwise Ranking Stability (violin)
-# ============================================================
 
 def fig5_ranking_stability():
     fig, axes = plt.subplots(1, 2, figsize=(16, 6))
@@ -351,7 +327,6 @@ def fig5_ranking_stability():
             pc.set_facecolor(pair_colors[i % len(pair_colors)])
             pc.set_alpha(0.5)
 
-        # Overlay strip
         for i, gaps_list in enumerate(all_gap_data):
             jitter = np.random.RandomState(42).uniform(-0.15, 0.15, len(gaps_list))
             ax.scatter([i] * len(gaps_list) + jitter, gaps_list,
@@ -374,9 +349,6 @@ def fig5_ranking_stability():
     print("  Saved fig5_ranking_stability.png")
 
 
-# ============================================================
-# Figure 6: Scale Analysis
-# ============================================================
 
 def fig6_scale_analysis():
     fig, axes = plt.subplots(1, 3, figsize=(15, 4.5))
@@ -427,9 +399,6 @@ def fig6_scale_analysis():
     print("  Saved fig6_scale_analysis.png")
 
 
-# ============================================================
-# Figure 7: Noise Removal Impact
-# ============================================================
 
 def fig7_noise_removal():
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
@@ -470,9 +439,6 @@ def fig7_noise_removal():
     print("  Saved fig7_noise_removal.png")
 
 
-# ============================================================
-# Figure 8: Category Sensitivity Heatmap (MMLU-Pro)
-# ============================================================
 
 def fig8_category_heatmap():
     data = load_analysis("mmlu")
@@ -531,9 +497,6 @@ def fig8_category_heatmap():
     print("  Saved fig8_category_heatmap.png")
 
 
-# ============================================================
-# Figure 9: Reversal Frequency
-# ============================================================
 
 def fig9_reversal_summary():
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
@@ -579,9 +542,6 @@ def fig9_reversal_summary():
     print("  Saved fig9_reversal_summary.png")
 
 
-# ============================================================
-# Figure 10: Regression Coefficients
-# ============================================================
 
 def fig10_regression_coefficients():
     fig, axes = plt.subplots(2, 2, figsize=(16, 10))
@@ -589,7 +549,6 @@ def fig10_regression_coefficients():
     for row, dataset in enumerate(["arc", "mmlu"]):
         data = load_analysis(dataset)
 
-        # Left: all models' main-effect coefficients
         ax_all = axes[row][0]
         all_coefs = {}
         for model in MODELS:
@@ -624,7 +583,6 @@ def fig10_regression_coefficients():
         if row == 0:
             ax_all.legend(fontsize=8, loc="lower right")
 
-        # Right: R-squared comparison
         ax_r2 = axes[row][1]
         r2_main = []
         r2_full = []
@@ -661,15 +619,11 @@ def fig10_regression_coefficients():
     print("  Saved fig10_regression_coefficients.png")
 
 
-# ============================================================
-# Figure 11: Summary Dashboard
-# ============================================================
 
 def fig11_summary_dashboard():
     fig = plt.figure(figsize=(18, 10))
     gs = gridspec.GridSpec(2, 3, hspace=0.45, wspace=0.35)
 
-    # Panel A: Accuracy distribution
     ax1 = fig.add_subplot(gs[0, 0])
     positions = []
     box_data = []
@@ -699,7 +653,6 @@ def fig11_summary_dashboard():
     ax1.set_ylabel("Accuracy")
     ax1.set_title("(A) Accuracy Distribution", fontsize=10)
 
-    # Panel B: Variance ratio
     ax2 = fig.add_subplot(gs[0, 1])
     labels_vr = []
     ratios = []
@@ -724,7 +677,6 @@ def fig11_summary_dashboard():
     ax2.set_yscale("log")
     ax2.legend(fontsize=7)
 
-    # Panel C: Flip rate
     ax3 = fig.add_subplot(gs[0, 2])
     labels_fr = []
     flips = []
@@ -744,7 +696,6 @@ def fig11_summary_dashboard():
     ax3.set_ylabel("Item Flip Rate (%)")
     ax3.set_title("(C) Item Flip Rate", fontsize=10)
 
-    # Panel D: Dimension variance (avg across models)
     ax4 = fig.add_subplot(gs[1, 0])
     dim_keys = DIM_NAMES + ["interaction"]
     dim_colors = ["#4C72B0", "#C44E52", "#DD8452", "#55A868", "#8172B2", "#CCCCCC"]
@@ -770,7 +721,6 @@ def fig11_summary_dashboard():
     ax4.set_ylabel("% of Var(prompt)")
     ax4.set_title("(D) Avg Dimension Variance Share", fontsize=10)
 
-    # Panel E: Reversal rates
     ax5 = fig.add_subplot(gs[1, 1])
     pair_labels_all = []
     rev_rates_all = []
@@ -796,7 +746,6 @@ def fig11_summary_dashboard():
     ax5.set_title("(E) Ranking Reversals", fontsize=10)
     ax5.set_ylim(0, 100)
 
-    # Panel F: Scale trend
     ax6 = fig.add_subplot(gs[1, 2])
     for dataset in ["arc", "mmlu"]:
         data = load_analysis(dataset)
@@ -826,9 +775,6 @@ def fig11_summary_dashboard():
     print("  Saved fig11_summary_dashboard.png")
 
 
-# ============================================================
-# Main
-# ============================================================
 
 if __name__ == "__main__":
     print("Generating figures for Experiment I-Extended (100 variants)...")

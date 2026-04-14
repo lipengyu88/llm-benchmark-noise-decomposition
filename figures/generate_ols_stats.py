@@ -16,7 +16,6 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from scipy import stats
 
-# ── paths ────────────────────────────────────────────────────────────
 sys.path.insert(0, "/Users/bytedance/ST5230/exp1")
 from prompt_variants import get_all_variants
 
@@ -30,7 +29,6 @@ MODEL_NICE = {"llama": "LLaMA-3-8B", "qwen7b": "Qwen-2.5-7B",
 BENCHMARKS = [("arc", "ARC-Challenge", ARC_JSON),
               ("mmlu", "MMLU-Pro", MMLU_JSON)]
 
-# dimension: (name, n_levels)
 DIM_INFO = [
     ("instruction",    3),
     ("answer_format",  3),
@@ -38,13 +36,11 @@ DIM_INFO = [
     ("framing",        2),
     ("delimiter",      3),
 ]
-# Total dummy variables: (3-1)+(3-1)+(3-1)+(2-1)+(3-1) = 2+2+2+1+2 = 9
 
 
-# ── build design matrix (dummy coding, level 0 = reference) ─────────
 def build_design_matrix():
     """Return (X, col_names) where X is 100 x 10 (with intercept)."""
-    variants = get_all_variants()  # list of (id, (i,j,k,l,m))
+    variants = get_all_variants()
     indices = [v[1] for v in variants]
 
     cols = []
@@ -55,26 +51,23 @@ def build_design_matrix():
             cols.append([1.0 if idx[dim_idx] == lvl else 0.0
                          for idx in indices])
 
-    X = np.column_stack(cols)            # 100 x 9
-    X = sm.add_constant(X, prepend=True) # 100 x 10
+    X = np.column_stack(cols)
+    X = sm.add_constant(X, prepend=True)
     col_names = ["const"] + col_names
     return X, col_names
 
 
-# ── main ─────────────────────────────────────────────────────────────
 def main():
     X, col_names = build_design_matrix()
     print(f"Design matrix shape: {X.shape}  columns: {col_names}\n")
 
-    # load data
     data = {}
     for key, nice, path in BENCHMARKS:
         with open(path) as f:
             data[key] = json.load(f)
 
-    results = {}  # (bench_key, model) -> OLS result
+    results = {}
 
-    # header
     sep = "=" * 88
     for bench_key, bench_nice, _ in BENCHMARKS:
         print(f"\n{sep}")
@@ -85,7 +78,6 @@ def main():
             ols = sm.OLS(y, X).fit()
             results[(bench_key, model)] = ols
 
-            # Shapiro-Wilk on residuals
             sw_stat, sw_p = stats.shapiro(ols.resid)
 
             print(f"\n--- {MODEL_NICE[model]} ({bench_nice}) ---")
@@ -102,7 +94,6 @@ def main():
                       f"{ols.bse[i]:>10.6f} {ols.tvalues[i]:>10.4f} "
                       f"{ols.pvalues[i]:>12.4e}")
 
-    # ── LaTeX-friendly summary table ─────────────────────────────────
     print(f"\n\n{'=' * 88}")
     print("  LaTeX-ready summary (copy-paste into tabular)")
     print("=" * 88)
@@ -129,7 +120,6 @@ def main():
                       f"{ols.params[i]:.4f} & {ols.tvalues[i]:.2f} & "
                       f"{ols.pvalues[i]:.2e} \\\\")
 
-    # ── Q-Q plot grid ────────────────────────────────────────────────
     fig, axes = plt.subplots(2, 4, figsize=(16, 8))
 
     for row, (bench_key, bench_nice, _) in enumerate(BENCHMARKS):

@@ -80,9 +80,6 @@ DATASETS = {"arc": "arc_challenge", "mmlu": "mmlu_pro"}
 RNG = np.random.RandomState(42)
 
 
-# ============================================================
-# Data loading: build per-condition correctness matrix
-# ============================================================
 
 def load_exp1_matrix(dataset_key: str) -> tuple[list[str], np.ndarray]:
     """Return (condition_labels, matrix of shape (n_conditions, n_models))
@@ -97,7 +94,6 @@ def load_exp1_matrix(dataset_key: str) -> tuple[list[str], np.ndarray]:
         with open(path, encoding="utf-8") as f:
             results[e2_name] = json.load(f)
 
-    # Use llama's qids and variants as reference (all models should match)
     ref = results["llama-3.1-8b"]
     qids = sorted(ref.keys())
     variants = sorted({vid for q in ref.values() for vid in q.keys()})
@@ -126,7 +122,6 @@ def load_exp2_matrix(dataset_key: str) -> tuple[list[str], np.ndarray]:
     """Load Exp II data across both paraphrase sources, treating each
     (question_id, version, source) as one condition."""
     bench = DATASETS[dataset_key]
-    # Collect {(qid, version, source) -> {model: is_correct}}
     cells: dict[tuple[str, int, str], dict[str, int]] = {}
     for m in MODELS:
         for src in ["gpt4o", "qwen"]:
@@ -165,9 +160,6 @@ def build_pairwise_wins(matrix: np.ndarray) -> np.ndarray:
     return W
 
 
-# ============================================================
-# Bradley-Terry MLE via Zermelo iteration
-# ============================================================
 
 def fit_bt(W: np.ndarray, tol: float = 1e-8, max_iter: int = 10000) -> np.ndarray:
     """Fit BT ratings from pairwise win matrix W. Returns log-strength vector.
@@ -177,11 +169,10 @@ def fit_bt(W: np.ndarray, tol: float = 1e-8, max_iter: int = 10000) -> np.ndarra
     Normalises so pi sums to 1, then returns log(pi).
     """
     n = W.shape[0]
-    # Add tiny prior to avoid zero wins
     W = W + 0.01
     pi = np.ones(n) / n
-    N = W + W.T  # total comparisons between each pair
-    wins = W.sum(axis=1)  # total wins for each model
+    N = W + W.T
+    wins = W.sum(axis=1)
 
     for _ in range(max_iter):
         pi_new = np.zeros(n)
@@ -221,14 +212,11 @@ def rank_posterior(boot: np.ndarray) -> np.ndarray:
     """Given bootstrap BT ratings (n_bootstrap x n_models), compute for each
     model the posterior probability of holding each rank (1 = best)."""
     n_bootstrap, n_models = boot.shape
-    # Rank each row (higher rating = better rank = rank 1)
-    # argsort descending -> positions give rank - 1
     ranks = np.zeros_like(boot, dtype=int)
     for b in range(n_bootstrap):
-        order = np.argsort(-boot[b])  # indices from best to worst
+        order = np.argsort(-boot[b])
         for pos, idx in enumerate(order):
             ranks[b, idx] = pos + 1
-    # Posterior: for each model, fraction of bootstrap draws at each rank
     posterior = np.zeros((n_models, n_models))
     for m in range(n_models):
         for k in range(1, n_models + 1):
@@ -236,9 +224,6 @@ def rank_posterior(boot: np.ndarray) -> np.ndarray:
     return posterior
 
 
-# ============================================================
-# Sample-size simulation
-# ============================================================
 
 def simulate_sample_size(matrix: np.ndarray,
                          sample_sizes: list[int],
@@ -251,7 +236,6 @@ def simulate_sample_size(matrix: np.ndarray,
     if rng is None:
         rng = RNG
 
-    # Reference ranking from full data
     full_W = build_pairwise_wins(matrix)
     full_ratings = fit_bt(full_W)
     order = np.argsort(-full_ratings)
@@ -284,7 +268,6 @@ def simulate_sample_size(matrix: np.ndarray,
             "pr_correct_top2_set": top2_hits / n_repeats,
         })
 
-    # Find the smallest N with both probabilities >= 0.95
     results["n_needed_top1_95"] = None
     results["n_needed_top2_95"] = None
     for pt in results["sample_curves"]:
@@ -295,15 +278,11 @@ def simulate_sample_size(matrix: np.ndarray,
     return results
 
 
-# ============================================================
-# Main analysis pipeline
-# ============================================================
 
 def analyze_dataset(dataset_key: str, n_bootstrap: int = 10000,
                     n_simulate_repeats: int = 200) -> dict:
     log.info(f"\n{'=' * 60}\nDataset: {DATASETS[dataset_key]}\n{'=' * 60}")
 
-    # Load data
     labels_e1, mat_e1 = load_exp1_matrix(dataset_key)
     labels_e2, mat_e2 = load_exp2_matrix(dataset_key)
     log.info(f"  Exp I conditions: {len(labels_e1)}  "
@@ -314,7 +293,6 @@ def analyze_dataset(dataset_key: str, n_bootstrap: int = 10000,
     combined_labels = labels_e1 + labels_e2
     log.info(f"  Combined conditions: {len(combined_labels)}")
 
-    # Full-data BT fit
     W = build_pairwise_wins(combined_mat)
     log_ratings = fit_bt(W)
     ratings = np.exp(log_ratings)
@@ -326,7 +304,6 @@ def analyze_dataset(dataset_key: str, n_bootstrap: int = 10000,
         log.info(f"    {rank}. {MODEL_LABELS[MODELS[idx]]:15s}: "
                  f"logit={log_ratings[idx]:+.4f}, strength={ratings[idx]:.4f}")
 
-    # Pairwise win rate summary
     log.info("\n  Pairwise win matrix (row beats col):")
     for i, m_i in enumerate(MODELS):
         line = f"    {MODEL_LABELS[m_i]:15s}"
@@ -339,12 +316,10 @@ def analyze_dataset(dataset_key: str, n_bootstrap: int = 10000,
                 line += f" {rate:5.3f}  "
         log.info(line)
 
-    # Bootstrap
     log.info(f"\n  Running bootstrap ({n_bootstrap} resamples)...")
     boot = bootstrap_bt(combined_mat, n_bootstrap=n_bootstrap,
                         rng=np.random.RandomState(42))
 
-    # 95% CI on log-ratings
     ci_low = np.percentile(boot, 2.5, axis=0)
     ci_high = np.percentile(boot, 97.5, axis=0)
     log.info("  Bootstrap 95% CIs on log-ratings:")
@@ -352,7 +327,6 @@ def analyze_dataset(dataset_key: str, n_bootstrap: int = 10000,
         log.info(f"    {MODEL_LABELS[MODELS[idx]]:15s}: "
                  f"{log_ratings[idx]:+.4f} [{ci_low[idx]:+.4f}, {ci_high[idx]:+.4f}]")
 
-    # Rank posterior
     posterior = rank_posterior(boot)
     log.info("\n  Rank posterior (Pr(model holds rank k)):")
     header = "    " + " " * 16 + "  ".join(f"rank{k}" for k in range(1, len(MODELS) + 1))
@@ -363,7 +337,6 @@ def analyze_dataset(dataset_key: str, n_bootstrap: int = 10000,
             row += f"  {posterior[idx, k]:.3f}"
         log.info(row)
 
-    # Sample-size simulation
     log.info(f"\n  Running sample-size simulation ({n_simulate_repeats} repeats per N)...")
     sample_sizes = [50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000]
     sample_sizes = [s for s in sample_sizes if s <= len(combined_labels)]

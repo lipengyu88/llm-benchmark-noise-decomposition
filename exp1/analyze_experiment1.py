@@ -50,13 +50,9 @@ DATASET_LABELS = {"arc": "ARC-Challenge", "mmlu": "MMLU-Pro"}
 N_BOOTSTRAP = 10000
 RNG = np.random.RandomState(42)
 
-# 5 dimensions for the extended design
 DIM_NAMES = ["instruction", "answer_format", "option_format", "framing", "delimiter"]
 DIM_LABELS = ["Instruction", "Answer Format", "Option Format", "Framing", "Delimiter"]
 
-# ============================================================
-# Data loading
-# ============================================================
 
 def load_results(model, dataset):
     path = RESULTS_DIR / f"results_{model}_{dataset}.json"
@@ -96,9 +92,6 @@ def build_matrix(model, dataset, variants):
     return qids, variant_ids, matrix
 
 
-# ============================================================
-# Accuracy-level metrics
-# ============================================================
 
 def accuracy_per_variant(matrix):
     return np.nanmean(matrix, axis=0)
@@ -137,17 +130,12 @@ def item_flip_rate(matrix):
     }
 
 
-# ============================================================
-# OFAT main effect analysis (5 dimensions)
-# ============================================================
 
 def ofat_main_effects(matrix, variants):
     """Compute OFAT main effects for all 5 dimensions."""
     variant_ids = [v[0] for v in variants]
     base_acc = float(np.nanmean(matrix[:, 0]))
 
-    # Map OFAT variant IDs to dimensions
-    # OFAT order: instruction(2), answer_format(2), option_format(2), framing(1), delimiter(2) = 9
     ofat_groups = {
         "instruction":   ["ofat_1", "ofat_2"],
         "answer_format": ["ofat_3", "ofat_4"],
@@ -167,9 +155,6 @@ def ofat_main_effects(matrix, variants):
     return effects
 
 
-# ============================================================
-# Interaction effect analysis (5 dimensions)
-# ============================================================
 
 def interaction_analysis(matrix, variants):
     """
@@ -181,12 +166,11 @@ def interaction_analysis(matrix, variants):
     accs = accuracy_per_variant(matrix)
     n = len(accs)
 
-    n_levels = list(N_LEVELS)  # (3, 3, 3, 2, 3)
+    n_levels = list(N_LEVELS)
 
-    # Build design matrix with dummy coding (drop level 0 as reference)
     X_main_cols = []
     main_names = []
-    raw = np.array(variant_indices, dtype=int)  # (n_variants, 5)
+    raw = np.array(variant_indices, dtype=int)
     for d in range(5):
         for lvl in range(1, n_levels[d]):
             col = (raw[:, d] == lvl).astype(float)
@@ -214,7 +198,6 @@ def interaction_analysis(matrix, variants):
     notable_main = {k: v for k, v in main_coefficients.items()
                     if k != "intercept" and abs(v) > 0.01}
 
-    # Interaction model (main + 2-way interactions)
     dim_col_ranges = []
     offset = 0
     for d in range(5):
@@ -267,9 +250,6 @@ def interaction_analysis(matrix, variants):
     }
 
 
-# ============================================================
-# Variance decomposition
-# ============================================================
 
 def variance_decomposition(matrix, n_bootstrap=N_BOOTSTRAP):
     n_questions, n_variants = matrix.shape
@@ -301,9 +281,6 @@ def variance_decomposition(matrix, n_bootstrap=N_BOOTSTRAP):
     }
 
 
-# ============================================================
-# Dimension-level variance decomposition (5 dimensions)
-# ============================================================
 
 def dimension_variance_decomposition(matrix, variants):
     """Decompose Var_prompt into per-dimension contributions.
@@ -312,7 +289,7 @@ def dimension_variance_decomposition(matrix, variants):
     compute group-mean accuracy, then compute the variance of those group means.
     """
     variant_indices = np.array([v[1] for v in variants], dtype=int)
-    accs_all = np.nanmean(matrix, axis=0)  # (n_variants,)
+    accs_all = np.nanmean(matrix, axis=0)
     var_total = float(np.var(accs_all))
 
     dim_vars = {}
@@ -337,9 +314,6 @@ def dimension_variance_decomposition(matrix, variants):
     return {"variances": dim_vars, "percentages": dim_pcts}
 
 
-# ============================================================
-# Ranking-level metrics
-# ============================================================
 
 def pairwise_gap_bootstrap(matrices, model_names, n_bootstrap=N_BOOTSTRAP):
     pairs = list(combinations(model_names, 2))
@@ -438,9 +412,6 @@ def rank_distribution_bootstrap(matrices, model_names, n_bootstrap=5000):
     return {"mean": avg_rank_dist, "std_across_prompts": rank_dist_std}
 
 
-# ============================================================
-# MMLU-Pro category-level analysis
-# ============================================================
 
 def category_analysis(matrix, qids, dataset):
     if dataset != "mmlu":
@@ -467,9 +438,6 @@ def category_analysis(matrix, qids, dataset):
     return {cat: info for cat, info in sorted_cats}
 
 
-# ============================================================
-# Noise analysis
-# ============================================================
 
 def noise_analysis(matrices, qids, dataset, available_models):
     all_cols = [matrices[m] for m in MODELS if m in matrices]
@@ -537,9 +505,6 @@ def noise_analysis(matrices, qids, dataset, available_models):
     }
 
 
-# ============================================================
-# Scale analysis
-# ============================================================
 
 def scale_analysis(all_results, dataset):
     available = [m for m in MODELS if m in all_results]
@@ -584,9 +549,6 @@ def scale_analysis(all_results, dataset):
     }
 
 
-# ============================================================
-# Token usage
-# ============================================================
 
 def token_usage_summary(model, dataset):
     results = load_results(model, dataset)
@@ -607,9 +569,6 @@ def token_usage_summary(model, dataset):
     }
 
 
-# ============================================================
-# Main analysis
-# ============================================================
 
 def analyze_single_dataset(dataset):
     variants = get_all_variants()
@@ -622,7 +581,6 @@ def analyze_single_dataset(dataset):
     all_results = {}
     qids_ref = None
 
-    # Surface indices: exclude with_explanation (answer_format level 2)
     surface_indices = [i for i, (_, vidx) in enumerate(variants) if vidx[1] != 2]
 
     for model in MODELS:
@@ -644,7 +602,6 @@ def analyze_single_dataset(dataset):
         dim_var = dimension_variance_decomposition(matrix, variants)
         usage = token_usage_summary(model, dataset)
 
-        # Surface-only metrics
         m_surf = matrix[:, surface_indices]
         stats_surf = accuracy_stats(m_surf)
         flip_surf = item_flip_rate(m_surf)
@@ -704,7 +661,6 @@ def analyze_single_dataset(dataset):
         if cat:
             all_results[model]["category_analysis"] = cat
 
-    # Ranking analysis
     available_models = [m for m in MODELS if m in matrices]
     if len(available_models) >= 2:
         print(f"\n--- Ranking Analysis (ALL {n_variants}) ---")
@@ -746,7 +702,6 @@ def analyze_single_dataset(dataset):
             "rank_distribution": rank_dist,
         }
 
-    # Scale analysis
     if len(available_models) >= 2:
         sa = scale_analysis(all_results, dataset)
         if sa:
@@ -767,7 +722,6 @@ def analyze_single_dataset(dataset):
             print(f"  NO-EXPL: Std trend={sa['std_trend_surface']}, Flip trend={sa['flip_trend_surface']}")
             all_results["scale_analysis"] = sa
 
-    # Noise analysis
     if qids_ref and len(available_models) >= 1:
         print(f"\n--- Noise Analysis ---")
         noise = noise_analysis(matrices, qids_ref, dataset, available_models)
@@ -781,7 +735,6 @@ def analyze_single_dataset(dataset):
             k: v for k, v in noise.items() if k not in ("noise_scores", "qid_noise_map")
         }
 
-    # Save
     out_path = OUTPUT_DIR / f"analysis_{dataset}.json"
     with open(out_path, "w") as f:
         json.dump(all_results, f, indent=2, default=str)
