@@ -1,28 +1,3 @@
-"""
-Experiment V: Stability Analysis
-
-Computes run-to-run stability metrics from the repeated trials and compares
-them against the prompt-induced variance from Experiment I, validating
-whether the temperature=0 assumption used in Experiments I-IV is justified.
-
-Metrics
--------
-1. TARr@5 (Total Agreement Rate, raw answers): for each (question, model),
-   the fraction of pairs of runs out of C(5,2)=10 that agree on the parsed
-   answer letter. 1.0 = perfect determinism.
-
-2. TARa@5 (Total Agreement Rate, accuracy): for each (question, model),
-   the fraction of run-pairs that agree on is_correct (binary).
-
-3. Per-model accuracy std across runs: how much does aggregate accuracy
-   move when you re-run the same prompt 5 times?
-
-4. Comparison with Exp I prompt-induced variance: ratio of run-to-run std
-   to prompt-induced std. If <1/3, the temperature=0 assumption is safe.
-
-Usage:
-    python analyze_stability.py
-"""
 from __future__ import annotations
 import json
 from pathlib import Path

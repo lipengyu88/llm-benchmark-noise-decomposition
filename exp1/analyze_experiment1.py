@@ -1,25 +1,3 @@
-"""
-Experiment I-Extended: 100 Prompt Variants — Analysis
-
-Adapted from exp1/analyze_experiment1.py for the extended 100-variant,
-150-question design with 5 dimensions (instruction, answer_format,
-option_format, framing, delimiter).
-
-Metrics:
-  Accuracy-level: Mean/Std, Max-Min Range, Item Flip Rate
-  Ranking-level: Pairwise Gap Stability, Reversal Frequency, Rank Distribution
-  Variance decomposition: Var_prompt vs Var_sampling
-  Dimension-level variance attribution (5 dimensions)
-  Interaction effects: main-effects OLS regression
-  Category-level analysis: MMLU-Pro sensitivity by subject category
-  Noise analysis: per-item noise score, removal impact
-  Scale analysis: robustness trend across model sizes
-
-Usage:
-    cd exp1
-    python analyze_experiment1_extended.py
-"""
-
 import json
 import numpy as np
 import pandas as pd

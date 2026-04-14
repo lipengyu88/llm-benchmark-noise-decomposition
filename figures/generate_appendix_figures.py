@@ -1,12 +1,3 @@
-"""
-Generate appendix figures for the report.
-
-Outputs:
-  fig_a1_ols_coefficients.png  - heatmap of main-effects OLS coefficients
-                                 across all 8 model-benchmark regressions
-
-Each figure is saved at 600 DPI.
-"""
 from __future__ import annotations
 import json
 from pathlib import Path

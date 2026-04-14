@@ -1,14 +1,3 @@
-"""
-OLS regression analysis of prompt-variant accuracy data.
-
-For each (model, benchmark) pair, fits an OLS model with 9 dummy-coded
-prompt-design variables (5 dimensions, level 0 as reference) and produces:
-  - F-statistic, F p-value, R^2, adjusted R^2
-  - Per-coefficient t-statistics and p-values
-  - Shapiro-Wilk normality test on residuals
-  - Q-Q residual plot (saved as fig_a11_ols_diagnostics.png)
-"""
-
 import sys
 import json
 import numpy as np

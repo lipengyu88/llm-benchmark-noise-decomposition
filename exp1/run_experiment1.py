@@ -1,25 +1,3 @@
-"""
-Experiment I-Extended: 100 Prompt Variants on Shared 150-Question Subset
-
-Two-phase async pipeline satisfying the project specification's
-"50-200 different prompt variations" guideline:
-
-  - 100 prompt variants (5-dimension factorial subsample)
-  - 150 questions per benchmark (same subset Exp II uses, enabling direct
-    cross-experiment comparison)
-  - 4 models x 2 benchmarks = 8 runs
-  - Total: 100 x 150 x 4 x 2 = 120,000 API calls
-
-Phase 1: max_tokens=200, CONCURRENCY=30
-Phase 2: rerun is_correct=None entries with max_tokens=1024
-Checkpoint every 200 tasks.
-
-Usage:
-    python run_experiment1_extended.py                    # all
-    python run_experiment1_extended.py --model llama       # one model
-    python run_experiment1_extended.py --dataset arc       # one dataset
-    python run_experiment1_extended.py --concurrency 40    # tune concurrency
-"""
 from __future__ import annotations
 import json
 import os

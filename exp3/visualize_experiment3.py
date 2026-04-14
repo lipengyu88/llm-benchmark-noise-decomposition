@@ -1,21 +1,3 @@
-"""
-Experiment III: High-Noise Item Analysis — Publication-quality Visualizations
-
-Reads:   analysis_exp3/analysis_*.json, noise_data/noise_*.json
-Writes:  figures_exp3/*.png
-
-Figures:
-  1. Noise score distribution (histogram + cumulative)
-  2. Accuracy stability improvement across removal thresholds (Exp I)
-  3. Accuracy stability improvement across removal thresholds (Exp II)
-  4. Variance decomposition shift under noise removal
-  5. Ranking reversal reduction under noise removal
-  6. Three-way variance decomposition (prompt vs sampling vs test-set)
-  7. Noise correlation heatmap across models
-  8. Noise vs difficulty scatter
-  9. Category-level noise analysis (MMLU-Pro)
-  10. Summary dashboard
-"""
 from __future__ import annotations
 import json
 import numpy as np

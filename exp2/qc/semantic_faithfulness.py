@@ -1,32 +1,3 @@
-"""
-Experiment II: Automated Paraphrase Semantic Faithfulness Check
-
-Uses GPT-4o as a natural-language-inference judge to compute bidirectional
-entailment scores for every paraphrase in Experiment II. This complements
-the 50-sample manual QC: it scales to all 1800 paraphrases and gives each
-paraphrase an objective, reproducible faithfulness grade.
-
-For each paraphrase p and original question q, we ask GPT-4o:
-  direction_1: Does p entail q? (does paraphrase preserve q's meaning?)
-  direction_2: Does q entail p? (does paraphrase add unstated info?)
-
-Both directions use a 3-way entailment label {entailment, neutral, contradiction}
-plus a 1-5 confidence score.
-
-A paraphrase is "faithful" iff BOTH directions return entailment.
-Neutral in either direction => info added/lost (fails strict equivalence).
-Contradiction in either direction => meaning changed.
-
-Scope:
-  4 files x 150 questions x 3 paraphrases = 1800 paraphrases
-  1800 x 2 directions = 3600 GPT-4o calls
-  Cost: ~$2 total
-
-Usage:
-    python semantic_faithfulness.py                 # all 4 files
-    python semantic_faithfulness.py --source gpt4o  # only gpt4o source
-    python semantic_faithfulness.py --max-items 50  # quick sanity check
-"""
 from __future__ import annotations
 import asyncio
 import json

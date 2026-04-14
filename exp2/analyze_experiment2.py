@@ -1,17 +1,3 @@
-"""
-Experiment II: Analyze results — accuracy, flip rate, pairwise gaps, rank
-distribution, Benjamini-Hochberg correction, cross-source comparison.
-
-Reads:   exp2_{dataset}_{model}_{source}.json
-Writes:  analysis_exp2/analysis_{dataset}.json
-
-Supports multiple paraphrase sources (gpt4o, qwen) and performs:
-  - Primary analysis on the full question set, treating parse failures as wrong
-  - Supplemental clean-subset analysis for sensitivity checking
-  - BH-corrected pairwise comparisons
-  - Cross-source comparison (if both sources available)
-  - Cross-experiment comparison with Exp I (if available)
-"""
 from __future__ import annotations
 import json
 import numpy as np

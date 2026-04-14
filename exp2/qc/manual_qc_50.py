@@ -1,37 +1,3 @@
-"""
-Experiment II: Paraphrase Quality Check — Manual-Style Review of 50 Samples
-
-Implements the QC commitment from the project proposal: "We manually inspect
-50 random samples to verify semantic and label correctness."
-
-Since human manual annotation is impractical for this pipeline, we use
-GPT-4o as a rigorous LLM-as-judge with an explicit rubric and chain-of-
-thought reasoning. This is a standard practice in recent evaluation
-literature (e.g., G-Eval, LLM-as-a-Judge), but it is clearly labelled as
-LLM-assisted review throughout the outputs so readers can calibrate their
-trust accordingly.
-
-Sampling strategy:
-  - 25 paraphrases from GPT-4o source + 25 from Qwen source = 50 total
-  - Stratified across the two benchmarks (13 ARC + 12 MMLU per source)
-  - Within each (source, benchmark) stratum, random with seed=42
-  - We sample ONE paraphrase per question to avoid question-level coupling
-  - The paraphrase index (0/1/2) is also randomised
-
-For each sample, GPT-4o rates three dimensions on a 1–5 scale:
-  1. semantic_equivalence: Is the paraphrase semantically equivalent?
-  2. answer_invariance:    Would the correct answer stay the same?
-  3. information_preservation: Is all task-relevant info preserved?
-
-A paraphrase PASSES QC if all three scores are >= 4 (i.e. "good" or "excellent").
-
-Output: paraphrase_qc_manual.csv with per-sample scores, rationales, and
-overall pass/fail flags. Aggregate pass rates are printed to stdout and
-also written to paraphrase_qc_summary.json.
-
-Cost estimate: 50 GPT-4o calls with ~500 input + ~300 output tokens each
-≈ $0.20 total.
-"""
 from __future__ import annotations
 import asyncio
 import json

@@ -1,26 +1,3 @@
-"""
-Experiment II: Paraphrase Generation with GPT-4o
-
-Generates 3 diverse paraphrased versions of each question using GPT-4o
-via OpenRouter.  Key improvements over the original Qwen2.5-72B script:
-
-  1. Uses a DIFFERENT model family (GPT-4o) to avoid "model grading its
-     own test" bias — none of the evaluated models are GPT-4o.
-  2. Generates all 3 paraphrases in a SINGLE structured prompt, explicitly
-     requesting diversity, to avoid the degenerate duplication that occurs
-     with temperature=0 + independent calls.
-  3. Uses temperature=0.7 for natural variation while maintaining quality.
-  4. Includes a JSON output format for reliable parsing.
-
-Also regenerates Qwen2.5-72B paraphrases with the SAME improved prompt
-(single-call, 3 diverse outputs, temperature=0.7) for fair comparison.
-
-Usage:
-    python generate_paraphrases_gpt4o.py                          # GPT-4o, both datasets
-    python generate_paraphrases_gpt4o.py --dataset arc            # one dataset
-    python generate_paraphrases_gpt4o.py --model qwen             # Qwen2.5-72B regeneration
-    python generate_paraphrases_gpt4o.py --model both             # both models
-"""
 from __future__ import annotations
 import asyncio
 import json

@@ -1,11 +1,3 @@
-"""
-Experiment II: Visualization — PPT-quality PNG figures.
-
-Supports dual paraphrase sources (GPT-4o and Qwen) with cross-source comparison.
-
-Reads:   analysis_exp2/analysis_*.json, exp2_*.json
-Writes:  figures_exp2/*.png
-"""
 from __future__ import annotations
 import json
 import numpy as np

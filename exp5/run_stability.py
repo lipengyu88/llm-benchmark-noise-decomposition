@@ -1,32 +1,3 @@
-"""
-Experiment V: Run-to-Run Stability Validation
-
-A small sanity-check experiment that verifies our temperature=0 assumption
-in Experiments I-IV. Atil et al. (2024, "LLM Stability") showed that
-temperature=0 with a fixed seed does NOT guarantee deterministic outputs in
-many LLM APIs. Our entire prompt-noise analysis assumes that any accuracy
-variation across prompts reflects prompt sensitivity rather than residual
-API stochasticity. This experiment quantifies that assumption.
-
-Design
-------
-- Subset of 50 questions per benchmark (stratified by difficulty)
-- 4 models (same as main experiments)
-- 1 fixed base prompt (the level-0 variant from Exp I)
-- 5 independent repeats per (question, model)
-
-Total: 50 questions x 2 datasets x 4 models x 5 repeats = 2,000 API calls.
-
-Metric (TARr@5, from Atil et al.):
-  For each (question, model), the fraction of run-pairs where the answer
-  agrees. TARr@5 = 1.0 means perfect determinism; lower values quantify
-  the run-to-run noise floor that should be subtracted from prompt-induced
-  variance.
-
-Usage:
-    python run_stability.py
-    python run_stability.py --n-questions 50 --n-repeats 5
-"""
 from __future__ import annotations
 import json
 import os

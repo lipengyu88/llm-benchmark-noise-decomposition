@@ -1,13 +1,3 @@
-"""
-Generate the three main-text figures for the conference report.
-
-Outputs (saved to the same directory as this script):
-  fig1_accuracy_distribution.png  - per-variant accuracy boxplot + strip
-  fig2_bt_sample_size.png         - BT top-1 / top-2 stability vs N
-  fig3_three_way_variance.png     - three-way variance decomposition stacked bars
-
-All figures are exported at 600 DPI, suitable for camera-ready submission.
-"""
 from __future__ import annotations
 import json
 from pathlib import Path

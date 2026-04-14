@@ -1,20 +1,3 @@
-"""
-Experiment I-Extended: Publication-quality Visualizations (100 variants)
-
-Figures:
-  fig1  — Accuracy distribution across 100 variants (box + swarm)
-  fig2  — OFAT main effects by dimension (5 dimensions)
-  fig3  — Variance decomposition: Var(prompt) vs Var(sampling)
-  fig4  — Dimension-level variance attribution (pie/bar)
-  fig5  — Pairwise ranking stability (violin + jitter)
-  fig6  — Scale analysis: robustness vs model size
-  fig7  — Noise removal impact on accuracy std
-  fig8  — Category sensitivity heatmap (MMLU-Pro)
-  fig9  — Ranking reversal frequency
-  fig10 — Regression coefficients (main effects)
-  fig11 — Summary dashboard
-"""
-
 import json
 import numpy as np
 import matplotlib

@@ -1,38 +1,3 @@
-"""
-Experiment I-Extended: 100 Prompt Variants
-
-Expands the original 18-variant factorial design to 100 variants covering
-5 orthogonal dimensions, to satisfy the project specification's
-"50-200 different prompt variations" guideline.
-
-Design rationale
-----------------
-Original (18 variants, 4 dimensions):
-    instruction(3) x answer_format(3) x option_format(3) x framing(2) = 54
-
-For 100 variants, we extend the design space by adding a 5th dimension
-(delimiter style), giving:
-    instruction(3) x answer_format(3) x option_format(3) x framing(2)
-    x delimiter(3) = 162 total combinations.
-
-We sample 100 variants as follows:
-  - 1 base variant (all zeros)
-  - 10 one-factor-at-a-time (OFAT) variants: every non-zero level of every
-    dimension held singly
-  - 89 random factorial combinations drawn from the remaining 151-combination
-    space (seed = 42), avoiding collisions with base / OFAT
-
-This gives every dimension-level both main-effect coverage (via OFAT) and
-interaction coverage (via factorial sampling).
-
-Dimensions
-----------
-1. instruction: 3 levels (task phrasing)
-2. answer_format: 3 levels (letter-only / tag / explanation)
-3. option_format: 3 levels (A. / (A) / A))
-4. framing: 2 levels (no prefix / role prefix)
-5. delimiter: 3 levels (blank lines / dashes / markdown headers)
-"""
 import random
 import itertools
 

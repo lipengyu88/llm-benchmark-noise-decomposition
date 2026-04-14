@@ -1,23 +1,3 @@
-"""
-Experiment III: High-Noise Item Analysis — Full Re-evaluation
-
-After removing the noisiest items at 10%/20%/30% thresholds, re-compute
-all accuracy-level and ranking-level metrics from Experiments I & II.
-
-Metrics re-evaluated:
-  Accuracy-level: Mean/Std, Max-Min Range, Item Flip Rate
-  Ranking-level: Pairwise Gap Stability (bootstrap CIs), Reversal Frequency,
-                 Rank Distribution
-  Cross-experiment: Variance decomposition (prompt vs sampling vs test-set)
-
-Also computes:
-  - Noise source attribution (which experiment contributes more noise)
-  - Noise correlation across models (do models agree on noisy items?)
-  - Scale analysis (does noise sensitivity change with model size?)
-
-Usage:
-    python analyze_experiment3.py
-"""
 from __future__ import annotations
 import json
 import numpy as np

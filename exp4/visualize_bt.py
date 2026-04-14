@@ -1,11 +1,3 @@
-"""
-Experiment IV: Bradley-Terry Analysis — Publication-quality Figures
-
-Produces 3 figures:
-  1. BT ratings with 95% bootstrap CIs (both benchmarks side-by-side)
-  2. Rank posterior heatmap (probability each model holds each rank)
-  3. Sample-size stability curves (Pr(correct top-k) vs N comparisons)
-"""
 from __future__ import annotations
 import json
 from pathlib import Path

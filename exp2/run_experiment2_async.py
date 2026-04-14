@@ -1,19 +1,3 @@
-"""
-Experiment II: Test-Set Resampling via Paraphrasing — Async Runner
-
-Evaluates 4 models on original + 3 paraphrased versions of 150 questions
-per benchmark, using the base prompt template (v00) to isolate test-set
-variation from prompt variation.
-
-Supports multiple paraphrase sources (GPT-4o and Qwen2.5-72B) for
-cross-source comparison.
-
-Usage:
-    python run_experiment2_async.py                          # GPT-4o source, all
-    python run_experiment2_async.py --source qwen            # Qwen source
-    python run_experiment2_async.py --source both            # both sources
-    python run_experiment2_async.py --model llama --dataset arc
-"""
 from __future__ import annotations
 import asyncio
 import json
