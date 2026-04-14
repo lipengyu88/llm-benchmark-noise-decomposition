@@ -41,6 +41,7 @@ Thumbs.db
 # Paper source (not for public repo)
 paper.tex
 template.tex
+references.bib
 *.pdf
 
 # Internal docs
